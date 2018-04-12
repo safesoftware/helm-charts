@@ -1,0 +1,16 @@
+fmeserver:
+  buildNr: 2018-latest
+
+deployment:
+  hostname: localhost
+
+storage:
+  database:
+    class: hostpath
+    size: 1Gi
+  fmeserver:
+    class: hostpath
+    size: 10Gi
+  logs:
+    class: hostpath
+    size: 2Gi

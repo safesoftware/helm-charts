@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
+    safe.k8s.fmeserver.component: fmeserverweb
+  name: fmeserverweb
+spec:
+  ports:
+  - port: 8080
+  selector:
+    safe.k8s.fmeserver.component: fmeserverwebcore

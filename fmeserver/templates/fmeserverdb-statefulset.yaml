@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
+    safe.k8s.fmeserver.component: fmeserverdb
+  name: fmeserverdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      safe.k8s.fmeserver.component: fmeserverdb
+  serviceName: fmeserverdb
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
+        safe.k8s.fmeserver.component: fmeserverdb
+    spec:
+      containers:
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-db:{{ .Values.fmeserver.buildNr }}
+          name: fmeserverdb
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgresdata
+      restartPolicy: Always
+      volumes:
+      - name: postgresdata
+        persistentVolumeClaim:
+          claimName: fmeserver-database-{{ .Values.fmeserver.buildNr }}

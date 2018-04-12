@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
+    safe.k8s.fmeserver.component: fmeserverqueue
+  name: fmeserverqueue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      safe.k8s.fmeserver.component: fmeserverqueue
+  serviceName: fmeserverqueue
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeserver.component: fmeserverqueue
+        safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
+    spec:
+      containers:
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-queue:{{ .Values.fmeserver.buildNr }}
+          name: fmeserverqueue
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - mountPath: /data/fmeserverdata/resources/logs
+              name: fmeserverlogs
+      restartPolicy: Always
+      volumes:
+        - name: fmeserverlogs
+          persistentVolumeClaim:
+            claimName: fmeserver-logs-{{ .Values.fmeserver.buildNr }}
