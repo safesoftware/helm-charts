@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
-    safe.k8s.fmeserver.component: fmeserverwebsocket
+    safe.k8s.fmeserver.component: websocket
   name: fmeserverwebsocket
 spec:
   ports:
@@ -11,4 +11,4 @@ spec:
     port: 7078
   clusterIP: None
   selector:
-    safe.k8s.fmeserver.component: fmeserverwebsocket
+    safe.k8s.fmeserver.component: websocket

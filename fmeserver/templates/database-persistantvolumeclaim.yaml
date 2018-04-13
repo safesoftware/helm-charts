@@ -3,8 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
-    safe.k8s.fmeserver.component: fmeserverdb
-  name: fmeserver-database-{{ .Values.fmeserver.buildNr }}
+    safe.k8s.fmeserver.component: db
+  name: fmeserver-db-{{ .Values.fmeserver.buildNr }}
 spec:
   accessModes:
   - ReadWriteOnce

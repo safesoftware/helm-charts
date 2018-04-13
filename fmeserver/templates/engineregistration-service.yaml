@@ -3,12 +3,11 @@ kind: Service
 metadata:
   labels:
     safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
-    safe.k8s.fmeserver.component: fmeservercore
-  name: fmeservercore
+    safe.k8s.fmeserver.component: core
+  name: engineregistration
 spec:
-  clusterIP: None
   ports:
     - name: engineregistration
       port: 7070
   selector:
-    safe.k8s.fmeserver.component: fmeserverwebcore
+    safe.k8s.fmeserver.component: core

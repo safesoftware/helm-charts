@@ -3,23 +3,23 @@ kind: StatefulSet
 metadata:
   labels:
     safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
-    safe.k8s.fmeserver.component: fmeserverdb
-  name: fmeserverdb
+    safe.k8s.fmeserver.component: db
+  name: db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      safe.k8s.fmeserver.component: fmeserverdb
+      safe.k8s.fmeserver.component: db
   serviceName: fmeserverdb
   template:
     metadata:
       labels:
         safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
-        safe.k8s.fmeserver.component: fmeserverdb
+        safe.k8s.fmeserver.component: db
     spec:
       containers:
         - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-db:{{ .Values.fmeserver.buildNr }}
-          name: fmeserverdb
+          name: db
           ports:
             - containerPort: 5432
           volumeMounts:
@@ -29,4 +29,4 @@ spec:
       volumes:
       - name: postgresdata
         persistentVolumeClaim:
-          claimName: fmeserver-database-{{ .Values.fmeserver.buildNr }}
+          claimName: fmeserver-db-{{ .Values.fmeserver.buildNr }}

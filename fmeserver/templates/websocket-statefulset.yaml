@@ -1,42 +1,35 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   labels:
     safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
-    safe.k8s.fmeserver.component: fmeserverengine
-  name: fmeserverengine
+    safe.k8s.fmeserver.component: websocket
+  name: websocket
 spec:
   replicas: 1
   selector:
     matchLabels:
-      safe.k8s.fmeserver.component: fmeserverengine
+      safe.k8s.fmeserver.component: websocket
+  serviceName: fmeserverwebsocket
   template:
     metadata:
       labels:
-        safe.k8s.fmeserver.component: fmeserverengine
+        safe.k8s.fmeserver.component: websocket
         safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
     spec:
       containers:
-        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-engine:{{ .Values.fmeserver.buildNr }}
-          name: fmeserverengine
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ .Values.fmeserver.buildNr }}
+          name: websocket
+          env:
+            - name: PRIMARY_PROCESS
+              value: websocket
+          ports:
+            - containerPort: 7078
           volumeMounts:
             - mountPath: /data/fmeserverdata
               name: fmeserverdata
             - mountPath: /data/fmeserverdata/resources/logs
               name: fmeserverlogs
-          env:
-            - name: EXTERNALHOSTNAME
-              value: {{ .Values.deployment.hostname }}
-            - name: WEBPROTOCOL
-              value: https
-            - name: EXTERNALPORT
-              value: '443'
-            - name: FMESERVERHOSTNAME
-              value: fmeserverengineregistration
-            - name: NODENAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
       restartPolicy: Always
       volumes:
         - name: fmeserverdata

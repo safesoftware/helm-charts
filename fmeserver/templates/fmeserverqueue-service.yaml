@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
-    safe.k8s.fmeserver.component: fmeserverqueue
+    safe.k8s.fmeserver.component: queue
   name: fmeserverqueue
 spec:
   ports:
@@ -11,4 +11,4 @@ spec:
     port: 6379
   clusterIP: None
   selector:
-    safe.k8s.fmeserver.component: fmeserverqueue
+    safe.k8s.fmeserver.component: queue

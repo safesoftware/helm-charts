@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
-    safe.k8s.fmeserver.component: fmeserverdb
+    safe.k8s.fmeserver.component: db
   name: fmeserverdb
 spec:
   ports:
@@ -11,4 +11,4 @@ spec:
     port: 5432
   clusterIP: None
   selector:
-    safe.k8s.fmeserver.component: fmeserverdb
+    safe.k8s.fmeserver.component: db

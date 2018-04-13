@@ -3,10 +3,10 @@ kind: Service
 metadata:
   labels:
     safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
-    safe.k8s.fmeserver.component: fmeserverweb
+    safe.k8s.fmeserver.component: web
   name: fmeserverweb
 spec:
   ports:
   - port: 8080
   selector:
-    safe.k8s.fmeserver.component: fmeserverwebcore
+    safe.k8s.fmeserver.component: core
