@@ -20,6 +20,7 @@ spec:
       containers:
         - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-db:{{ .Values.fmeserver.buildNr }}
           name: db
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
             - containerPort: 5432
           volumeMounts:

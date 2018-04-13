@@ -20,6 +20,7 @@ spec:
       containers:
         - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-queue:{{ .Values.fmeserver.buildNr }}
           name: queue
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
             - containerPort: 6379
           volumeMounts:

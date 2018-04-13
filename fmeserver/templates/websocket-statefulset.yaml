@@ -20,6 +20,7 @@ spec:
       containers:
         - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ .Values.fmeserver.buildNr }}
           name: websocket
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
           env:
             - name: PRIMARY_PROCESS
               value: websocket

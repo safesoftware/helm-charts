@@ -14,3 +14,7 @@ storage:
   logs:
     class: hostpath
     size: 2Gi
+
+images:
+  # Supported values: Always or IfNotPresent
+  pullPolicy: Always

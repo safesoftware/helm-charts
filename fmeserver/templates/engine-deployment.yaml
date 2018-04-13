@@ -19,6 +19,7 @@ spec:
       containers:
         - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-engine:{{ .Values.fmeserver.buildNr }}
           name: engine
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
           volumeMounts:
             - mountPath: /data/fmeserverdata
               name: fmeserverdata

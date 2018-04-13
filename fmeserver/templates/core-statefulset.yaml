@@ -20,6 +20,7 @@ spec:
       containers:
         - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ .Values.fmeserver.buildNr }}
           name: core
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
             - containerPort: 7070
           volumeMounts:
@@ -42,6 +43,7 @@ spec:
               value: fmeserver
         - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-web:{{ .Values.fmeserver.buildNr }}
           name: web
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
             - containerPort: 8080
           volumeMounts:
