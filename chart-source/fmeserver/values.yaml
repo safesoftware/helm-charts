@@ -11,9 +11,6 @@ storage:
   fmeserver:
     class: hostpath
     size: 10Gi
-  logs:
-    class: hostpath
-    size: 2Gi
 
 images:
   # Supported values: Always or IfNotPresent

@@ -26,8 +26,6 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeserverdata
               name: fmeserverdata
-            - mountPath: /data/fmeserverdata/resources/logs
-              name: fmeserverlogs
           env:
             - name: PRIMARY_PROCESS
               value: core
@@ -55,8 +53,6 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeserverdata
               name: fmeserverdata
-            - mountPath: /data/fmeserverdata/resources/logs
-              name: fmeserverlogs
           env:
             - name: FMESERVERHOSTNAME
               value: localhost
@@ -89,6 +85,3 @@ spec:
         - name: fmeserverdata
           persistentVolumeClaim:
             claimName: fmeserver-data-{{ .Values.fmeserver.buildNr }}
-        - name: fmeserverlogs
-          persistentVolumeClaim:
-            claimName: fmeserver-logs-{{ .Values.fmeserver.buildNr }}
