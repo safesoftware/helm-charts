@@ -41,6 +41,12 @@ spec:
               value: '443'
             - name: NODENAMENS
               value: fmeserver
+          readinessProbe:
+            tcpSocket:
+              port: 7070
+            initialDelaySeconds: 20
+            timeoutSeconds: 3
+            periodSeconds: 5
         - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-web:{{ .Values.fmeserver.buildNr }}
           name: web
           imagePullPolicy: {{ .Values.images.pullPolicy }}
@@ -64,6 +70,20 @@ spec:
               value: https
             - name: EXTERNALPORT
               value: '443'
+          livenessProbe:
+            httpGet:
+              path: /fmerest/v3/healthcheck
+              port: 8080
+            initialDelaySeconds: 60
+            failureThreshold: 6
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /fmerest/v3/healthcheck
+              port: 8080
+            initialDelaySeconds: 20
+            timeoutSeconds: 3
+            periodSeconds: 5
       restartPolicy: Always
       volumes:
         - name: fmeserverdata

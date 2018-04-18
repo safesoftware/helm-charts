@@ -26,6 +26,29 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeserverdata/resources/logs
               name: fmeserverlogs
+          env:
+          - name: POD_IP
+            valueFrom: { fieldRef: { fieldPath: status.podIP } }
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec redis-cli -a sozPpbLfgdI9WJoPejNMpSxGw -h $POD_IP ping
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 5
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec redis-cli -a sozPpbLfgdI9WJoPejNMpSxGw -h $POD_IP ping
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 5
       restartPolicy: Always
       volumes:
         - name: fmeserverlogs

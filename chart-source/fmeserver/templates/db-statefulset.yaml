@@ -26,6 +26,28 @@ spec:
           volumeMounts:
           - mountPath: /var/lib/postgresql/data
             name: postgresdata
+          # env and probes copied from official pg chart: https://github.com/kubernetes/charts/blob/master/stable/postgresql/templates/deployment.yaml
+          env:
+          - name: POD_IP
+            valueFrom: { fieldRef: { fieldPath: status.podIP } }
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            initialDelaySeconds: 120
+            timeoutSeconds: 5
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            periodSeconds: 5
       restartPolicy: Always
       volumes:
       - name: postgresdata
