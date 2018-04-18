@@ -24,8 +24,8 @@ spec:
           ports:
             - containerPort: 6379
           volumeMounts:
-            - mountPath: /data/fmeserverdata/resources/logs
-              name: fmeserverlogs
+            - mountPath: /data/fmeserverdata
+              name: fmeserverdata
           env:
           - name: POD_IP
             valueFrom: { fieldRef: { fieldPath: status.podIP } }
@@ -51,6 +51,6 @@ spec:
             failureThreshold: 5
       restartPolicy: Always
       volumes:
-        - name: fmeserverlogs
+        - name: fmeserverdata
           persistentVolumeClaim:
-            claimName: fmeserver-logs-{{ .Values.fmeserver.buildNr }}
+            claimName: fmeserver-data-{{ .Values.fmeserver.buildNr }}

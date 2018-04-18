@@ -3,11 +3,11 @@ entries:
   fmeserver:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-04-17T16:22:49.844409819-07:00
+    created: 2018-04-18T15:50:07.028782326-07:00
     description: A Helm chart for deploying FME Server in Kubernetes
-    digest: e6752fb798438f22e0b7d6f485850afcf2b13e4818e1f14c10df5688fa1df5b3
+    digest: bbea613149a819173c55f0f4f56749884fc8a9a5f157ee1320483236d38a4c62
     name: fmeserver
     urls:
     - https://safesoftware.github.io/helm-charts/fmeserver-0.1.0.tgz
     version: 0.1.0
-generated: 2018-04-17T16:22:49.833451279-07:00
+generated: 2018-04-18T15:50:07.026953666-07:00

@@ -29,8 +29,6 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeserverdata
               name: fmeserverdata
-            - mountPath: /data/fmeserverdata/resources/logs
-              name: fmeserverlogs
           livenessProbe:
             tcpSocket:
               port: 7078
@@ -48,6 +46,3 @@ spec:
         - name: fmeserverdata
           persistentVolumeClaim:
             claimName: fmeserver-data-{{ .Values.fmeserver.buildNr }}
-        - name: fmeserverlogs
-          persistentVolumeClaim:
-            claimName: fmeserver-logs-{{ .Values.fmeserver.buildNr }}
