@@ -16,3 +16,8 @@ spec:
               serviceName: fmeserverwebsocket
               servicePort: 7078
             path: /websocket
+          # TODO: Remove before merging to master
+          - backend:
+              serviceName: fmeservereb
+              servicePort: 8080
+            path: /engine-broker/v1

@@ -4,6 +4,7 @@ metadata:
   labels:
     safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
     safe.k8s.fmeserver.component: engine
+    safe.k8s.fmeserver.set.id: {{ .Values.fmeserver.engines.defaultSetID }}
   name: engine
 spec:
   replicas: 1

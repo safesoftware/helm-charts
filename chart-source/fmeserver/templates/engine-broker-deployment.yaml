@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
+    safe.k8s.fmeserver.component: engine-broker
+  name: engine-broker
+spec:
+  replicase: 1
+  selector:
+    matchLabels:
+      safe.k8s.fmeserver.component: engine-broker
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeserver.component: engine-broker
+        safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
+    spec:
+      serviceAccountName: engine-broker-auth
+      restartPolicy: Always
+      containers:
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/engine-broker-k8s:latest
+          name: engine-broker
+          imagePullPolicy: {{ .Values.images.pullPolicy }}

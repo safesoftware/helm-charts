@@ -1,5 +1,7 @@
 fmeserver:
   buildNr: 2018-latest
+  engines:
+    defaultSetID: default-set
 
 deployment:
   hostname: localhost
