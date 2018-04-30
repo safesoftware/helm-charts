@@ -18,7 +18,7 @@ spec:
         safe.k8s.fmeserver.component: db
     spec:
       containers:
-        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-db:{{ .Values.fmeserver.buildNr }}
+        - image: postgres:9.5
           name: db
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
