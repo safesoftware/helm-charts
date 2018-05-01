@@ -80,6 +80,12 @@ spec:
             initialDelaySeconds: 20
             timeoutSeconds: 3
             periodSeconds: 5
+      initContainers:
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ .Values.fmeserver.buildNr }}
+          name: dbinit
+          env:
+            - name: PRIMARY_PROCESS
+              value: initpgsql
       restartPolicy: Always
       volumes:
         - name: fmeserverdata
