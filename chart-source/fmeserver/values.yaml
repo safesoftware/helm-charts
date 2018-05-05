@@ -5,13 +5,21 @@ deployment:
   hostname: localhost
 
 storage:
+  useHostDir: false
+  reclaimPolicy: Delete
   database:
     class: hostpath
     size: 1Gi
+    path:
   fmeserver:
     class: hostpath
     size: 10Gi
+    path:
 
 images:
   # Supported values: Always or IfNotPresent
   pullPolicy: Always
+
+nginx-ingress:
+  rbac:
+    create: true
