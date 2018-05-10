@@ -8,7 +8,9 @@ metadata:
 spec:
   accessModes:
   - ReadWriteOnce
+  {{- if not .Values.storage.useHostDir }}
   storageClassName: {{.Values.storage.database.class}}
+  {{- end }}
   resources:
     requests:
       storage: {{.Values.storage.database.size}}

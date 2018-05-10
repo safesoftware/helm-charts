@@ -17,6 +17,11 @@ spec:
         safe.k8s.fmeserver.component: core
         safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
     spec:
+      securityContext:
+        /* fsGroup: 1363 */
+        {{- if .Values.storage.useHostDir }}
+        runAsUser: 0
+        {{- end }}
       containers:
         - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ .Values.fmeserver.buildNr }}
           name: core
@@ -39,6 +44,12 @@ spec:
               value: '443'
             - name: NODENAMENS
               value: fmeserver
+            {{- if .Values.storage.useHostDir }}
+            - name: FMESERVER_UID
+              value: '1363'
+            - name: FMESERVER_GID
+              value: '1363'
+            {{- end }}
           readinessProbe:
             tcpSocket:
               port: 7070
