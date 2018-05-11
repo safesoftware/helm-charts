@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
+    safe.k8s.fmeserver.build: "{{ .Values.fmeserver.buildNr }}"
     safe.k8s.fmeserver.component: core
   name: core
 spec:
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         safe.k8s.fmeserver.component: core
-        safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
+        safe.k8s.fmeserver.build: "{{ .Values.fmeserver.buildNr }}"
     spec:
       securityContext:
         /* fsGroup: 1363 */

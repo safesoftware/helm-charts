@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
+    safe.k8s.fmeserver.build: "{{ .Values.fmeserver.buildNr }}"
     safe.k8s.fmeserver.component: websocket
   name: websocket
 spec:
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         safe.k8s.fmeserver.component: websocket
-        safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr }}
+        safe.k8s.fmeserver.build: "{{ .Values.fmeserver.buildNr }}"
     spec:
       containers:
         - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ .Values.fmeserver.buildNr }}
