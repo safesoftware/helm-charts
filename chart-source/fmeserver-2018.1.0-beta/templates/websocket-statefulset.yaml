@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    safe.k8s.fmeserver.build: "{{ .Values.fmeserver.buildNr }}"
+    safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
     safe.k8s.fmeserver.component: websocket
   name: websocket
 spec:
@@ -15,10 +15,10 @@ spec:
     metadata:
       labels:
         safe.k8s.fmeserver.component: websocket
-        safe.k8s.fmeserver.build: "{{ .Values.fmeserver.buildNr }}"
+        safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
     spec:
       containers:
-        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ .Values.fmeserver.buildNr }}
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
           name: websocket
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           env:
@@ -45,4 +45,4 @@ spec:
       volumes:
         - name: fmeserverdata
           persistentVolumeClaim:
-            claimName: fmeserver-data-{{ .Values.fmeserver.buildNr }}
+            claimName: fmeserver-data-{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}

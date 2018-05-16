@@ -1,0 +1,5 @@
+apiVersion: v1
+appVersion: "2018.1.0 BETA"
+description: A Helm chart for deploying FME Server 2018.1 BETA in Kubernetes
+name: fmeserver-2018.1.0-beta
+version: 0.1.0

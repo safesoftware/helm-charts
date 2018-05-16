@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    safe.k8s.fmeserver.build: "{{ .Values.fmeserver.buildNr }}"
+    safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
     safe.k8s.fmeserver.component: db
   name: db
 spec:
@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       labels:
-        safe.k8s.fmeserver.build: "{{ .Values.fmeserver.buildNr }}"
+        safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
         safe.k8s.fmeserver.component: db
     spec:
       containers:
@@ -52,4 +52,4 @@ spec:
       volumes:
       - name: postgresdata
         persistentVolumeClaim:
-          claimName: fmeserver-db-{{ .Values.fmeserver.buildNr }}
+          claimName: fmeserver-db-{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}

@@ -2,9 +2,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    safe.k8s.fmeserver.build: "{{ .Values.fmeserver.buildNr }}"
+    safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
     safe.k8s.fmeserver.component: db
-  name: fmeserver-db-{{ .Values.fmeserver.buildNr }}
+  name: fmeserver-db-{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
 spec:
   accessModes:
   - ReadWriteOnce

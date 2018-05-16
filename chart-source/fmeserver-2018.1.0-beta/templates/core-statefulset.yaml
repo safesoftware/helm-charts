@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    safe.k8s.fmeserver.build: "{{ .Values.fmeserver.buildNr }}"
+    safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
     safe.k8s.fmeserver.component: core
   name: core
 spec:
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         safe.k8s.fmeserver.component: core
-        safe.k8s.fmeserver.build: "{{ .Values.fmeserver.buildNr }}"
+        safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
     spec:
       securityContext:
         /* fsGroup: 1363 */
@@ -23,7 +23,7 @@ spec:
         runAsUser: 0
         {{- end }}
       containers:
-        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ .Values.fmeserver.buildNr }}
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
           name: core
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
@@ -56,7 +56,7 @@ spec:
             initialDelaySeconds: 20
             timeoutSeconds: 3
             periodSeconds: 5
-        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-web:{{ .Values.fmeserver.buildNr }}
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-web:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
           name: web
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
@@ -92,7 +92,7 @@ spec:
             timeoutSeconds: 3
             periodSeconds: 5
       initContainers:
-        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ .Values.fmeserver.buildNr }}
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
           name: dbinit
           env:
             - name: PRIMARY_PROCESS
@@ -101,4 +101,4 @@ spec:
       volumes:
         - name: fmeserverdata
           persistentVolumeClaim:
-            claimName: fmeserver-data-{{ .Values.fmeserver.buildNr }}
+            claimName: fmeserver-data-{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
