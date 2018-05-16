@@ -2,16 +2,16 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: fmeserver-data-{{ .Values.fmeserver.buildNr }}
+  name: fmeserver-db-{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
 spec:
   {{- with .Values.storage }}
   capacity:
-    storage: {{ .fmeserver.size }}
+    storage: {{ .database.size }}
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: {{ .reclaimPolicy }}
   hostPath:
-    path: {{ .fmeserver.path | default "/tmp/k8s/fmeserver_data" }}
+    path: {{ .database.path | default "/tmp/k8s/fmeserver_db" }}
     type: DirectoryOrCreate
   {{- end }}
 {{ end }}
