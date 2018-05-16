@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
+    safe.k8s.fmeserver.component: db
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      safe.k8s.fmeserver.component: db
+  serviceName: fmeserverdb
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
+        safe.k8s.fmeserver.component: db
+    spec:
+      containers:
+        - image: postgres:9.5
+          name: db
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgresdata
+          # env and probes copied from official pg chart: https://github.com/kubernetes/charts/blob/master/stable/postgresql/templates/deployment.yaml
+          env:
+          - name: POD_IP
+            valueFrom: { fieldRef: { fieldPath: status.podIP } }
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            initialDelaySeconds: 120
+            timeoutSeconds: 5
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            periodSeconds: 5
+      restartPolicy: Always
+      volumes:
+      - name: postgresdata
+        persistentVolumeClaim:
+          claimName: fmeserver-db-{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}

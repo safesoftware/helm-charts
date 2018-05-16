@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
+    safe.k8s.fmeserver.component: core
+  name: core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      safe.k8s.fmeserver.component: core
+  serviceName: fmeserver
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeserver.component: core
+        safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
+    spec:
+      securityContext:
+        /* fsGroup: 1363 */
+        {{- if .Values.storage.useHostDir }}
+        runAsUser: 0
+        {{- end }}
+      containers:
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+          name: core
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          ports:
+            - containerPort: 7070
+          volumeMounts:
+            - mountPath: /data/fmeserverdata
+              name: fmeserverdata
+          env:
+            - name: PRIMARY_PROCESS
+              value: core
+            - name: FMESERVERHOSTNAME
+              value: localhost
+            - name: WEBSERVERHOSTNAME
+              value: localhost
+            - name: FMESERVERHOSTNAMELOCAL
+              value: localhost
+            - name: EXTERNALPORT
+              value: '443'
+            - name: NODENAMENS
+              value: fmeserver
+            {{- if .Values.storage.useHostDir }}
+            - name: FMESERVER_UID
+              value: '1363'
+            - name: FMESERVER_GID
+              value: '1363'
+            {{- end }}
+          readinessProbe:
+            tcpSocket:
+              port: 7070
+            initialDelaySeconds: 20
+            timeoutSeconds: 3
+            periodSeconds: 5
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-web:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+          name: web
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - mountPath: /data/fmeserverdata
+              name: fmeserverdata
+          env:
+            - name: FMESERVERHOSTNAME
+              value: localhost
+            - name: WEBSERVERHOSTNAME
+              value: localhost
+            - name: FMESERVERHOSTNAMELOCAL
+              value: localhost
+            - name: EXTERNALHOSTNAME
+              value: {{ .Values.deployment.hostname }}
+            - name: WEBPROTOCOL
+              value: https
+            - name: EXTERNALPORT
+              value: '443'
+          livenessProbe:
+            httpGet:
+              path: /fmerest/v3/healthcheck
+              port: 8080
+            initialDelaySeconds: 60
+            failureThreshold: 6
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /fmerest/v3/healthcheck
+              port: 8080
+            initialDelaySeconds: 20
+            timeoutSeconds: 3
+            periodSeconds: 5
+      initContainers:
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+          name: dbinit
+          env:
+            - name: PRIMARY_PROCESS
+              value: initpgsql
+      restartPolicy: Always
+      volumes:
+        - name: fmeserverdata
+          persistentVolumeClaim:
+            claimName: fmeserver-data-{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}

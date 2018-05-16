@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
+    safe.k8s.fmeserver.component: db
+  name: fmeserverdb
+spec:
+  ports:
+  - name: pg
+    port: 5432
+  clusterIP: None
+  selector:
+    safe.k8s.fmeserver.component: db

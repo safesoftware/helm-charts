@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
+    safe.k8s.fmeserver.component: websocket
+  name: websocket
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      safe.k8s.fmeserver.component: websocket
+  serviceName: fmeserverwebsocket
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeserver.component: websocket
+        safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
+    spec:
+      containers:
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+          name: websocket
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          env:
+            - name: PRIMARY_PROCESS
+              value: websocket
+          ports:
+            - containerPort: 7078
+          volumeMounts:
+            - mountPath: /data/fmeserverdata
+              name: fmeserverdata
+          livenessProbe:
+            tcpSocket:
+              port: 7078
+            initialDelaySeconds: 30
+            failureThreshold: 5
+            timeoutSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: 7078
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 5
+      restartPolicy: Always
+      volumes:
+        - name: fmeserverdata
+          persistentVolumeClaim:
+            claimName: fmeserver-data-{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}

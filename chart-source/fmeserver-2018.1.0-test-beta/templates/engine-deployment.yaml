@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
+    safe.k8s.fmeserver.component: engine
+  name: engine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      safe.k8s.fmeserver.component: engine
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeserver.component: engine
+        safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
+    spec:
+      containers:
+        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-engine:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+          name: engine
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          volumeMounts:
+            - mountPath: /data/fmeserverdata
+              name: fmeserverdata
+          env:
+            - name: EXTERNALHOSTNAME
+              value: {{ .Values.deployment.hostname }}
+            - name: WEBPROTOCOL
+              value: https
+            - name: EXTERNALPORT
+              value: '443'
+            - name: FMESERVERHOSTNAME
+              value: engineregistration
+            - name: NODENAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+      restartPolicy: Always
+      volumes:
+        - name: fmeserverdata
+          persistentVolumeClaim:
+            claimName: fmeserver-data-{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
