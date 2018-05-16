@@ -23,7 +23,7 @@ fi
 
 # Run tests
 for chart_dir in chart-source/*/ ; do
-  if [ "$BRANCH_NAME" = "master" ]; then
+  if [ "$BRANCH_NAME" = "master" ] ; then
     echo "Master branch detected, running tests for all charts"
     run_tests $chart_dir $helm_params
   else
