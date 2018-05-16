@@ -4,7 +4,9 @@
 set -e
 
 export HELM_VERSION="2.9.1"
-export HELM_BIN=.semaphore-cache/helm-$HELM_VERSION
+export HELM_BIN="$(pwd)/.semaphore-cache/helm-$HELM_VERSION"
+export HELM_HOME="$(pwd)/.semaphore-cache/.helm"
+export HELM_PLUGIN_DIR="$(pwd)/.semaphore-cache/.helmplugins"
 
 if [ "$BRANCH_NAME" != "master" ]; then
   echo "Only master branch supports releases"
@@ -17,6 +19,9 @@ if [ ! -f $HELM_BIN ]; then
 fi
 
 # Configure Helm
+sudo cp $HELM_BIN /usr/local/bin/helm
+mkdir -p $HELM_HOME $HELM_PLUGIN_DIR
+$HELM_BIN init --client-only
 $HELM_BIN plugin install https://github.com/mbenabda/helm-local-chart-version || true
 $HELM_BIN repo add safesoftware https://safesoftware.github.io/helm-charts/
 
@@ -87,3 +92,4 @@ git add docs/
 git commit -m "[ci skip] Release latest Helm charts"
 
 git push origin --tags
+git push origin master
