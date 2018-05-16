@@ -3,7 +3,17 @@ entries:
   fmeserver-2018.1.0-beta:
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-05-16T23:09:53.781474515Z
+    created: 2018-05-16T23:17:54.055462332Z
+    description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
+      in production)
+    digest: 6aea9aebf887b7ef1596118867e717842ab677b11f3caa226f59c4483ffad21b
+    name: fmeserver-2018.1.0-beta
+    urls:
+    - https://safesoftware.github.io/helm-charts/fmeserver-2018.1.0-beta-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v1
+    appVersion: 2018.1.0 BETA
+    created: 2018-05-16T23:17:54.054172296Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 74eb15a8d29a124071cc02c6293f9390e22b2b7d1188a1ba298f196d35bfaf3e
@@ -13,11 +23,11 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-05-16T23:09:53.780561787Z
+    created: 2018-05-16T23:17:54.052912884Z
     description: A Helm chart for deploying FME Server 2018.1 BETA in Kubernetes
     digest: 2b1e2fa0365eea50401028e3539b0aeb3f60dbc9f263ed49ed3bb7971f7813b6
     name: fmeserver-2018.1.0-beta
     urls:
     - https://safesoftware.github.io/helm-charts/fmeserver-2018.1.0-beta-0.1.0.tgz
     version: 0.1.0
-generated: 2018-05-16T23:09:53.77940504Z
+generated: 2018-05-16T23:17:54.051638129Z
