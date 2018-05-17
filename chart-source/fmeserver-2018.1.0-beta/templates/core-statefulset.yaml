@@ -50,12 +50,6 @@ spec:
             - name: FMESERVER_GID
               value: '1363'
             {{- end }}
-          readinessProbe:
-            tcpSocket:
-              port: 7070
-            initialDelaySeconds: 20
-            timeoutSeconds: 3
-            periodSeconds: 5
         - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-web:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
           name: web
           imagePullPolicy: {{ .Values.images.pullPolicy }}
