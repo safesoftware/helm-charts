@@ -3,6 +3,8 @@ fmeserver:
 
 deployment:
   hostname: localhost
+  tlsSecretName:
+  certManagerIssuer:
 
 storage:
   useHostDir: false
@@ -19,7 +21,11 @@ storage:
 images:
   # Supported values: Always or IfNotPresent
   pullPolicy: Always
+  registry: safe-harbor.safe.internal
+  namespace: fmeserver-kubernetes
+
 
 nginx-ingress:
+  enabled: true
   rbac:
     create: true
