@@ -1,4 +1,5 @@
 dependencies:
   - name: nginx-ingress
+    condition: nginx-ingress.enabled
     repository: '@stable'
     version: 0.16.0

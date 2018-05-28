@@ -17,8 +17,11 @@ spec:
         safe.k8s.fmeserver.component: queue
         safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
     spec:
+      # Temporary helper, should be removed before making public
+      # imagePullSecrets:
+      #   - name: safesoftware-fmeserver-k8s-pull-secret
       containers:
-        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-queue:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-queue:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
           name: queue
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:

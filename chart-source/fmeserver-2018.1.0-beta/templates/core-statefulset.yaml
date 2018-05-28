@@ -17,13 +17,16 @@ spec:
         safe.k8s.fmeserver.component: core
         safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
     spec:
+      # Temporary helper, should be removed before making public
+      # imagePullSecrets:
+      #   - name: safesoftware-fmeserver-k8s-pull-secret
       securityContext:
         /* fsGroup: 1363 */
         {{- if .Values.storage.useHostDir }}
         runAsUser: 0
         {{- end }}
       containers:
-        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-core:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
           name: core
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
@@ -50,7 +53,7 @@ spec:
             - name: FMESERVER_GID
               value: '1363'
             {{- end }}
-        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-web:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-web:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
           name: web
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
@@ -86,7 +89,7 @@ spec:
             timeoutSeconds: 3
             periodSeconds: 5
       initContainers:
-        - image: safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-core:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
           name: dbinit
           env:
             - name: PRIMARY_PROCESS

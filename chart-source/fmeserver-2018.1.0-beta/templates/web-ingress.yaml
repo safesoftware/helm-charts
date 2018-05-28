@@ -4,9 +4,19 @@ metadata:
   name: fmeserver-web-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"
+    {{- if .Values.deployment.certManagerIssuer }}
+    certmanager.k8s.io/issuer: {{ .Values.deployment.certManagerIssuer | quote }}
+    {{- end }}
 spec:
+  {{- if .Values.deployment.tlsSecretName }}
+  tls:
+    - hosts:
+        - {{ .Values.deployment.hostname }}
+      secretName: {{ .Values.deployment.tlsSecretName }}
+  {{- end }}
   rules:
-    - http:
+    - host: {{ .Values.deployment.hostname }}
+      http:
         paths:
           - backend:
               serviceName: fmeserverweb
