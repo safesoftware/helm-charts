@@ -2,8 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
     safe.k8s.fmeserver.component: engine
+    {{- include "fmeserver.common.labels" . | indent 4 }}
   name: engine
 spec:
   replicas: 1
@@ -14,13 +14,13 @@ spec:
     metadata:
       labels:
         safe.k8s.fmeserver.component: engine
-        safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
+        {{- include "fmeserver.common.labels" . | indent 8 }}
     spec:
       # Temporary helper, should be removed before making public
       # imagePullSecrets:
       #   - name: safesoftware-fmeserver-k8s-pull-secret
       containers:
-        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-engine:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-engine:{{ .Values.fmeserver.buildNr }}
           name: engine
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           volumeMounts:
@@ -43,4 +43,4 @@ spec:
       volumes:
         - name: fmeserverdata
           persistentVolumeClaim:
-            claimName: fmeserver-data-{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+            claimName: fmeserver-data-{{ .Values.fmeserver.buildNr }}

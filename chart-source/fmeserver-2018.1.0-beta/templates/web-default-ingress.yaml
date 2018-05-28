@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: fmeserver-web-ingress
+  annotations:
+{{- include "fmeserver.ingress.annotations" . | indent 4 }}
+spec:
+  {{- include "fmeserver.ingress.tls" . }}
+  rules:
+    - host: {{ .Values.deployment.hostname }}
+      http:
+        paths:
+          - backend:
+              serviceName: fmeserverweb
+              servicePort: 8080
+            path: /
