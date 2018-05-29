@@ -21,7 +21,6 @@ spec:
       # imagePullSecrets:
       #   - name: safesoftware-fmeserver-k8s-pull-secret
       securityContext:
-        /* fsGroup: 1363 */
         {{- if .Values.storage.useHostDir }}
         runAsUser: 0
         {{- end }}

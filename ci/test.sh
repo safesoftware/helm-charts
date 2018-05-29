@@ -5,6 +5,8 @@ set -e
 
 export HELM_VERSION="2.9.1"
 export HELM_BIN=.semaphore-cache/helm-$HELM_VERSION
+export HELM_HOME="$(pwd)/.semaphore-cache/.helm"
+export HELM_PLUGIN_DIR="$(pwd)/.semaphore-cache/.helm/plugins"
 
 function run_tests() {
   echo "Running test for chart $1"
@@ -14,12 +16,19 @@ function run_tests() {
   else
     $HELM_BIN lint $1
   fi
+  $HELM_BIN unittest $1
 }
 
 # Setup tools
 if [ ! -f $HELM_BIN ]; then
   curl https://storage.googleapis.com/kubernetes-helm/helm-v$HELM_VERSION-linux-amd64.tar.gz | tar -xz linux-amd64/helm && mv linux-amd64/helm $HELM_BIN
 fi
+
+# Configure Helm
+sudo cp $HELM_BIN /usr/local/bin/helm
+mkdir -p $HELM_HOME/plugins
+$HELM_BIN init --client-only
+$HELM_BIN plugin install https://github.com/lrills/helm-unittest || true
 
 # Run tests
 for chart_dir in chart-source/*/ ; do

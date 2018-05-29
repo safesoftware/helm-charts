@@ -1,0 +1,97 @@
+suite: core statefulset
+templates:
+  - core-statefulset.yaml
+tests:
+  - it: renders default values
+    set:
+      fmeserver.buildNr: '18888'
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:18888"
+      - equal:
+          path: spec.template.spec.containers[1].image
+          value: "safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-web:18888"
+      - equal:
+          path: spec.template.spec.initContainers[0].image
+          value: "safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:18888"
+      - equal:
+          path: spec.template.spec.containers[1].env[3].value
+          value: "localhost"
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: Always
+      - equal:
+          path: spec.template.spec.volumes[0].persistentVolumeClaim.claimName
+          value: fmeserver-data-18888
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMESERVER_UID
+            value: '1363'
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMESERVER_GID
+            value: '1363'
+      - isEmpty:
+          path: spec.template.spec.securityContext
+
+  - it: renders labels
+    set:
+      fmeserver.buildNr: '18888'
+    asserts:
+      - equal:
+          path: metadata.labels.safe\.k8s\.fmeserver\.component
+          value: core
+      - equal:
+          path: metadata.labels.safe\.k8s\.fmeserver\.build
+          value: '18888'
+
+  - it: allows to change the pull policy, registry and namespace
+    set:
+      fmeserver.buildNr: '18888'
+      images.pullPolicy: IfNotPresent
+      images.registry: quay.ui
+      images.namespace: safesoftwure
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: IfNotPresent
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "quay.ui/safesoftwure/fmeserver-core:18888"
+      - equal:
+          path: spec.template.spec.containers[1].image
+          value: "quay.ui/safesoftwure/fmeserver-web:18888"
+      - equal:
+          path: spec.template.spec.initContainers[0].image
+          value: "quay.ui/safesoftwure/fmeserver-core:18888"
+
+  - it: allows to change the hostname
+    set:
+      fmeserver.buildNr: '18888'
+      deployment.hostname: 'fmeserver.safe.com'
+    asserts:
+       - equal:
+          path: spec.template.spec.containers[1].env[3].value
+          value: "fmeserver.safe.com"
+
+  - it: sets right permission for hostpath disk
+    set:
+      fmeserver.buildNr: '18888'
+      storage.useHostDir: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMESERVER_UID
+            value: '1363'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMESERVER_GID
+            value: '1363'
+      - equal:
+          path: spec.template.spec.securityContext.runAsUser
+          value: 0
