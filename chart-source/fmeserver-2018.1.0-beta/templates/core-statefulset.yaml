@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
+    {{- include "fmeserver.common.labels" . | indent 4 }}
     safe.k8s.fmeserver.component: core
   name: core
 spec:
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         safe.k8s.fmeserver.component: core
-        safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
+        {{- include "fmeserver.common.labels" . | indent 8 }}
     spec:
       # Temporary helper, should be removed before making public
       # imagePullSecrets:
@@ -26,7 +26,7 @@ spec:
         runAsUser: 0
         {{- end }}
       containers:
-        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-core:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-core:{{ .Values.fmeserver.buildNr }}
           name: core
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
@@ -53,7 +53,7 @@ spec:
             - name: FMESERVER_GID
               value: '1363'
             {{- end }}
-        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-web:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-web:{{ .Values.fmeserver.buildNr }}
           name: web
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
@@ -89,7 +89,7 @@ spec:
             timeoutSeconds: 3
             periodSeconds: 5
       initContainers:
-        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-core:{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-core:{{ .Values.fmeserver.buildNr }}
           name: dbinit
           env:
             - name: PRIMARY_PROCESS
@@ -98,4 +98,4 @@ spec:
       volumes:
         - name: fmeserverdata
           persistentVolumeClaim:
-            claimName: fmeserver-data-{{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr }}
+            claimName: fmeserver-data-{{ .Values.fmeserver.buildNr }}

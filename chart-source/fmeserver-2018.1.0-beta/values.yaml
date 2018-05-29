@@ -23,9 +23,3 @@ images:
   pullPolicy: Always
   registry: safe-harbor.safe.internal
   namespace: fmeserver-kubernetes
-
-
-nginx-ingress:
-  enabled: true
-  rbac:
-    create: true
