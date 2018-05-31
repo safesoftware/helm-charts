@@ -6,7 +6,7 @@ metadata:
     {{- include "fmeserver.common.labels" . | indent 4 }}
   name: engine
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       safe.k8s.fmeserver.component: engine
