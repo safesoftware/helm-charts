@@ -10,6 +10,9 @@ tests:
           path: metadata.annotations.kubernetes\.io\/ingress\.class
           value: nginx
       - equal:
+          path: metadata.annotations.nginx\.ingress\.kubernetes\.io/proxy-body-size
+          value: '0'
+      - equal:
           path: spec.rules[0].host
           value: localhost
       - equal:
