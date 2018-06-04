@@ -1,6 +1,7 @@
 {{/* Generates shared ingress annotations */}}
 {{- define "fmeserver.ingress.annotations" }}
 kubernetes.io/ingress.class: "nginx"
+nginx.ingress.kubernetes.io/proxy-body-size: "0"
 {{- if .Values.deployment.certManagerIssuer }}
 certmanager.k8s.io/issuer: {{ .Values.deployment.certManagerIssuer | quote }}
 {{- end }}
