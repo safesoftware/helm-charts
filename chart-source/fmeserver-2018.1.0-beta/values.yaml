@@ -21,5 +21,5 @@ storage:
 images:
   # Supported values: Always or IfNotPresent
   pullPolicy: Always
-  registry: safe-harbor.safe.internal
-  namespace: fmeserver-kubernetes
+  registry: quay.io
+  namespace: safesoftware
