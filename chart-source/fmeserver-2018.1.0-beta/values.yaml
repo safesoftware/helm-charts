@@ -20,6 +20,6 @@ storage:
 
 images:
   # Supported values: Always or IfNotPresent
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   registry: quay.io
   namespace: safesoftware

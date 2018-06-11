@@ -11,7 +11,7 @@ tests:
           value: "quay.io/safesoftware/fmeserver-core:18888"
       - equal:
           path: spec.template.spec.containers[0].imagePullPolicy
-          value: Always
+          value: IfNotPresent
       - equal:
           path: spec.template.spec.volumes[0].persistentVolumeClaim.claimName
           value: fmeserver-data-18888
@@ -30,13 +30,13 @@ tests:
   - it: allows to change the pull policy, registry and namespace
     set:
       fmeserver.buildNr: '18888'
-      images.pullPolicy: IfNotPresent
+      images.pullPolicy: Always
       images.registry: safe-harbour.safe.internal
       images.namespace: fmeserver-k8s
     asserts:
       - equal:
           path: spec.template.spec.containers[0].imagePullPolicy
-          value: IfNotPresent
+          value: Always
       - equal:
           path: spec.template.spec.containers[0].image
           value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:18888"

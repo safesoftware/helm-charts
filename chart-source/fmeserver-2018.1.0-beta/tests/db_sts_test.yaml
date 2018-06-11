@@ -8,7 +8,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].imagePullPolicy
-          value: Always
+          value: IfNotPresent
       - equal:
           path: spec.template.spec.volumes[0].persistentVolumeClaim.claimName
           value: fmeserver-db-18888
@@ -27,8 +27,8 @@ tests:
   - it: allows to change the pull policy
     set:
       fmeserver.buildNr: '18888'
-      images.pullPolicy: IfNotPresent
+      images.pullPolicy: Always
     asserts:
       - equal:
           path: spec.template.spec.containers[0].imagePullPolicy
-          value: IfNotPresent
+          value: Always

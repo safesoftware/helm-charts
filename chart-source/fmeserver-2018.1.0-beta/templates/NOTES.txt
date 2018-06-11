@@ -12,4 +12,8 @@ Things to check if something does not work:
   - Is the NGINX ingress controller deployed? Check the following link for more details: https://kubernetes.github.io/ingress-nginx/deploy/
   - Does your server have enough disk storage?
 
+To uninstall/delete FME Server (this deletes all data):
+
+  $ helm del --purge {{ .Release.Name }}
+
 If you have issues, you can contact us here: https://www.safe.com/support/
