@@ -42,8 +42,12 @@ spec:
               value: localhost
             - name: FMESERVERHOSTNAMELOCAL
               value: localhost
+            - name: EXTERNALHOSTNAME
+              value: {{ .Values.deployment.hostname }}
             - name: EXTERNALPORT
               value: '443'
+            - name: WEBPROTOCOL
+              value: https
             - name: NODENAMENS
               value: fmeserver
             {{- if .Values.storage.useHostDir }}
