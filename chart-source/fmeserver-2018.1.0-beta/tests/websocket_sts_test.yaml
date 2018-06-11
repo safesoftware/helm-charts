@@ -8,7 +8,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: "safe-harbor.safe.internal/fmeserver-kubernetes/fmeserver-core:18888"
+          value: "quay.io/safesoftware/fmeserver-core:18888"
       - equal:
           path: spec.template.spec.containers[0].imagePullPolicy
           value: Always
@@ -31,12 +31,12 @@ tests:
     set:
       fmeserver.buildNr: '18888'
       images.pullPolicy: IfNotPresent
-      images.registry: quay.iu
-      images.namespace: safesoftwure
+      images.registry: safe-harbour.safe.internal
+      images.namespace: fmeserver-k8s
     asserts:
       - equal:
           path: spec.template.spec.containers[0].imagePullPolicy
           value: IfNotPresent
       - equal:
           path: spec.template.spec.containers[0].image
-          value: "quay.iu/safesoftwure/fmeserver-core:18888"
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:18888"
