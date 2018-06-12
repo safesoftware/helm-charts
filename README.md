@@ -1,19 +1,39 @@
-# Official helm charts of Safe Software
+# Official Safe Software Helm Charts
 
-## Configuration
+## Prerequisites
 
-Add the Safe Software charts repository:  
+To add the Safe Software charts repository:  
 `helm repo add safesoftware https://safesoftware.github.io/helm-charts/`
 
+## Installing the Chart
+
+To walk you through the helm installation process, a quick-start script for all supported FME Server versions has been created and can be found [here](http://fme.ly/k8s).
+
+## FME Server 2018.1.0 BETA
+
+### Configuration
+
+The following table lists the configurable parameters of the FME Server 2018.1.0 BETA chart and their default values.
+
+|      Parameter      |               Description             |                    Default                |
+|---------------------|---------------------------------------|-------------------------------------------|
+| `fmeserver.buildNr` | The requested FME Server Build Number |  `Nil` You must provide a build number. You can find available build numbers [here](http://fme.ly/k8s). |
+| `deployment.hostname` | FME Server hostname | `localhost` |
+| `deployment.tlsSecretName` | Custom TLS certificate, see [documentation](https://docs.google.com/document/d/e/2PACX-1vRHu7tkQLJsJ0uXRz-KgSxo6DOQL38Sc97PQPgMR0MLAfsEqrV7-HZeRE7i3BSRDjjIWDmAJoWkICii/pub) for more details | `Nil` |
+| `deployment.certManagerIssuer` | Cert Manager issuer name, see [documentation](https://docs.google.com/document/d/e/2PACX-1vRHu7tkQLJsJ0uXRz-KgSxo6DOQL38Sc97PQPgMR0MLAfsEqrV7-HZeRE7i3BSRDjjIWDmAJoWkICii/pub) for more details | `Nil` |
+| `storage.reclaimPolicy` | [Volume Reclaim Policy](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaim-policy) | `Delete` |
+| `storage.useHostDir` | Allows to map data and database volumes to a directory on a node. Requires path parameters. | `false` |
+| `storage.database.class` | Storage class for Database data. Ignored if host dir mapping is used. | `hostpath` |
+| `storage.database.size` | Database volume size | `1Gi` |
+| `storage.database.path` | Absolute path where database data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
+| `storage.fmeserver.class` | Storage class for FME Server data. Ignored if host dir mapping is used. | `hostpath` |
+| `storage.fmeserver.size` | FME Server data volume size | `10Gi` |
+| `storage.fmeserver.path` | Absolute path where FME Server data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
+| `images.pullPolicy` | Image pull policy | `IfNotPresent` |
+| `images.registry` | Docker registry | `quay.io` This parameter should not be changed. |
+| `images.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
+
 ## Development
-
-### How to build a new chart version (usually done by CI)
-
-```console
-helm package chart-source/fmeserver/
-mv fmeserver-0.1.0.tgz docs/fmeserver-0.1.0.tgz
-helm repo index docs --url https://safesoftware.github.io/helm-charts
-```
 
 ### Run unit tests
 
