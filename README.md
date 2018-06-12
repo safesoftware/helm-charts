@@ -23,10 +23,10 @@ The following table lists the configurable parameters of the FME Server 2018.1.0
 | `deployment.certManagerIssuer` | Cert Manager issuer name, see [documentation](https://docs.google.com/document/d/e/2PACX-1vRHu7tkQLJsJ0uXRz-KgSxo6DOQL38Sc97PQPgMR0MLAfsEqrV7-HZeRE7i3BSRDjjIWDmAJoWkICii/pub) for more details | `Nil` |
 | `storage.reclaimPolicy` | [Volume Reclaim Policy](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaim-policy) | `Delete` |
 | `storage.useHostDir` | Allows to map data and database volumes to a directory on a node. Requires path parameters. | `false` |
-| `storage.database.class` | Storage class for Database data. Ignored if host dir mapping is used. | `hostpath` |
-| `storage.database.size` | Database volume size | `1Gi` |
-| `storage.database.path` | Absolute path where database data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
-| `storage.fmeserver.class` | Storage class for FME Server data. Ignored if host dir mapping is used. | `hostpath` |
+| `storage.postgresql.class` | Storage class for PostgreSQL data. Ignored if host dir mapping is used. | `Nil` |
+| `storage.postgresql.size` | PostgreSQL volume size | `1Gi` |
+| `storage.postgresql.path` | Absolute path where database data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
+| `storage.fmeserver.class` | Storage class for FME Server data. Ignored if host dir mapping is used. | `Nil` |
 | `storage.fmeserver.size` | FME Server data volume size | `10Gi` |
 | `storage.fmeserver.path` | Absolute path where FME Server data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
 | `images.pullPolicy` | Image pull policy | `IfNotPresent` |

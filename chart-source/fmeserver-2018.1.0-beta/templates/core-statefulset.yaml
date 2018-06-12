@@ -17,9 +17,6 @@ spec:
         safe.k8s.fmeserver.component: core
         {{- include "fmeserver.common.labels" . | indent 8 }}
     spec:
-      # Temporary helper, should be removed before making public
-      # imagePullSecrets:
-      #   - name: safesoftware-fmeserver-k8s-pull-secret
       securityContext:
         {{- if .Values.storage.useHostDir }}
         runAsUser: 0
@@ -50,6 +47,13 @@ spec:
               value: https
             - name: NODENAMENS
               value: fmeserver
+            - name: PGSQLHOSTNAME
+              value: "{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: postgres-password
             {{- if .Values.storage.useHostDir }}
             - name: FMESERVER_UID
               value: '1363'
@@ -97,6 +101,13 @@ spec:
           env:
             - name: PRIMARY_PROCESS
               value: initpgsql
+            - name: PGSQLHOSTNAME
+              value: "{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: postgres-password
       restartPolicy: Always
       volumes:
         - name: fmeserverdata

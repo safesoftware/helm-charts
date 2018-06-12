@@ -8,7 +8,7 @@ metadata:
 spec:
   accessModes:
   - ReadWriteOnce
-  {{- if not .Values.storage.useHostDir }}
+  {{- if and (not .Values.storage.useHostDir) .Values.storage.fmeserver.class }}
   storageClassName: {{.Values.storage.fmeserver.class}}
   {{- end }}
   resources:
