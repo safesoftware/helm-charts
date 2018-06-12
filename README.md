@@ -1,9 +1,13 @@
-# Official helm charts of Safe Software
+# Official Safe Software Helm Charts
 
-Add the Safe Software charts repository:  
+## Prerequisites
+
+To add the Safe Software charts repository:  
 `helm repo add safesoftware https://safesoftware.github.io/helm-charts/`
 
-A quick-start script for all supported FME Server versions can be found here: [http://fme.ly/k8s](http://fme.ly/k8s)
+## Installing the Chart
+
+To walk you through the helm installation process, a quick-start script for all supported FME Server versions has been created and can be found [here](http://fme.ly/k8s).
 
 ## FME Server 2018.1.0 BETA
 
