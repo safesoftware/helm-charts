@@ -17,9 +17,6 @@ spec:
         safe.k8s.fmeserver.component: websocket
         {{- include "fmeserver.common.labels" . | indent 8 }}
     spec:
-      # Temporary helper, should be removed before making public
-      # imagePullSecrets:
-      #   - name: safesoftware-fmeserver-k8s-pull-secret
       containers:
         - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-core:{{ .Values.fmeserver.buildNr }}
           name: websocket

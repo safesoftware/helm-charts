@@ -4,13 +4,13 @@ metadata:
   labels:
     safe.k8s.fmeserver.component: db
     {{- include "fmeserver.common.labels" . | indent 4 }}
-  name: fmeserver-db-{{ .Values.fmeserver.buildNr }}
+  name: fmeserver-postgresql
 spec:
   accessModes:
   - ReadWriteOnce
-  {{- if not .Values.storage.useHostDir }}
-  storageClassName: {{.Values.storage.database.class}}
+  {{- if and (not .Values.storage.useHostDir) .Values.storage.postgresql.class }}
+  storageClassName: {{.Values.storage.postgresql.class}}
   {{- end }}
   resources:
     requests:
-      storage: {{.Values.storage.database.size}}
+      storage: {{.Values.storage.postgresql.size}}

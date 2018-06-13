@@ -22,6 +22,14 @@ tests:
       - isEmpty:
           path: spec.storageClassName
 
+  - it: removes storage class by default
+    set:
+      fmeserver.buildNr: '18888'
+      storage.useHostDir: false
+    asserts:
+      - isEmpty:
+          path: spec.storageClassName
+
   - it: sets the storage class and size
     set:
       fmeserver.buildNr: '18888'

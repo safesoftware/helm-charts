@@ -1,6 +1,6 @@
-suite: database pvc
+suite: postgresql pvc
 templates:
-  - database-pvc.yaml
+  - postgresql-pvc.yaml
 tests:
   - it: renders labels
     set:
@@ -16,8 +16,16 @@ tests:
   - it: removes storage class if host dir is set
     set:
       fmeserver.buildNr: '18888'
-      storage.database.class: 'newClass'
+      storage.postgresql.class: 'newClass'
       storage.useHostDir: true
+    asserts:
+      - isEmpty:
+          path: spec.storageClassName
+
+  - it: removes storage class by default
+    set:
+      fmeserver.buildNr: '18888'
+      storage.useHostDir: false
     asserts:
       - isEmpty:
           path: spec.storageClassName
@@ -25,9 +33,9 @@ tests:
   - it: sets the storage class and size
     set:
       fmeserver.buildNr: '18888'
-      storage.database.class: 'newClass'
+      storage.postgresql.class: 'newClass'
       storage.useHostDir: false
-      storage.database.size: 30Gi
+      storage.postgresql.size: 30Gi
     asserts:
       - equal:
           path: spec.storageClassName
