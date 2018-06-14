@@ -6,12 +6,12 @@ metadata:
 spec:
   {{- with .Values.storage }}
   capacity:
-    storage: {{ .database.size }}
+    storage: {{ .postgresql.size }}
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: {{ .reclaimPolicy }}
   hostPath:
-    path: {{ .database.path | default "/tmp/k8s/fmeserver_db" }}
+    path: {{ .postgresql.path | default "/tmp/k8s/fmeserver_db" }}
     type: DirectoryOrCreate
   {{- end }}
 {{ end }}
