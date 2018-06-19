@@ -4,7 +4,7 @@ metadata:
   labels:
     safe.k8s.fmeserver.component: misc
     {{- include "fmeserver.common.labels" . | indent 4 }}
-  name: fmeserver-data-{{ .Values.fmeserver.buildNr }}
+  name: fmeserver-data
 spec:
   accessModes:
   - ReadWriteOnce

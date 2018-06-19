@@ -20,6 +20,8 @@ spec:
       securityContext:
         {{- if .Values.storage.useHostDir }}
         runAsUser: 0
+        {{- else }}
+        fsGroup: 1363
         {{- end }}
       containers:
         - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-core:{{ .Values.fmeserver.buildNr }}
@@ -112,4 +114,4 @@ spec:
       volumes:
         - name: fmeserverdata
           persistentVolumeClaim:
-            claimName: fmeserver-data-{{ .Values.fmeserver.buildNr }}
+            claimName: fmeserver-data

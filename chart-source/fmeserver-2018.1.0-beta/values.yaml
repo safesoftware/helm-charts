@@ -3,8 +3,11 @@ fmeserver:
 
 deployment:
   hostname: localhost
+  proxyReadTimeout: 60
   tlsSecretName:
-  certManagerIssuer:
+  certManager:
+    issuerName:
+    issuerType: cluster
 
 storage:
   useHostDir: false
