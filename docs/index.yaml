@@ -3,7 +3,17 @@ entries:
   fmeserver-2018.1.0-beta:
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.241342268Z
+    created: 2018-06-20T16:58:47.241615608Z
+    description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
+      in production)
+    digest: 83e6ad3d335182183b5b7d48047cdab1f1d4365ed3370ece40cc2727adf9b36a
+    name: fmeserver-2018.1.0-beta
+    urls:
+    - https://safesoftware.github.io/helm-charts/fmeserver-2018.1.0-beta-0.5.3.tgz
+    version: 0.5.3
+  - apiVersion: v1
+    appVersion: 2018.1.0 BETA
+    created: 2018-06-20T16:58:47.240299408Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 4cc2c9863aee14383ac79e0263637da3e38a6ce68d23e7702a31e3962918cfe4
@@ -13,7 +23,7 @@ entries:
     version: 0.5.2
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.240122937Z
+    created: 2018-06-20T16:58:47.239003647Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: ebf23bfe770f123ac83b1bdec39f07b7a9ea49cb4f19bc9f60d1cde5226ddf05
@@ -23,7 +33,7 @@ entries:
     version: 0.5.1
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.239334253Z
+    created: 2018-06-20T16:58:47.237601507Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 90fdc3eaa1e8a58bea152f9068f22a93fb59f48d582025fa52b725d67f57cfa8
@@ -33,7 +43,7 @@ entries:
     version: 0.5.0
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.238650663Z
+    created: 2018-06-20T16:58:47.236276176Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 71f3a861edac5a0b60ed7d86f668eb94a949771490f11bc2ba6724f3728e2c7a
@@ -43,7 +53,7 @@ entries:
     version: 0.4.1
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.238347708Z
+    created: 2018-06-20T16:58:47.235639769Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 2db0fbbce2dd5f777342781e84f6db68aecf6f66939fcc53ec301ade9a5afbd2
@@ -53,7 +63,7 @@ entries:
     version: 0.4.0
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.2380634Z
+    created: 2018-06-20T16:58:47.235045588Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 4965f46868af4770fcf85bf536044a5e4e8eb07924a1f2342fd38acb36485804
@@ -63,7 +73,7 @@ entries:
     version: 0.3.4
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.237790557Z
+    created: 2018-06-20T16:58:47.234444451Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 45e7aa01ec0b283e2eea673ebd9fef506647f7d44c079ed1cfe90a75e8772d83
@@ -73,7 +83,7 @@ entries:
     version: 0.3.3
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.237512156Z
+    created: 2018-06-20T16:58:47.233833346Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: d2400d18cba8a4358a2ab5399c3f841c13f18d249b1af511f29c2f9ca5fbbdd2
@@ -83,7 +93,7 @@ entries:
     version: 0.3.2
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.237217626Z
+    created: 2018-06-20T16:58:47.233179737Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: b28dd6dea0b587dd259b5b6eac31aa02dfb6704068c8467738fe02304d32f50b
@@ -93,7 +103,7 @@ entries:
     version: 0.3.1
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.236940691Z
+    created: 2018-06-20T16:58:47.232635031Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 7fc1c71538c526f38c3e66dc000c40e8c4d5d3718b3137155716f338fa4d0687
@@ -103,7 +113,7 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.236690693Z
+    created: 2018-06-20T16:58:47.232101486Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 70e4f6e4f3bcf9d5179ed708bf17d5f92e8d07b1211b2ed600c610ac3cb260fc
@@ -113,7 +123,7 @@ entries:
     version: 0.2.2
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.235921941Z
+    created: 2018-06-20T16:58:47.230436694Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 47229ba0389b7b31cb5ccba4a916965c7e78324057e44b1630494ac0343953c0
@@ -123,7 +133,7 @@ entries:
     version: 0.2.1
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.235152565Z
+    created: 2018-06-20T16:58:47.22872808Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 6aea9aebf887b7ef1596118867e717842ab677b11f3caa226f59c4483ffad21b
@@ -133,7 +143,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.234379566Z
+    created: 2018-06-20T16:58:47.227041045Z
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 74eb15a8d29a124071cc02c6293f9390e22b2b7d1188a1ba298f196d35bfaf3e
@@ -143,11 +153,11 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: 2018-06-20T00:13:42.233595991Z
+    created: 2018-06-20T16:58:47.225300824Z
     description: A Helm chart for deploying FME Server 2018.1 BETA in Kubernetes
     digest: 2b1e2fa0365eea50401028e3539b0aeb3f60dbc9f263ed49ed3bb7971f7813b6
     name: fmeserver-2018.1.0-beta
     urls:
     - https://safesoftware.github.io/helm-charts/fmeserver-2018.1.0-beta-0.1.0.tgz
     version: 0.1.0
-generated: 2018-06-20T00:13:42.232766714Z
+generated: 2018-06-20T16:58:47.221177782Z
