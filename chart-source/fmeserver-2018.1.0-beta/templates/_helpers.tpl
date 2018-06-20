@@ -2,8 +2,11 @@
 {{- define "fmeserver.ingress.annotations" }}
 kubernetes.io/ingress.class: "nginx"
 nginx.ingress.kubernetes.io/proxy-body-size: "0"
-{{- if .Values.deployment.certManagerIssuer }}
-certmanager.k8s.io/issuer: {{ .Values.deployment.certManagerIssuer | quote }}
+{{- if (and (not (empty .Values.deployment.certManager.issuerName)) (eq .Values.deployment.certManager.issuerType "cluster")) }}
+certmanager.k8s.io/cluster-issuer: {{ .Values.deployment.certManager.issuerName | quote }}
+{{- end }}
+{{- if (and (not (empty .Values.deployment.certManager.issuerName)) (eq .Values.deployment.certManager.issuerType "namespace")) }}
+certmanager.k8s.io/issuer: {{ .Values.deployment.certManager.issuerName | quote }}
 {{- end }}
 {{- end }}
 

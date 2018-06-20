@@ -23,7 +23,7 @@ tests:
           value: IfNotPresent
       - equal:
           path: spec.template.spec.volumes[0].persistentVolumeClaim.claimName
-          value: fmeserver-data-18888
+          value: fmeserver-data
       - notContains:
           path: spec.template.spec.containers[0].env
           content:
@@ -35,7 +35,10 @@ tests:
             name: FMESERVER_GID
             value: '1363'
       - isEmpty:
-          path: spec.template.spec.securityContext
+          path: spec.template.spec.securityContext.runAsUser
+      - equal:
+          path: spec.template.spec.securityContext.fsGroup
+          value: 1363
 
   - it: renders labels
     set:
@@ -95,3 +98,5 @@ tests:
       - equal:
           path: spec.template.spec.securityContext.runAsUser
           value: 0
+      - isEmpty:
+          path: spec.template.spec.securityContext.fsGroup

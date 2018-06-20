@@ -17,7 +17,7 @@ tests:
           value: IfNotPresent
       - equal:
           path: spec.template.spec.volumes[0].persistentVolumeClaim.claimName
-          value: fmeserver-data-18888
+          value: fmeserver-data
 
   - it: renders labels
     set:
