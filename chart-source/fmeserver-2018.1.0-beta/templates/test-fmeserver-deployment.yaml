@@ -9,7 +9,11 @@ spec:
     - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-deployment-tester:{{ .Values.fmeserver.buildNr }}
       name: deployment-tester
       env:
-        - name: HOSTNAME
-          value: {{ .Values.deployment.hostname }}
+        - name: FMESERVER_URL
+          value: "https://{{ .Values.deployment.hostname }}"
+        - name: FMESERVER_USER
+          value: "admin"
+        - name: FMESERVER_PASSWORD
+          value: "admin"
   hostNetwork: true
   restartPolicy: Never
