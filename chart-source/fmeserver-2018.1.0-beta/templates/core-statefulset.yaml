@@ -6,7 +6,7 @@ metadata:
     safe.k8s.fmeserver.component: core
   name: core
 spec:
-  replicas: 1
+  replicas: {{ .Values.deployment.numCores }}
   selector:
     matchLabels:
       safe.k8s.fmeserver.component: core
@@ -18,7 +18,7 @@ spec:
         {{- include "fmeserver.common.labels" . | indent 8 }}
     spec:
       securityContext:
-        {{- if .Values.storage.useHostDir }}
+        {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
         runAsUser: 0
         {{- else }}
         fsGroup: 1363
@@ -56,7 +56,7 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
                   key: postgres-password
-            {{- if .Values.storage.useHostDir }}
+            {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
             - name: FMESERVER_UID
               value: '1363'
             - name: FMESERVER_GID
@@ -116,4 +116,14 @@ spec:
       volumes:
         - name: fmeserverdata
           persistentVolumeClaim:
-            claimName: fmeserver-data
+            claimName: {{ template "fmeserver.storage.data.claimName" . }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: safe.k8s.fmeserver.component
+                operator: In
+                values:
+                - core
+            topologyKey: "kubernetes.io/hostname"

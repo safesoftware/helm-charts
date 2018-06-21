@@ -8,6 +8,9 @@ deployment:
   certManager:
     issuerName:
     issuerType: cluster
+  numCores: 1
+  numEngines: 2
+  startAsRoot: false
 
 resources:
   core:
@@ -29,13 +32,18 @@ resources:
 
 storage:
   useHostDir: false
+  deployNFS: false
   reclaimPolicy: Delete
   postgresql:
     size: 1Gi
     class:
     path:
   fmeserver:
+    accessMode: ReadWriteOnce
     size: 10Gi
+    # NFS claims can fail in some environments because there is not enough storage available on the fmeserver data volume claim
+    # The workaround is lowering the value for the nfsClaim. If this paramter is not set, the regular size above is used for the NFS claim
+    nfsClaimSize:
     class:
     path:
 
