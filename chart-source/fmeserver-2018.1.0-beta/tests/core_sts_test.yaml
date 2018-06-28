@@ -100,3 +100,24 @@ tests:
           value: 0
       - isEmpty:
           path: spec.template.spec.securityContext.fsGroup
+
+  - it: sets right permission for start as root
+    set:
+      fmeserver.buildNr: '18888'
+      deployment.startAsRoot: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMESERVER_UID
+            value: '1363'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMESERVER_GID
+            value: '1363'
+      - equal:
+          path: spec.template.spec.securityContext.runAsUser
+          value: 0
+      - isEmpty:
+          path: spec.template.spec.securityContext.fsGroup

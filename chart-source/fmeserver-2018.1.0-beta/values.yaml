@@ -8,6 +8,9 @@ deployment:
   certManager:
     issuerName:
     issuerType: cluster
+  numCores: 1
+  numEngines: 2
+  startAsRoot: false
 
 resources:
   core:
@@ -35,6 +38,7 @@ storage:
     class:
     path:
   fmeserver:
+    accessMode: ReadWriteOnce
     size: 10Gi
     class:
     path:

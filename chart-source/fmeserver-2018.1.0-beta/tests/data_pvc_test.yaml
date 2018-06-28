@@ -8,7 +8,7 @@ tests:
     asserts:
       - equal:
           path: metadata.labels.safe\.k8s\.fmeserver\.component
-          value: misc
+          value: data
       - equal:
           path: metadata.labels.safe\.k8s\.fmeserver\.build
           value: '18888'
@@ -22,20 +22,24 @@ tests:
       - isEmpty:
           path: spec.storageClassName
 
-  - it: removes storage class by default
+  - it: removes storage class and uses ReadWriteOnce by default
     set:
       fmeserver.buildNr: '18888'
       storage.useHostDir: false
     asserts:
       - isEmpty:
           path: spec.storageClassName
+      - equal:
+          path: spec.accessModes[0]
+          value: ReadWriteOnce
 
-  - it: sets the storage class and size
+  - it: sets the storage class, accessmode and size
     set:
       fmeserver.buildNr: '18888'
       storage.fmeserver.class: 'newClass'
       storage.useHostDir: false
       storage.fmeserver.size: 30Gi
+      storage.fmeserver.accessMode: ReadWriteMany
     asserts:
       - equal:
           path: spec.storageClassName
@@ -43,3 +47,6 @@ tests:
       - equal:
           path: spec.resources.requests.storage
           value: 30Gi
+      - equal:
+          path: spec.accessModes[0]
+          value: ReadWriteMany

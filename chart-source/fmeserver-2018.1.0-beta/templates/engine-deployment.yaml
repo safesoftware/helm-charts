@@ -6,7 +6,7 @@ metadata:
     {{- include "fmeserver.common.labels" . | indent 4 }}
   name: engine
 spec:
-  replicas: 2
+  replicas: {{ .Values.deployment.numEngines }}
   selector:
     matchLabels:
       safe.k8s.fmeserver.component: engine
@@ -49,14 +49,6 @@ spec:
       volumes:
         - name: fmeserverdata
           persistentVolumeClaim:
-            claimName: fmeserver-data
+            claimName: {{ template "fmeserver.storage.data.claimName" . }}
       affinity:
-        podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: safe.k8s.fmeserver.component
-                operator: In
-                values:
-                - core
-            topologyKey: "kubernetes.io/hostname"
+        {{- include "fmeserver.deployment.dataVolumeAffinity" . | indent 8 }}

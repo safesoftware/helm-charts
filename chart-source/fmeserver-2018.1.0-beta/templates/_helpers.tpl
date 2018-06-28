@@ -24,3 +24,23 @@ certmanager.k8s.io/issuer: {{ .Values.deployment.certManager.issuerName | quote 
 {{- define "fmeserver.common.labels" }}
 safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
 {{- end}}
+
+{{/* Data volume ClaimName name */}}
+{{- define "fmeserver.storage.data.claimName" -}}
+{{- "fmeserver-data" }}
+{{- end -}}
+
+{{/* Affinity rules for ReadWriteOnce data disks */}}
+{{- define "fmeserver.deployment.dataVolumeAffinity" }}
+{{- if ne .Values.storage.fmeserver.accessMode "ReadWriteMany" }}
+podAffinity:
+  requiredDuringSchedulingIgnoredDuringExecution:
+  - labelSelector:
+      matchExpressions:
+      - key: safe.k8s.fmeserver.component
+        operator: In
+        values:
+        - core
+    topologyKey: "kubernetes.io/hostname"
+{{- end}}
+{{- end }}
