@@ -43,8 +43,20 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
                   key: postgres-password
+          resources:
+{{ toYaml .Values.resources.engine | indent 12 }}
       restartPolicy: Always
       volumes:
         - name: fmeserverdata
           persistentVolumeClaim:
             claimName: fmeserver-data
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: safe.k8s.fmeserver.component
+                operator: In
+                values:
+                - core
+            topologyKey: "kubernetes.io/hostname"

@@ -29,6 +29,8 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeserverdata
               name: fmeserverdata
+          resources:
+{{ toYaml .Values.resources.websocket | indent 12 }}
           livenessProbe:
             tcpSocket:
               port: 7078
@@ -46,3 +48,13 @@ spec:
         - name: fmeserverdata
           persistentVolumeClaim:
             claimName: fmeserver-data
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: safe.k8s.fmeserver.component
+                operator: In
+                values:
+                - core
+            topologyKey: "kubernetes.io/hostname"
