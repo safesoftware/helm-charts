@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    safe.k8s.fmeserver.component: core
+    {{- include "fmeserver.common.labels" . | indent 4 }}
+  name: engineregistration
+spec:
+  ports:
+    - name: engineregistration
+      port: 7070
+  selector:
+    safe.k8s.fmeserver.component: core
