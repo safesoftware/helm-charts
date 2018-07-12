@@ -2,6 +2,9 @@
 {{- define "fmeserver.ingress.annotations" }}
 kubernetes.io/ingress.class: "nginx"
 nginx.ingress.kubernetes.io/proxy-body-size: "0"
+nginx.ingress.kubernetes.io/affinity: cookie
+nginx.ingress.kubernetes.io/session-cookie-name: {{ .Release.Name }}-ingress
+nginx.ingress.kubernetes.io/session-cookie-hash: md5
 {{- if (and (not (empty .Values.deployment.certManager.issuerName)) (eq .Values.deployment.certManager.issuerType "cluster")) }}
 certmanager.k8s.io/cluster-issuer: {{ .Values.deployment.certManager.issuerName | quote }}
 {{- end }}
