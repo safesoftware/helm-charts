@@ -3,12 +3,10 @@ templates:
   - websocket-statefulset.yaml
 tests:
   - it: renders default values
-    set:
-      fmeserver.buildNr: '18888'
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: "quay.io/safesoftware/fmeserver-core:18888"
+          value: "quay.io/safesoftware/fmeserver-core:2018.1.0"
       - equal:
           path: spec.template.spec.containers[0].imagePullPolicy
           value: IfNotPresent
@@ -17,8 +15,6 @@ tests:
           value: fmeserver-data
 
   - it: ensures affinity to core if volume does not support many access
-    set:
-      fmeserver.buildNr: '18888'
     asserts:
       - contains:
           path: spec.template.spec.affinity.podAffinity.requiredDuringSchedulingIgnoredDuringExecution
@@ -33,26 +29,23 @@ tests:
 
   - it: ignores affinity to core if volume supports ReadWriteMany access
     set:
-      fmeserver.buildNr: '18888'
       storage.fmeserver.accessMode: ReadWriteMany
     asserts:
       - isEmpty:
           path: spec.template.spec.affinity
 
   - it: renders labels
-    set:
-      fmeserver.buildNr: '18888'
     asserts:
       - equal:
           path: metadata.labels.safe\.k8s\.fmeserver\.component
           value: websocket
       - equal:
           path: metadata.labels.safe\.k8s\.fmeserver\.build
-          value: '18888'
+          value: '2018.1.0'
 
   - it: allows to change the pull policy, registry and namespace
     set:
-      fmeserver.buildNr: '18888'
+      fmeserver.buildNr: '2018.1.0-20180808'
       images.pullPolicy: Always
       images.registry: safe-harbour.safe.internal
       images.namespace: fmeserver-k8s
@@ -62,4 +55,4 @@ tests:
           value: Always
       - equal:
           path: spec.template.spec.containers[0].image
-          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:18888"
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:2018.1.0-20180808"

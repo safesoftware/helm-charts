@@ -1,10 +1,8 @@
-suite: websocket ingress
+suite: transact ingress
 templates:
-  - websocket-ingress.yaml
+  - transact-ingress.yaml
 tests:
   - it: renders default configuration for self-signed certificate
-    set:
-      fmeserver.buildNr: '18888'
     asserts:
       - equal:
           path: metadata.annotations.kubernetes\.io\/ingress\.class
@@ -23,11 +21,10 @@ tests:
           path: spec.tls[0].secretName
       - equal:
           path: metadata.annotations.nginx\.ingress\.kubernetes\.io/proxy-read-timeout
-          value: "2592000"
+          value: "1209600"
 
   - it: renders certmanager cluster issuer configuration
     set:
-      fmeserver.buildNr: '18888'
       deployment.hostname: fmeserver.safe.com
       deployment.tlsSecretName: fmeserver-tls-cert-le-test
       deployment.certManager.issuerName: letsencrypt-test
@@ -46,11 +43,10 @@ tests:
           value: letsencrypt-test
       - equal:
           path: metadata.annotations.nginx\.ingress\.kubernetes\.io/proxy-read-timeout
-          value: "2592000"
+          value: "1209600"
 
   - it: renders certmanager namespace issuer configuration
     set:
-      fmeserver.buildNr: '18888'
       deployment.hostname: fmeserver.safe.com
       deployment.tlsSecretName: fmeserver-tls-cert-le-test
       deployment.certManager.issuerName: letsencrypt-test
@@ -70,4 +66,4 @@ tests:
           value: letsencrypt-test
       - equal:
           path: metadata.annotations.nginx\.ingress\.kubernetes\.io/proxy-read-timeout
-          value: "2592000"
+          value: "1209600"

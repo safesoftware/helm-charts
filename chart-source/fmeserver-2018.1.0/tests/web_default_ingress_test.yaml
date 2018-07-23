@@ -3,8 +3,6 @@ templates:
   - web-default-ingress.yaml
 tests:
   - it: renders default configuration for self-signed certificate
-    set:
-      fmeserver.buildNr: '18888'
     asserts:
       - equal:
           path: metadata.annotations.kubernetes\.io\/ingress\.class
@@ -30,7 +28,6 @@ tests:
 
   - it: renders certmanager cluster issuer configuration with custom timeout
     set:
-      fmeserver.buildNr: '18888'
       deployment.hostname: fmeserver.safe.com
       deployment.proxyReadTimeout: 120
       deployment.tlsSecretName: fmeserver-tls-cert-le-test
@@ -54,7 +51,6 @@ tests:
 
   - it: renders certmanager namespace issuer configuration
     set:
-      fmeserver.buildNr: '18888'
       deployment.hostname: fmeserver.safe.com
       deployment.tlsSecretName: fmeserver-tls-cert-le-test
       deployment.certManager.issuerName: letsencrypt-test

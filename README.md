@@ -9,7 +9,7 @@ To add the Safe Software charts repository:
 
 To walk you through the helm installation process, a quick-start script for all supported FME Server versions has been created and can be found [here](http://fme.ly/k8s).
 
-## FME Server 2018.1.0 BETA
+## FME Server 2018.1.0
 
 ### Configuration
 
@@ -17,7 +17,7 @@ The following table lists the configurable parameters of the FME Server 2018.1.0
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
-| `fmeserver.buildNr` | The requested FME Server Build Number |  `Nil` You must provide a build number. You can find available build numbers [here](http://fme.ly/k8s). |
+| `fmeserver.buildNr` | The requested FME Server Container Build |  `2018.1.0`  |
 | `deployment.hostname` | FME Server hostname | `localhost` |
 | `deployment.proxyReadTimeout` | Default proxy read timeout (in seconds) | `60` |
 | `deployment.tlsSecretName` | Custom TLS certificate, see [documentation](https://docs.google.com/document/d/e/2PACX-1vRHu7tkQLJsJ0uXRz-KgSxo6DOQL38Sc97PQPgMR0MLAfsEqrV7-HZeRE7i3BSRDjjIWDmAJoWkICii/pub) for more details | `Nil` |
