@@ -3,19 +3,16 @@ templates:
   - postgresql-pvc.yaml
 tests:
   - it: renders labels
-    set:
-      fmeserver.buildNr: '18888'
     asserts:
       - equal:
           path: metadata.labels.safe\.k8s\.fmeserver\.component
           value: db
       - equal:
           path: metadata.labels.safe\.k8s\.fmeserver\.build
-          value: '18888'
+          value: '2018.1.0'
 
   - it: removes storage class if host dir is set
     set:
-      fmeserver.buildNr: '18888'
       storage.postgresql.class: 'newClass'
       storage.useHostDir: true
     asserts:
@@ -24,7 +21,6 @@ tests:
 
   - it: removes storage class by default
     set:
-      fmeserver.buildNr: '18888'
       storage.useHostDir: false
     asserts:
       - isEmpty:
@@ -32,7 +28,6 @@ tests:
 
   - it: sets the storage class and size
     set:
-      fmeserver.buildNr: '18888'
       storage.postgresql.class: 'newClass'
       storage.useHostDir: false
       storage.postgresql.size: 30Gi

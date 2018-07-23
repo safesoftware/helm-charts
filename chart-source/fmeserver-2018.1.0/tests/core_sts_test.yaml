@@ -3,18 +3,16 @@ templates:
   - core-statefulset.yaml
 tests:
   - it: renders default values
-    set:
-      fmeserver.buildNr: '18888'
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: "quay.io/safesoftware/fmeserver-core:18888"
+          value: "quay.io/safesoftware/fmeserver-core:2018.1.0"
       - equal:
           path: spec.template.spec.containers[1].image
-          value: "quay.io/safesoftware/fmeserver-web:18888"
+          value: "quay.io/safesoftware/fmeserver-web:2018.1.0"
       - equal:
           path: spec.template.spec.initContainers[0].image
-          value: "quay.io/safesoftware/fmeserver-core:18888"
+          value: "quay.io/safesoftware/fmeserver-core:2018.1.0"
       - equal:
           path: spec.template.spec.containers[1].env[3].value
           value: "localhost"
@@ -41,19 +39,17 @@ tests:
           value: 1363
 
   - it: renders labels
-    set:
-      fmeserver.buildNr: '18888'
     asserts:
       - equal:
           path: metadata.labels.safe\.k8s\.fmeserver\.component
           value: core
       - equal:
           path: metadata.labels.safe\.k8s\.fmeserver\.build
-          value: '18888'
+          value: '2018.1.0'
 
   - it: allows to change the pull policy, registry and namespace
     set:
-      fmeserver.buildNr: '18888'
+      fmeserver.buildNr: '2018.1.0-20180808'
       images.pullPolicy: Always
       images.registry: safe-harbour.safe.internal
       images.namespace: fmeserver-k8s
@@ -63,17 +59,16 @@ tests:
           value: Always
       - equal:
           path: spec.template.spec.containers[0].image
-          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:18888"
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:2018.1.0-20180808"
       - equal:
           path: spec.template.spec.containers[1].image
-          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-web:18888"
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-web:2018.1.0-20180808"
       - equal:
           path: spec.template.spec.initContainers[0].image
-          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:18888"
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:2018.1.0-20180808"
 
   - it: allows to change the hostname
     set:
-      fmeserver.buildNr: '18888'
       deployment.hostname: 'fmeserver.safe.com'
     asserts:
        - equal:
@@ -82,7 +77,6 @@ tests:
 
   - it: sets right permission for hostpath disk
     set:
-      fmeserver.buildNr: '18888'
       storage.useHostDir: true
     asserts:
       - contains:
@@ -103,7 +97,6 @@ tests:
 
   - it: sets right permission for start as root
     set:
-      fmeserver.buildNr: '18888'
       deployment.startAsRoot: true
     asserts:
       - contains:

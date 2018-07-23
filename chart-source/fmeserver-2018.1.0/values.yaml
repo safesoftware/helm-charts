@@ -1,5 +1,5 @@
 fmeserver:
-  buildNr:
+  buildNr: 2018.1.0
 
 deployment:
   hostname: localhost
