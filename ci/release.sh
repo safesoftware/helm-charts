@@ -67,7 +67,7 @@ for chart_dir in chart-source/*/ ; do
   chart_name=`get_chart_name $chart_dir`
   local_chart_version=`get_local_chart_version $chart_dir`
 
-  if echo $available_repos | grep -q "safesoftware/$chart_name" ; then
+  if echo $available_repos | grep -q "safesoftware/$chart_name " ; then
     remote_chart_version=`get_remote_chart_version $chart_name`
     echo "Existing helm chart $chart_name with version $remote_chart_version found"
     # Check if something changed in comparison to latest released version
