@@ -6,7 +6,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: "quay.io/safesoftware/fmeserver-core:2018.1.0"
+          value: "quay.io/safesoftware/fmeserver-core:2018.1.1"
       - equal:
           path: spec.template.spec.containers[0].imagePullPolicy
           value: IfNotPresent
@@ -41,7 +41,7 @@ tests:
           value: websocket
       - equal:
           path: metadata.labels.safe\.k8s\.fmeserver\.build
-          value: '2018.1.0'
+          value: '2018.1.1'
 
   - it: allows to change the pull policy, registry and namespace
     set:
