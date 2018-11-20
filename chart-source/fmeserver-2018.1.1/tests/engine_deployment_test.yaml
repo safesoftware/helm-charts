@@ -28,7 +28,7 @@ tests:
 
   - it: allows to change the pull policy, registry and namespace
     set:
-      fmeserver.buildNr: '2018.1.1'
+      fmeserver.buildNr: '2018.1.1-20181120'
       images.pullPolicy: Always
       images.registry: safe-harbour.safe.internal
       images.namespace: fmeserver-k8s
