@@ -45,7 +45,7 @@ tests:
 
   - it: allows to change the pull policy, registry and namespace
     set:
-      fmeserver.buildNr: '2018.1.0-20180808'
+      fmeserver.buildNr: '2018.1.1-20181120'
       images.pullPolicy: Always
       images.registry: safe-harbour.safe.internal
       images.namespace: fmeserver-k8s
@@ -55,4 +55,4 @@ tests:
           value: Always
       - equal:
           path: spec.template.spec.containers[0].image
-          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:2018.1.0-20180808"
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:2018.1.1-20181120"

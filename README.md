@@ -13,7 +13,7 @@ To walk you through the helm installation process, a quick-start script for all 
 
 ### Configuration
 
-The following table lists the configurable parameters of the FME Server 2018.1.0 BETA chart and their default values.
+The following table lists the configurable parameters of the FME Server 2018.1.0 chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
@@ -47,7 +47,7 @@ The following table lists the configurable parameters of the FME Server 2018.1.0
 
 ### Configuration
 
-The following table lists the configurable parameters of the FME Server 2018.1.0 BETA chart and their default values.
+The following table lists the configurable parameters of the FME Server 2018.1.1 chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
