@@ -8,8 +8,10 @@ metadata:
 spec:
   {{- include "fmeserver.ingress.tls" . }}
   rules:
+    {{- if not .Values.deployment.singleServiceIngress }}
     - host: {{ .Values.deployment.hostname }}
-      http:
+      {{ else }}
+    - {{ end }}http:
         paths:
           - backend:
               serviceName: fmeserverweb
