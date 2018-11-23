@@ -9,12 +9,12 @@ metadata:
 spec:
   {{- include "fmeserver.ingress.tls" . }}
   rules:
-    {{- if .Values.deployment.useHostnameIngress }}
-    - host: {{ .Values.deployment.hostname }}
-      {{ else }}
-    - {{ end }}http:
+    - http:
         paths:
           - backend:
               serviceName: fmeserverwebsocket
               servicePort: 7078
             path: /websocket
+      {{- if .Values.deployment.useHostnameIngress }}
+      host: {{ .Values.deployment.hostname }}
+      {{ end }}
