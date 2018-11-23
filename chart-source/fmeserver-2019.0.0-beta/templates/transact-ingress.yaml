@@ -9,7 +9,7 @@ metadata:
 spec:
   {{- include "fmeserver.ingress.tls" . }}
   rules:
-    {{- if not .Values.deployment.singleServiceIngress }}
+    {{- if .Values.deployment.useHostnameIngress }}
     - host: {{ .Values.deployment.hostname }}
       {{ else }}
     - {{ end }}http:
