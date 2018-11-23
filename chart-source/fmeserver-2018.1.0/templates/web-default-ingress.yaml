@@ -8,10 +8,12 @@ metadata:
 spec:
   {{- include "fmeserver.ingress.tls" . }}
   rules:
-    - host: {{ .Values.deployment.hostname }}
-      http:
+    - http:
         paths:
           - backend:
               serviceName: fmeserverweb
               servicePort: 8080
             path: /
+      {{- if .Values.deployment.useHostnameIngress }}
+      host: {{ .Values.deployment.hostname }}
+      {{ end }}

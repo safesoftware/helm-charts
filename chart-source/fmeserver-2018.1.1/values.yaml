@@ -11,6 +11,7 @@ deployment:
   numCores: 1
   numEngines: 2
   startAsRoot: false
+  useHostnameIngress: true
 
 resources:
   core:

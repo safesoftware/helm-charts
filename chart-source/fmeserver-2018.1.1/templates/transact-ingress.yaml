@@ -9,8 +9,7 @@ metadata:
 spec:
   {{- include "fmeserver.ingress.tls" . }}
   rules:
-    - host: {{ .Values.deployment.hostname }}
-      http:
+    - http:
         paths:
           - backend:
               serviceName: fmeserverweb
@@ -24,3 +23,6 @@ spec:
               serviceName: fmeserverweb
               servicePort: 8080
             path: /fmerest/v3/transformations/transactdata
+      {{- if .Values.deployment.useHostnameIngress }}
+      host: {{ .Values.deployment.hostname }}
+      {{ end }}
