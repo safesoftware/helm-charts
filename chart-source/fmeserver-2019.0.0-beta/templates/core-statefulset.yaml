@@ -112,6 +112,8 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
                   key: postgres-password
+            - name: SKIPRUNSETUP
+              value: true
       restartPolicy: Always
       volumes:
         - name: fmeserverdata

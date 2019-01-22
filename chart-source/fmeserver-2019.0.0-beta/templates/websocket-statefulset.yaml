@@ -24,6 +24,8 @@ spec:
           env:
             - name: PRIMARY_PROCESS
               value: websocket
+            - name: SKIPRUNSETUP
+              value: true
           ports:
             - containerPort: 7078
           volumeMounts:
