@@ -57,7 +57,7 @@ spec:
                   name: {{ .Release.Name }}-postgresql
                   key: postgres-password
             - name: RUNSETUP
-              value: true
+              value: 'true'
             {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
             - name: FMESERVER_UID
               value: '1363'
