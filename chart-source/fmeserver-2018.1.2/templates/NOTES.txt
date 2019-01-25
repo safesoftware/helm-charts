@@ -1,0 +1,19 @@
+Congratulations, your FME Server should be ready shortly! You can check the progress of the deployment by typing:
+
+  $ helm status {{ .Release.Name }}
+
+Once all containers are running, you should be able to access your deployment under https://{{ .Values.deployment.hostname }}
+
+To ensure that everything is working correctly, helm provides a test framework which can be run once the FME Server is up and running (does currently NOT work for Docker on Mac/Windows):
+
+  $ helm test {{ .Release.Name }}
+
+Things to check if something does not work:
+  - Is the NGINX ingress controller deployed? Check the following link for more details: https://kubernetes.github.io/ingress-nginx/deploy/
+  - Does your server have enough disk storage?
+
+To uninstall/delete FME Server (this deletes all data):
+
+  $ helm del --purge {{ .Release.Name }}
+
+If you have issues, you can contact us here: https://www.safe.com/support/
