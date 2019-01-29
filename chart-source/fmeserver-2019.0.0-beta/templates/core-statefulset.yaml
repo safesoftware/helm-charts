@@ -112,7 +112,12 @@ spec:
             - name: PGSQLHOSTNAME
               value: "{{ template "fmeserver.database.host" . }}"
             - name: PGSQLPORT
-              value: "{{ .Values.fmeserver.database.port }}"     
+              value: "{{ .Values.fmeserver.database.port }}"
+            - name: PGSQLPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeserver.fullname" . }}
+                  key: fmeserver-db-password  
             - name: PGSQLADMINUSER
               value: {{ .Values.fmeserver.database.adminUser }}
             - name: PGSQLADMINPASSWORD
