@@ -45,11 +45,6 @@ spec:
                 secretKeyRef:
                   name: {{ template "fmeserver.fullname" . }}
                   key: fmeserver-db-password
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "fmeserver.fullname" . }}
-                  key: fmeserver-db-password
           resources:
 {{ toYaml .Values.resources.engine | indent 12 }}
       restartPolicy: Always

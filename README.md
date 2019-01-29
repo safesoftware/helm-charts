@@ -27,6 +27,7 @@ The following table lists the configurable parameters of the FME Server 2018.1.0
 | `deployment.numEngine` | Number of engines to launch. | `2` |
 | `deployment.startAsRoot` | Starts core container as root and grants the fmeserver user access to the file system. | `false` |
 | `deployment.useHostnameIngress` | Configures the ingress to route traffic to FME Server only if the request matches the value of `deployment.hostname`. Setting this to false will route all traffic on the ingress to FME Server. | `true` |
+| `deployment.deployPostgresql` | Deploy a Postgresql Database for FME Server to use. Set this to `false` if you have an existing database you would like FME Server to connect to. | `true` |
 | `resources.core` | [Core CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `2Gi`, CPU: `200m` |
 | `resources.engine` | [Engine CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `512Mi`, CPU: `200m` |
 | `resources.queue` | [Queue CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `128Mi`, CPU: `100m` |
@@ -43,6 +44,13 @@ The following table lists the configurable parameters of the FME Server 2018.1.0
 | `images.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `images.registry` | Docker registry | `quay.io` This parameter should not be changed. |
 | `images.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
+| `fmeserver.database.host` | The hostname of the Postgres database to use. Only set this if you are not using the included Postgres database |  `<The service DNS of the Postgresql database deployed with this chart>` |
+| `fmeserver.database.port` | The port of the Postgres database to use. |  `5432` |
+| `fmeserver.database.name` | The database name for FME Server to use for its schema. |  `fmeserver` |
+| `fmeserver.database.user` | The database user for FME Server to use/create. |  `fmeserver` |
+| `fmeserver.database.adminUser` | The admin database user for FME Server to use to create its schema in the database. |  `postgres` |
+| `fmeserver.database.adminPasswordSecret` | The name of the secret that contains the password of the admin user specified in `fmeserver.database.adminUser`. |  `postgres` |
+| `fmeserver.database.adminPasswordSecretKey` | The key in the specified `fmeserver.database.adminPasswordSecret` that contains the password for the admin user specified in `fmeserver.database.adminUser` |  `postgresql-password` |
 
 ## Development
 
