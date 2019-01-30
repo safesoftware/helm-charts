@@ -53,6 +53,10 @@ spec:
               value: "{{ template "fmeserver.database.host" . }}"
             - name: PGSQLPORT
               value: "{{ .Values.fmeserver.database.port }}"
+            - name: PGSQLDATABASENAME
+              value: "{{ .Values.fmeserver.database.name }}"
+            - name: PGSQLUSERNAME
+              value: "{{ .Values.fmeserver.database.user }}"
             - name: PGSQLPASSWORD
               valueFrom:
                 secretKeyRef:
@@ -113,6 +117,10 @@ spec:
               value: "{{ template "fmeserver.database.host" . }}"
             - name: PGSQLPORT
               value: "{{ .Values.fmeserver.database.port }}"
+            - name: PGSQLDATABASENAME
+              value: "{{ .Values.fmeserver.database.name }}"
+            - name: PGSQLUSERNAME
+              value: "{{ .Values.fmeserver.database.user }}"
             - name: PGSQLPASSWORD
               valueFrom:
                 secretKeyRef:
