@@ -37,12 +37,18 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: PGSQLHOSTNAME
-              value: "{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local"
-            - name: PGPASSWORD
+              value: "{{ template "fmeserver.database.host" . }}"
+            - name: PGSQLPORT
+              value: "{{ .Values.fmeserver.database.port }}"
+            - name: PGSQLDATABASENAME
+              value: "{{ .Values.fmeserver.database.name }}"
+            - name: PGSQLUSERNAME
+              value: "{{ .Values.fmeserver.database.user }}"
+            - name: PGSQLPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-postgresql
-                  key: postgres-password
+                  name: {{ template "fmeserver.fullname" . }}
+                  key: fmeserver-db-password
           resources:
 {{ toYaml .Values.resources.engine | indent 12 }}
       restartPolicy: Always

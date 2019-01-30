@@ -50,12 +50,18 @@ spec:
             - name: NODENAMENS
               value: fmeserver
             - name: PGSQLHOSTNAME
-              value: "{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local"
-            - name: PGPASSWORD
+              value: "{{ template "fmeserver.database.host" . }}"
+            - name: PGSQLPORT
+              value: "{{ .Values.fmeserver.database.port }}"
+            - name: PGSQLDATABASENAME
+              value: "{{ .Values.fmeserver.database.name }}"
+            - name: PGSQLUSERNAME
+              value: "{{ .Values.fmeserver.database.user }}"
+            - name: PGSQLPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-postgresql
-                  key: postgres-password
+                  name: {{ template "fmeserver.fullname" . }}
+                  key: fmeserver-db-password
             - name: RUNSETUP
               value: 'true'
             {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
@@ -110,12 +116,25 @@ spec:
             - name: PRIMARY_PROCESS
               value: initpgsql
             - name: PGSQLHOSTNAME
-              value: "{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local"
-            - name: PGPASSWORD
+              value: "{{ template "fmeserver.database.host" . }}"
+            - name: PGSQLPORT
+              value: "{{ .Values.fmeserver.database.port }}"
+            - name: PGSQLDATABASENAME
+              value: "{{ .Values.fmeserver.database.name }}"
+            - name: PGSQLUSERNAME
+              value: "{{ .Values.fmeserver.database.user }}"
+            - name: PGSQLPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-postgresql
-                  key: postgres-password
+                  name: {{ template "fmeserver.fullname" . }}
+                  key: fmeserver-db-password  
+            - name: PGSQLADMINUSER
+              value: {{ .Values.fmeserver.database.adminUser }}
+            - name: PGSQLADMINPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeserver.database.adminPasswordSecret" . }}
+                  key: {{ .Values.fmeserver.database.adminPasswordSecretKey }}
       restartPolicy: Always
       volumes:
         - name: fmeserverdata

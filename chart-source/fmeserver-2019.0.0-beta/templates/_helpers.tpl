@@ -47,3 +47,48 @@ podAffinity:
     topologyKey: "kubernetes.io/hostname"
 {{- end}}
 {{- end }}
+
+{{/* Create Postgresql hostname */}}
+{{- define "fmeserver.database.host" -}}
+{{- if .Values.fmeserver.database.host -}}
+{{ .Values.fmeserver.database.host -}}
+{{- else -}}
+{{- printf "%s-postgresql.%s.svc.cluster.local" .Release.Name .Release.Namespace -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Create Postgresql admin user password secret */}}
+{{- define "fmeserver.database.adminPasswordSecret" -}}
+{{- if .Values.fmeserver.database.adminPasswordSecret -}}
+{{ .Values.fmeserver.database.adminPasswordSecret }}
+{{- else -}}
+{{- printf "%s-postgresql" .Release.Name -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "fmeserver.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "fmeserver.fullname" -}}
+{{- if .Values.fullnameOverride -}}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "fmeserver.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
