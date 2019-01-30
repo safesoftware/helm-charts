@@ -87,6 +87,8 @@ spec:
               value: https
             - name: EXTERNALPORT
               value: '443'
+            - name: HIDEQUEUECONTENT
+              value: 'true'
           livenessProbe:
             httpGet:
               path: /fmerest/v3/healthcheck
