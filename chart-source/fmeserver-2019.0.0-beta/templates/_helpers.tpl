@@ -60,7 +60,7 @@ podAffinity:
 {{/* Create Postgresql admin user password secret */}}
 {{- define "fmeserver.database.adminPasswordSecret" -}}
 {{- if .Values.fmeserver.database.adminPasswordSecret -}}
-{{- printf "%s" .Values.fmeserver.database.adminPasswordSecret -}}
+{{ .Values.fmeserver.database.adminPasswordSecret }}
 {{- else -}}
 {{- printf "%s-postgresql" .Release.Name -}}
 {{- end -}}
