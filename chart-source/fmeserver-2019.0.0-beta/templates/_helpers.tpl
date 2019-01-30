@@ -51,7 +51,7 @@ podAffinity:
 {{/* Create Postgresql hostname */}}
 {{- define "fmeserver.database.host" -}}
 {{- if .Values.fmeserver.database.host -}}
-{{- printf "%s" .Values.fmeserver.database.host -}}
+{{ .Values.fmeserver.database.host -}}
 {{- else -}}
 {{- printf "%s-postgresql.%s.svc.cluster.local" .Release.Name .Release.Namespace -}}
 {{- end -}}
