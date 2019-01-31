@@ -1,0 +1,65 @@
+suite: queue statefulset
+templates:
+  - queue-statefulset.yaml
+tests:
+  - it: renders default values
+    set:
+      fmeserver.buildNr: '19500'
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "quay.io/safesoftware/fmeserver-queue:19500"
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: IfNotPresent
+      - equal:
+          path: spec.template.spec.volumes[0].persistentVolumeClaim.claimName
+          value: fmeserver-data
+
+  - it: renders labels
+    set:
+      fmeserver.buildNr: '19500'
+    asserts:
+      - equal:
+          path: metadata.labels.safe\.k8s\.fmeserver\.component
+          value: queue
+      - equal:
+          path: metadata.labels.safe\.k8s\.fmeserver\.build
+          value: '19500'
+
+  - it: allows to change the pull policy, registry and namespace
+    set:
+      fmeserver.buildNr: '19500'
+      images.pullPolicy: Always
+      images.registry: safe-harbour.safe.internal
+      images.namespace: fmeserver-k8s
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: Always
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-queue:19500"
+
+  - it: ensures affinity to core if volume does not support many access
+    set:
+      fmeserver.buildNr: '19500'
+    asserts:
+      - contains:
+          path: spec.template.spec.affinity.podAffinity.requiredDuringSchedulingIgnoredDuringExecution
+          content:
+            labelSelector:
+              matchExpressions:
+              - key: safe.k8s.fmeserver.component
+                operator: In
+                values:
+                - core
+            topologyKey: "kubernetes.io/hostname"
+
+  - it: ignores affinity to core if volume supports ReadWriteMany access
+    set:
+      fmeserver.buildNr: '19500'
+      storage.fmeserver.accessMode: ReadWriteMany
+    asserts:
+      - isEmpty:
+          path: spec.template.spec.affinity
