@@ -27,8 +27,12 @@ deployment:
 resources:
   core:
     requests:
-      memory: 2Gi
-      cpu: 200m
+      memory: 1.5Gi
+      cpu: 100m
+  web:
+    requests:
+      memory: 1Gi
+      cpu: 100m
   engine:
     requests:
       memory: 512Mi
