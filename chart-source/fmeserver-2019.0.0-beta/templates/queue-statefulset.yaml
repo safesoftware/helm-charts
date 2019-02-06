@@ -58,3 +58,15 @@ spec:
             claimName: {{ template "fmeserver.storage.data.claimName" . }}
       affinity:
         {{- include "fmeserver.deployment.dataVolumeAffinity" . | indent 8 }}
+      {{- if .Values.scheduling.queue.affinity }}
+{{ toYaml .Values.scheduling.queue.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.queue.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.scheduling.queue.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.queue.tolerations }}
+      tolerations:
+{{ toYaml .Values.scheduling.queue.tolerations | indent 8 }}
+      {{- end }}
+      

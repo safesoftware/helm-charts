@@ -140,6 +140,14 @@ spec:
         - name: fmeserverdata
           persistentVolumeClaim:
             claimName: {{ template "fmeserver.storage.data.claimName" . }}
+      {{- if .Values.scheduling.core.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.scheduling.core.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.core.tolerations }}
+      tolerations:
+{{ toYaml .Values.scheduling.core.tolerations | indent 8 }}
+      {{- end }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -150,3 +158,6 @@ spec:
                 values:
                 - core
             topologyKey: "kubernetes.io/hostname"
+        {{- if .Values.scheduling.core.affinity }}
+{{ toYaml .Values.scheduling.core.affinity | indent 8 }}
+        {{- end }}

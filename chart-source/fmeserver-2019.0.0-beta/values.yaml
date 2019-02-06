@@ -24,6 +24,24 @@ deployment:
   useHostnameIngress: true
   deployPostgresql: true
 
+scheduling:
+  core:
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+  engine:
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+  queue:
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+  websocket:
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+
 resources:
   core:
     requests:
