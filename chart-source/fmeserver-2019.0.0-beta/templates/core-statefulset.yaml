@@ -97,6 +97,10 @@ spec:
               value: '443'
             - name: HIDEQUEUECONTENT
               value: 'true'
+            - name: MAXTHREADS
+              value: {{ .Values.fmeserver.webserver.maxThreads }}
+            - name: EXPERIMENTAL_JAVA_FLAGS
+              value: {{ .Values.fmeserver.webserver.experimentalJavaFlags }}
           livenessProbe:
             httpGet:
               path: /fmerest/v3/healthcheck
@@ -129,7 +133,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "fmeserver.fullname" . }}
-                  key: fmeserver-db-password  
+                  key: fmeserver-db-password
             - name: PGSQLADMINUSER
               value: {{ .Values.fmeserver.database.adminUser }}
             - name: PGSQLADMINPASSWORD
