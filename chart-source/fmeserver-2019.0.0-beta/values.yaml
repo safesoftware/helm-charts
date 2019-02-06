@@ -26,6 +26,9 @@ deployment:
 
 scheduling:
   core:
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
   engine:
     affinity: {}
     nodeSelector: {}
