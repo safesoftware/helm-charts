@@ -5,11 +5,14 @@ fmeserver:
     port: '5432'
     name: fmeserver
     user: fmeserver
-    
+
     # This user and password must be a database user that can create databases and users in the postgresql database
     adminUser: postgres
     adminPasswordSecret:
     adminPasswordSecretKey:  postgresql-password
+  webserver:
+    maxThreads: 200
+    experimentalJavaFlags: false
 
 deployment:
   hostname: localhost
