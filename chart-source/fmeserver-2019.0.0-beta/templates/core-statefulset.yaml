@@ -29,6 +29,8 @@ spec:
           imagePullPolicy: {{ .Values.images.pullPolicy }}
           ports:
             - containerPort: 7070
+          resources:
+{{ toYaml .Values.resources.core | indent 12 }}
           volumeMounts:
             - mountPath: /data/fmeserverdata
               name: fmeserverdata
@@ -76,7 +78,7 @@ spec:
           ports:
             - containerPort: 8080
           resources:
-{{ toYaml .Values.resources.core | indent 12 }}
+{{ toYaml .Values.resources.web | indent 12 }}
           volumeMounts:
             - mountPath: /data/fmeserverdata
               name: fmeserverdata
@@ -95,6 +97,10 @@ spec:
               value: '443'
             - name: HIDEQUEUECONTENT
               value: 'true'
+            - name: MAXTHREADS
+              value: {{ .Values.fmeserver.webserver.maxThreads }}
+            - name: EXPERIMENTAL_JAVA_FLAGS
+              value: {{ .Values.fmeserver.webserver.experimentalJavaFlags }}
           livenessProbe:
             httpGet:
               path: /fmerest/v3/healthcheck
@@ -127,7 +133,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "fmeserver.fullname" . }}
-                  key: fmeserver-db-password  
+                  key: fmeserver-db-password
             - name: PGSQLADMINUSER
               value: {{ .Values.fmeserver.database.adminUser }}
             - name: PGSQLADMINPASSWORD
