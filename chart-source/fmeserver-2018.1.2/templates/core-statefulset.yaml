@@ -56,8 +56,6 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
                   key: postgres-password
-            - name: RUNSETUP
-              value: 'true'
             {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
             - name: FMESERVER_UID
               value: '1363'
@@ -104,9 +102,14 @@ spec:
       initContainers:
         - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-core:{{ .Values.fmeserver.buildNr }}
           name: dbinit
+          volumeMounts:
+            - mountPath: /data/fmeserverdata
+              name: fmeserverdata
           env:
             - name: PRIMARY_PROCESS
               value: initpgsql
+            - name: RUNSETUP
+              value: 'true'
             - name: PGSQLHOSTNAME
               value: "{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local"
             - name: PGPASSWORD
