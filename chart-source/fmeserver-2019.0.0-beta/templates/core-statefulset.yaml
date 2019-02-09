@@ -98,9 +98,9 @@ spec:
             - name: HIDEQUEUECONTENT
               value: 'true'
             - name: MAXTHREADS
-              value: {{ .Values.fmeserver.webserver.maxThreads }}
+              value: {{ .Values.fmeserver.webserver.maxThreads | quote }}
             - name: EXPERIMENTAL_JAVA_FLAGS
-              value: {{ .Values.fmeserver.webserver.experimentalJavaFlags }}
+              value: {{ .Values.fmeserver.webserver.experimentalJavaFlags | quote }}
           livenessProbe:
             httpGet:
               path: /fmerest/v3/healthcheck
