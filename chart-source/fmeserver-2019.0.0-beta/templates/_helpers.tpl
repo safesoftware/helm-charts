@@ -92,3 +92,14 @@ Create chart name and version as used by the chart label.
 {{- define "fmeserver.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Get the fmeserver database password secret.
+*/}}
+{{- define "fmeserver.database.secretName" -}}
+{{- if .Values.fmeserver.database.passwordSecret -}}
+{{ .Values.fmeserver.database.passwordSecret }}
+{{- else -}}
+{{- printf "%s" (include "fmeserver.fullname" .) -}}
+{{- end -}}
+{{- end -}}

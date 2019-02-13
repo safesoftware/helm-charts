@@ -5,6 +5,9 @@ fmeserver:
     port: '5432'
     name: fmeserver
     user: fmeserver
+    password: 4fmmsgrz09
+    passwordSecret:
+    passwordSecretKey: fmeserver-db-password
 
     # This user and password must be a database user that can create databases and users in the postgresql database
     adminUser: postgres
@@ -96,3 +99,4 @@ postgresql:
     requests:
       memory: 256Mi
       cpu: 100m
+  postgresqlPassword: a6av3abwzi
