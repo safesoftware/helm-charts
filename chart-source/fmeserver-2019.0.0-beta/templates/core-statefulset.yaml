@@ -62,8 +62,8 @@ spec:
             - name: PGSQLPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "fmeserver.fullname" . }}
-                  key: fmeserver-db-password
+                  name: {{ template "fmeserver.database.secretName" . }}
+                  key: {{ .Values.fmeserver.database.passwordSecretKey }}
             {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
             - name: FMESERVER_UID
               value: '1363'
@@ -135,8 +135,8 @@ spec:
             - name: PGSQLPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "fmeserver.fullname" . }}
-                  key: fmeserver-db-password
+                  name: {{ template "fmeserver.database.secretName" . }}
+                  key: {{ .Values.fmeserver.database.passwordSecretKey }}
             - name: PGSQLADMINUSER
               value: {{ .Values.fmeserver.database.adminUser }}
             - name: PGSQLADMINPASSWORD
