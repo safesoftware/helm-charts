@@ -4,6 +4,7 @@ fmeserver:
 deployment:
   hostname: localhost
   proxyReadTimeout: 60
+  proxyBodySize: 0
   tlsSecretName:
   certManager:
     issuerName:
