@@ -157,7 +157,7 @@ See https://github.com/helm/helm/issues/3708
 {{- define "fmeserver.image.pullPolicy" }}
 {{- if .Values.images -}}
 {{- if .Values.images.pullPolicy -}}
-{{ template "fmeserver.image.pullPolicy" . }}
+{{ .Values.images.pullPolicy }}
 {{- else -}}
 {{ .Values.fmeserver.image.pullPolicy }}
 {{- end -}}
