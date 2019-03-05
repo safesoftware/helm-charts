@@ -1,5 +1,11 @@
 fmeserver:
   buildNr:
+  image:
+    tag:
+    registry: quay.io
+    namespace: safesoftware
+    # Supported values: Always or IfNotPresent
+    pullPolicy: IfNotPresent
   database:
     host:
     port: '5432'
@@ -83,12 +89,6 @@ storage:
     size: 10Gi
     class:
     path:
-
-images:
-  # Supported values: Always or IfNotPresent
-  pullPolicy: IfNotPresent
-  registry: quay.io
-  namespace: safesoftware
 
 # It is recommended not to modify those parameters
 # For more options regarding PostgreSQL deployement, check the helm chart documentation:

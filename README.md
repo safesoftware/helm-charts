@@ -17,7 +17,10 @@ The following table lists the configurable parameters of the FME Server 2018.1.0
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
-| `fmeserver.buildNr` | The requested FME Server Build Number |  `Nil` You must provide a build number. You can find available build numbers [here](http://fme.ly/k8s). |
+| `fmeserver.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](http://fme.ly/k8s). |
+| `fmeserver.image.pullPolicy` | Image pull policy | `IfNotPresent` |
+| `fmeserver.image.registry` | Docker registry | `quay.io` This parameter should not be changed. |
+| `fmeserver.image.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
 | `deployment.hostname` | FME Server hostname | `localhost` |
 | `deployment.proxyReadTimeout` | Default proxy read timeout (in seconds) | `60` |
 | `deployment.proxyBodySize` | Default maximum allowed size of the request body | `0` |
@@ -43,9 +46,6 @@ The following table lists the configurable parameters of the FME Server 2018.1.0
 | `storage.fmeserver.class` | Storage class for FME Server data. Ignored if host dir mapping is used. | `Nil` |
 | `storage.fmeserver.size` | FME Server data volume size | `10Gi` |
 | `storage.fmeserver.path` | Absolute path where FME Server data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
-| `images.pullPolicy` | Image pull policy | `IfNotPresent` |
-| `images.registry` | Docker registry | `quay.io` This parameter should not be changed. |
-| `images.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
 | `fmeserver.database.host` | The hostname of the Postgres database to use. Only set this if you are not using the included Postgres database |  _The service DNS of the Postgresql database deployed with this chart_ |
 | `fmeserver.database.port` | The port of the Postgres database to use. |  `5432` |
 | `fmeserver.database.name` | The database name for FME Server to use for its schema. |  `fmeserver` |

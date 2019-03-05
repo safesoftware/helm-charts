@@ -17,9 +17,9 @@ spec:
         {{- include "fmeserver.common.labels" . | indent 8 }}
     spec:
       containers:
-        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-engine:{{ .Values.fmeserver.buildNr }}
+        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-engine:{{ template "fmeserver.image.tag" . }}
           name: engine
-          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          imagePullPolicy: {{ template "fmeserver.image.pullPolicy" . }}
           volumeMounts:
             - mountPath: /data/fmeserverdata
               name: fmeserverdata

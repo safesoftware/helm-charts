@@ -25,8 +25,12 @@ certmanager.k8s.io/issuer: {{ .Values.deployment.certManager.issuerName | quote 
 
 {{/* Common labels */}}
 {{- define "fmeserver.common.labels" }}
-safe.k8s.fmeserver.build: {{ required "A published fmeserver.buildNr needs to be passed in." .Values.fmeserver.buildNr | quote }}
-{{- end}}
+{{- if .Values.fmeserver.buildNr }}
+safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr | quote }}
+{{- else }}
+safe.k8s.fmeserver.build: {{ .Values.fmeserver.image.tag | quote }}
+{{- end }}
+{{- end }}
 
 {{/* Data volume ClaimName name */}}
 {{- define "fmeserver.storage.data.claimName" -}}
@@ -103,3 +107,63 @@ Get the fmeserver database password secret.
 {{- printf "%s" (include "fmeserver.fullname" .) -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Set the image parameters. We still support the old parameters for now
+*/}}
+{{- define "fmeserver.image.tag" }}
+{{- if .Values.fmeserver.buildNr -}}
+{{ .Values.fmeserver.buildNr }}
+{{- else -}}
+{{ .Values.fmeserver.image.tag }}
+{{- end -}}
+{{/* Check to make sure exactly one is set */}}
+{{- if not .Values.fmeserver.buildNr }}
+{{- if not .Values.fmeserver.image.tag }}
+{{ fail "fmeserver.image.tag is required." }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/* 
+We have to do this double 'if' check to see if the parent value exists otherwise we get
+templating errors.
+See https://github.com/helm/helm/issues/3708 
+*/}}
+{{- define "fmeserver.image.registry" }}
+{{- if .Values.images -}}
+{{- if .Values.images.registry -}}
+{{ .Values.images.registry }}
+{{- else -}}
+{{ .Values.fmeserver.image.registry }}
+{{- end -}}
+{{- else -}}
+{{ .Values.fmeserver.image.registry }}
+{{- end -}}
+{{- end -}}
+
+{{- define "fmeserver.image.namespace" }}
+{{- if .Values.images -}}
+{{- if .Values.images.namespace -}}
+{{ .Values.images.namespace }}
+{{- else -}}
+{{ .Values.fmeserver.image.namespace }}
+{{- end -}}
+{{- else -}}
+{{ .Values.fmeserver.image.namespace }}
+{{- end -}}
+{{- end -}}
+
+{{- define "fmeserver.image.pullPolicy" }}
+{{- if .Values.images -}}
+{{- if .Values.images.pullPolicy -}}
+{{ template "fmeserver.image.pullPolicy" . }}
+{{- else -}}
+{{ .Values.fmeserver.image.pullPolicy }}
+{{- end -}}
+{{- else -}}
+{{ .Values.fmeserver.image.pullPolicy }}
+{{- end -}}
+{{- end -}}
+
+
