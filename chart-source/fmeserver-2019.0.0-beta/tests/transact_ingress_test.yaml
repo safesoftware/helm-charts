@@ -4,7 +4,7 @@ templates:
 tests:
   - it: renders default configuration for self-signed certificate
     set:
-      fmeserver.buildNr: '19099'
+      fmeserver.image.tag: '19099'
     asserts:
       - equal:
           path: metadata.annotations.kubernetes\.io\/ingress\.class
@@ -27,7 +27,7 @@ tests:
 
   - it: renders certmanager cluster issuer configuration
     set:
-      fmeserver.buildNr: '19099'
+      fmeserver.image.tag: '19099'
       deployment.hostname: fmeserver.safe.com
       deployment.tlsSecretName: fmeserver-tls-cert-le-test
       deployment.certManager.issuerName: letsencrypt-test
@@ -50,7 +50,7 @@ tests:
 
   - it: renders certmanager namespace issuer configuration
     set:
-      fmeserver.buildNr: '19099'
+      fmeserver.image.tag: '19099'
       deployment.hostname: fmeserver.safe.com
       deployment.tlsSecretName: fmeserver-tls-cert-le-test
       deployment.certManager.issuerName: letsencrypt-test
