@@ -1,5 +1,4 @@
 fmeserver:
-  buildNr:
   image:
     tag:
     registry: quay.io
