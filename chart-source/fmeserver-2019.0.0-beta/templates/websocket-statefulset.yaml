@@ -18,9 +18,9 @@ spec:
         {{- include "fmeserver.common.labels" . | indent 8 }}
     spec:
       containers:
-        - image: {{ .Values.images.registry }}/{{ .Values.images.namespace }}/fmeserver-core:{{ .Values.fmeserver.buildNr }}
+        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-core:{{ template "fmeserver.image.tag" . }}
           name: websocket
-          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          imagePullPolicy: {{ template "fmeserver.image.pullPolicy" . }}
           env:
             - name: PRIMARY_PROCESS
               value: websocket
