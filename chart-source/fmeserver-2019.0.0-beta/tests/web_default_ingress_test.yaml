@@ -14,7 +14,7 @@ tests:
           value: '0'
       - equal:
           path: metadata.annotations.nginx\.ingress\.kubernetes\.io/proxy-read-timeout
-          value: '60'
+          value: '300'
       - equal:
           path: spec.rules[0].host
           value: localhost
