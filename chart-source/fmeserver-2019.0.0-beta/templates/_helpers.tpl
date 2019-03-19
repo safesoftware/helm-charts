@@ -25,6 +25,10 @@ certmanager.k8s.io/issuer: {{ .Values.deployment.certManager.issuerName | quote 
 
 {{/* Common labels */}}
 {{- define "fmeserver.common.labels" }}
+app: {{ template "fmeserver.name" . }}
+chart: {{ template "fmeserver.chart" . }}
+heritage: {{ .Release.Service }}
+release: {{ .Release.Name }}
 {{- if .Values.fmeserver.buildNr }}
 safe.k8s.fmeserver.build: {{ .Values.fmeserver.buildNr | quote }}
 {{- else }}
@@ -125,10 +129,10 @@ Set the image parameters. We still support the old parameters for now
 {{- end -}}
 {{- end -}}
 
-{{/* 
+{{/*
 We have to do this double 'if' check to see if the parent value exists otherwise we get
 templating errors.
-See https://github.com/helm/helm/issues/3708 
+See https://github.com/helm/helm/issues/3708
 */}}
 {{- define "fmeserver.image.registry" }}
 {{- if .Values.images -}}
