@@ -1,0 +1,102 @@
+fmeserver:
+  image:
+    tag: 2019.0.0
+    registry: quay.io
+    namespace: safesoftware
+    # Supported values: Always or IfNotPresent
+    pullPolicy: IfNotPresent
+  database:
+    host:
+    port: '5432'
+    name: fmeserver
+    user: fmeserver
+    password: 4fmmsgrz09
+    passwordSecret:
+    passwordSecretKey: fmeserver-db-password
+
+    # This user and password must be a database user that can create databases and users in the postgresql database
+    adminUser: postgres
+    adminPasswordSecret:
+    adminPasswordSecretKey:  postgresql-password
+  webserver:
+    maxThreads: 200
+    experimentalJavaFlags: false
+
+deployment:
+  hostname: localhost
+  proxyReadTimeout: 300
+  proxyBodySize: 0
+  tlsSecretName:
+  certManager:
+    issuerName:
+    issuerType: cluster
+  numCores: 1
+  numEngines: 2
+  startAsRoot: false
+  useHostnameIngress: true
+  deployPostgresql: true
+
+scheduling:
+  core:
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+  engine:
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+  queue:
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+  websocket:
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+
+resources:
+  core:
+    requests:
+      memory: 1.5Gi
+      cpu: 200m
+  web:
+    requests:
+      memory: 1Gi
+      cpu: 200m
+  engine:
+    requests:
+      memory: 512Mi
+      cpu: 200m
+  queue:
+    requests:
+      memory: 128Mi
+      cpu: 100m
+  websocket:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+
+storage:
+  useHostDir: false
+  reclaimPolicy: Delete
+  postgresql:
+    size: 1Gi
+    class:
+    path:
+  fmeserver:
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    class:
+    path:
+
+# It is recommended not to modify those parameters
+# For more options regarding PostgreSQL deployement, check the helm chart documentation:
+# https://github.com/kubernetes/charts/tree/master/stable/postgresql
+postgresql:
+  persistence:
+    existingClaim: fmeserver-postgresql
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+  postgresqlPassword: a6av3abwzi

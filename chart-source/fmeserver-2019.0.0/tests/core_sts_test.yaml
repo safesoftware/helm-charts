@@ -1,0 +1,143 @@
+suite: core statefulset
+templates:
+  - core-statefulset.yaml
+tests:
+  - it: renders default values
+    set:
+      fmeserver.image.tag: '19099'
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "quay.io/safesoftware/fmeserver-core:19099"
+      - equal:
+          path: spec.template.spec.containers[1].image
+          value: "quay.io/safesoftware/fmeserver-web:19099"
+      - equal:
+          path: spec.template.spec.initContainers[0].image
+          value: "quay.io/safesoftware/fmeserver-core:19099"
+      - equal:
+          path: spec.template.spec.containers[1].env[3].value
+          value: "localhost"
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: IfNotPresent
+      - equal:
+          path: spec.template.spec.volumes[0].persistentVolumeClaim.claimName
+          value: fmeserver-data
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMESERVER_UID
+            value: '1363'
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMESERVER_GID
+            value: '1363'
+      - isEmpty:
+          path: spec.template.spec.securityContext.runAsUser
+      - equal:
+          path: spec.template.spec.securityContext.fsGroup
+          value: 1363
+
+  - it: renders labels
+    set:
+      fmeserver.image.tag: '19099'
+    asserts:
+      - equal:
+          path: metadata.labels.safe\.k8s\.fmeserver\.component
+          value: core
+      - equal:
+          path: metadata.labels.safe\.k8s\.fmeserver\.build
+          value: '19099'
+
+  - it: allows to change the pull policy, registry and namespace
+    set:
+      fmeserver.image.tag: '19099'
+      fmeserver.image.pullPolicy: Always
+      fmeserver.image.registry: safe-harbour.safe.internal
+      fmeserver.image.namespace: fmeserver-k8s
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: Always
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:19099"
+      - equal:
+          path: spec.template.spec.containers[1].image
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-web:19099"
+      - equal:
+          path: spec.template.spec.initContainers[0].image
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:19099"
+
+  - it: allows to change the hostname
+    set:
+      fmeserver.image.tag: '19099'
+      deployment.hostname: 'fmeserver.safe.com'
+    asserts:
+       - equal:
+          path: spec.template.spec.containers[1].env[3].value
+          value: "fmeserver.safe.com"
+
+  - it: sets right permission for hostpath disk
+    set:
+      fmeserver.image.tag: '19099'
+      storage.useHostDir: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMESERVER_UID
+            value: '1363'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMESERVER_GID
+            value: '1363'
+      - equal:
+          path: spec.template.spec.securityContext.runAsUser
+          value: 0
+      - isEmpty:
+          path: spec.template.spec.securityContext.fsGroup
+
+  - it: sets right permission for start as root
+    set:
+      fmeserver.image.tag: '19099'
+      deployment.startAsRoot: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMESERVER_UID
+            value: '1363'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMESERVER_GID
+            value: '1363'
+      - equal:
+          path: spec.template.spec.securityContext.runAsUser
+          value: 0
+      - isEmpty:
+          path: spec.template.spec.securityContext.fsGroup
+
+  - it: tests the old deprecated values still work
+    set:
+      fmeserver.buildNr: '19099'
+      images.pullPolicy: Always
+      images.registry: safe-harbour.safe.internal
+      images.namespace: fmeserver-k8s
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: Always
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:19099"
+      - equal:
+          path: spec.template.spec.containers[1].image
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-web:19099"
+      - equal:
+          path: spec.template.spec.initContainers[0].image
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-core:19099"
