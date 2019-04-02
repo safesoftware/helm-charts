@@ -9,11 +9,11 @@ To add the Safe Software charts repository:
 
 To walk you through the helm installation process, a quick-start script for all supported FME Server versions has been created and can be found [here](http://fme.ly/k8s).
 
-## FME Server 2019.0.0 BETA
+## FME Server 2019.0.0
 
 ### Configuration
 
-The following table lists the configurable parameters of the FME Server 2018.1.0 BETA chart and their default values.
+The following table lists the configurable parameters of the FME Server 2019.0.0 chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
