@@ -2,4 +2,4 @@ apiVersion: v1
 appVersion: 2018.1.2
 description: FME Server 2018.1.2
 name: fmeserver-2018.1.2
-version: 1.0.12
+version: 1.0.13
