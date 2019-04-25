@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    safe.k8s.fmeserver.component: engine
+    {{- include "fmeserver.common.labels" . | indent 4 }}
+  name: engine
+spec:
+  replicas: {{ .Values.deployment.numEngines }}
+  selector:
+    matchLabels:
+      safe.k8s.fmeserver.component: engine
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeserver.component: engine
+        {{- include "fmeserver.common.labels" . | indent 8 }}
+    spec:
+      containers:
+        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-engine:{{ template "fmeserver.image.tag" . }}
+          name: engine
+          imagePullPolicy: {{ template "fmeserver.image.pullPolicy" . }}
+          volumeMounts:
+            - mountPath: /data/fmeserverdata
+              name: fmeserverdata
+          env:
+            - name: EXTERNALHOSTNAME
+              value: {{ .Values.deployment.hostname }}
+            - name: WEBPROTOCOL
+              value: https
+            - name: EXTERNALPORT
+              value: '443'
+            - name: FMESERVERHOSTNAME
+              value: engineregistration
+            - name: NODENAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: PGSQLHOSTNAME
+              value: "{{ template "fmeserver.database.host" . }}"
+            - name: PGSQLPORT
+              value: "{{ .Values.fmeserver.database.port }}"
+            - name: PGSQLDATABASENAME
+              value: "{{ .Values.fmeserver.database.name }}"
+            - name: PGSQLUSERNAME
+              value: "{{ .Values.fmeserver.database.user }}"
+            - name: PGSQLPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeserver.database.secretName" . }}
+                  key: {{ .Values.fmeserver.database.passwordSecretKey }}
+          resources:
+{{ toYaml .Values.resources.engine | indent 12 }}
+      restartPolicy: Always
+      volumes:
+        - name: fmeserverdata
+          persistentVolumeClaim:
+            claimName: {{ template "fmeserver.storage.data.claimName" . }}
+      affinity:
+        {{- include "fmeserver.deployment.dataVolumeAffinity" . | indent 8 }}
+      {{- if .Values.scheduling.engine.affinity }}
+{{ toYaml .Values.scheduling.engine.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.engine.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.scheduling.engine.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.engine.tolerations }}
+      tolerations:
+{{ toYaml .Values.scheduling.engine.tolerations | indent 8 }}
+      {{- end }}
+      
