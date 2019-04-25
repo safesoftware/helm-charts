@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    safe.k8s.fmeserver.component: queue
+    {{- include "fmeserver.common.labels" . | indent 4 }}
+  name: queue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      safe.k8s.fmeserver.component: queue
+  serviceName: fmeserverqueue
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeserver.component: queue
+        {{- include "fmeserver.common.labels" . | indent 8 }}
+    spec:
+      containers:
+        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-queue:{{ template "fmeserver.image.tag" . }}
+          name: queue
+          imagePullPolicy: {{ template "fmeserver.image.pullPolicy" . }}
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - mountPath: /data/fmeserverdata
+              name: fmeserverdata
+          env:
+          - name: POD_IP
+            valueFrom: { fieldRef: { fieldPath: status.podIP } }
+          resources:
+{{ toYaml .Values.resources.queue | indent 12 }}
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec redis-cli -a sozPpbLfgdI9WJoPejNMpSxGw -h $POD_IP ping
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 5
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec redis-cli -a sozPpbLfgdI9WJoPejNMpSxGw -h $POD_IP ping
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 5
+      restartPolicy: Always
+      volumes:
+        - name: fmeserverdata
+          persistentVolumeClaim:
+            claimName: {{ template "fmeserver.storage.data.claimName" . }}
+      affinity:
+        {{- include "fmeserver.deployment.dataVolumeAffinity" . | indent 8 }}
+      {{- if .Values.scheduling.queue.affinity }}
+{{ toYaml .Values.scheduling.queue.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.queue.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.scheduling.queue.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.queue.tolerations }}
+      tolerations:
+{{ toYaml .Values.scheduling.queue.tolerations | indent 8 }}
+      {{- end }}
+      

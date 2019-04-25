@@ -1,0 +1,79 @@
+suite: queue statefulset
+templates:
+  - queue-statefulset.yaml
+tests:
+  - it: renders default values
+    set:
+      fmeserver.image.tag: '19099'
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "quay.io/safesoftware/fmeserver-queue:19099"
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: IfNotPresent
+      - equal:
+          path: spec.template.spec.volumes[0].persistentVolumeClaim.claimName
+          value: fmeserver-data
+
+  - it: renders labels
+    set:
+      fmeserver.image.tag: '19099'
+    asserts:
+      - equal:
+          path: metadata.labels.safe\.k8s\.fmeserver\.component
+          value: queue
+      - equal:
+          path: metadata.labels.safe\.k8s\.fmeserver\.build
+          value: '19099'
+
+  - it: allows to change the pull policy, registry and namespace
+    set:
+      fmeserver.image.tag: '19099'
+      fmeserver.image.pullPolicy: Always
+      fmeserver.image.registry: safe-harbour.safe.internal
+      fmeserver.image.namespace: fmeserver-k8s
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: Always
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-queue:19099"
+
+  - it: ensures affinity to core if volume does not support many access
+    set:
+      fmeserver.image.tag: '19099'
+    asserts:
+      - contains:
+          path: spec.template.spec.affinity.podAffinity.requiredDuringSchedulingIgnoredDuringExecution
+          content:
+            labelSelector:
+              matchExpressions:
+              - key: safe.k8s.fmeserver.component
+                operator: In
+                values:
+                - core
+            topologyKey: "kubernetes.io/hostname"
+
+  - it: ignores affinity to core if volume supports ReadWriteMany access
+    set:
+      fmeserver.image.tag: '19099'
+      storage.fmeserver.accessMode: ReadWriteMany
+    asserts:
+      - isEmpty:
+          path: spec.template.spec.affinity
+
+  - it: tests the old deprecated values still work
+    set:
+      fmeserver.buildNr: '19099'
+      images.pullPolicy: Always
+      images.registry: safe-harbour.safe.internal
+      images.namespace: fmeserver-k8s
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: Always
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "safe-harbour.safe.internal/fmeserver-k8s/fmeserver-queue:19099"

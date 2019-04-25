@@ -1,0 +1,45 @@
+suite: postgresql pvc
+templates:
+  - postgresql-pvc.yaml
+tests:
+  - it: renders labels
+    set:
+      fmeserver.image.tag: '19099'
+    asserts:
+      - equal:
+          path: metadata.labels.safe\.k8s\.fmeserver\.component
+          value: db
+      - equal:
+          path: metadata.labels.safe\.k8s\.fmeserver\.build
+          value: '19099'
+
+  - it: removes storage class if host dir is set
+    set:
+      fmeserver.image.tag: '19099'
+      storage.postgresql.class: 'newClass'
+      storage.useHostDir: true
+    asserts:
+      - isEmpty:
+          path: spec.storageClassName
+
+  - it: removes storage class by default
+    set:
+      fmeserver.buildNr: '19099'
+      storage.useHostDir: false
+    asserts:
+      - isEmpty:
+          path: spec.storageClassName
+
+  - it: sets the storage class and size
+    set:
+      fmeserver.image.tag: '19099'
+      storage.postgresql.class: 'newClass'
+      storage.useHostDir: false
+      storage.postgresql.size: 30Gi
+    asserts:
+      - equal:
+          path: spec.storageClassName
+          value: newClass
+      - equal:
+          path: spec.resources.requests.storage
+          value: 30Gi

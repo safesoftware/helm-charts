@@ -1,0 +1,73 @@
+suite: transact ingress
+templates:
+  - transact-ingress.yaml
+tests:
+  - it: renders default configuration for self-signed certificate
+    set:
+      fmeserver.image.tag: '19099'
+    asserts:
+      - equal:
+          path: metadata.annotations.kubernetes\.io\/ingress\.class
+          value: nginx
+      - equal:
+          path: spec.rules[0].host
+          value: localhost
+      - equal:
+          path: spec.tls[0].hosts[0]
+          value: localhost
+      - isEmpty:
+          path: metadata.annotations.certmanager\.k8s\.io/issuer
+      - isEmpty:
+          path: metadata.annotations.certmanager\.k8s\.io/cluster-issuer
+      - isEmpty:
+          path: spec.tls[0].secretName
+      - equal:
+          path: metadata.annotations.nginx\.ingress\.kubernetes\.io/proxy-read-timeout
+          value: "1209600"
+
+  - it: renders certmanager cluster issuer configuration
+    set:
+      fmeserver.image.tag: '19099'
+      deployment.hostname: fmeserver.safe.com
+      deployment.tlsSecretName: fmeserver-tls-cert-le-test
+      deployment.certManager.issuerName: letsencrypt-test
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: fmeserver.safe.com
+      - equal:
+          path: spec.tls[0].hosts[0]
+          value: fmeserver.safe.com
+      - equal:
+          path: spec.tls[0].secretName
+          value: fmeserver-tls-cert-le-test
+      - equal:
+          path: metadata.annotations.certmanager\.k8s\.io/cluster-issuer
+          value: letsencrypt-test
+      - equal:
+          path: metadata.annotations.nginx\.ingress\.kubernetes\.io/proxy-read-timeout
+          value: "1209600"
+
+  - it: renders certmanager namespace issuer configuration
+    set:
+      fmeserver.image.tag: '19099'
+      deployment.hostname: fmeserver.safe.com
+      deployment.tlsSecretName: fmeserver-tls-cert-le-test
+      deployment.certManager.issuerName: letsencrypt-test
+      deployment.certManager.issuerType: namespace
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: fmeserver.safe.com
+      - equal:
+          path: spec.tls[0].hosts[0]
+          value: fmeserver.safe.com
+      - equal:
+          path: spec.tls[0].secretName
+          value: fmeserver-tls-cert-le-test
+      - equal:
+          path: metadata.annotations.certmanager\.k8s\.io/issuer
+          value: letsencrypt-test
+      - equal:
+          path: metadata.annotations.nginx\.ingress\.kubernetes\.io/proxy-read-timeout
+          value: "1209600"
