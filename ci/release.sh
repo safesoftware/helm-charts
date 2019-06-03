@@ -63,7 +63,9 @@ function get_remote_chart_version() {
 
 available_repos=`$HELM_BIN search safesoftware/`
 
-for chart_dir in chart-source/*/ ; do
+# From 2019.1 on we will be buildiing the charts internally and publishing them to this repo
+# We only want to build 2019.0.* using this script
+for chart_dir in chart-source/*2019.0*/ ; do
   chart_name=`get_chart_name $chart_dir`
   local_chart_version=`get_local_chart_version $chart_dir`
 
