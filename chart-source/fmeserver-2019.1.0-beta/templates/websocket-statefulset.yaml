@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    safe.k8s.fmeserver.component: websocket
+    {{- include "fmeserver.common.labels" . | indent 4 }}
+  name: websocket
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      safe.k8s.fmeserver.component: websocket
+  serviceName: fmeserverwebsocket
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeserver.component: websocket
+        {{- include "fmeserver.common.labels" . | indent 8 }}
+    spec:
+      containers:
+        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-core:{{ template "fmeserver.image.tag" . }}
+          name: websocket
+          imagePullPolicy: {{ template "fmeserver.image.pullPolicy" . }}
+          env:
+            - name: PRIMARY_PROCESS
+              value: websocket
+          ports:
+            - containerPort: 7078
+          volumeMounts:
+            - mountPath: /data/fmeserverdata
+              name: fmeserverdata
+          resources:
+{{ toYaml .Values.resources.websocket | indent 12 }}
+          livenessProbe:
+            tcpSocket:
+              port: 7078
+            initialDelaySeconds: 30
+            failureThreshold: 5
+            timeoutSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: 7078
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 5
+      restartPolicy: Always
+      volumes:
+        - name: fmeserverdata
+          persistentVolumeClaim:
+            claimName: {{ template "fmeserver.storage.data.claimName" . }}
+      affinity:
+        {{- include "fmeserver.deployment.dataVolumeAffinity" . | indent 8 }}
+      {{- if .Values.scheduling.websocket.affinity }}
+{{ toYaml .Values.scheduling.websocket.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.websocket.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.scheduling.websocket.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.websocket.tolerations }}
+      tolerations:
+{{ toYaml .Values.scheduling.websocket.tolerations | indent 8 }}
+      {{- end }}
