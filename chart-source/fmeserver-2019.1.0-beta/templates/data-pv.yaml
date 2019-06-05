@@ -1,0 +1,17 @@
+{{ if .Values.storage.useHostDir }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: fmeserver-data
+spec:
+  {{- with .Values.storage }}
+  capacity:
+    storage: {{ .fmeserver.size }}
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: {{ .reclaimPolicy }}
+  hostPath:
+    path: {{ .fmeserver.path | default "/tmp/k8s/fmeserver_data" }}
+    type: DirectoryOrCreate
+  {{- end }}
+{{ end }}
