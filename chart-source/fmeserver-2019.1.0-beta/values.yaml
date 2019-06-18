@@ -43,6 +43,20 @@ deployment:
   useHostnameIngress: true
   deployPostgresql: true
 
+annotations:
+  core:
+    statefulset: {}
+    template: {}
+  engine:
+    deployment: {}
+    template: {}
+  queue:
+    statefulset: {}
+    template: {}
+  websocket:
+    statefulset: {}
+    template: {}
+
 scheduling:
   core:
     affinity: {}

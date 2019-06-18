@@ -5,6 +5,10 @@ metadata:
     safe.k8s.fmeserver.component: queue
     {{- include "fmeserver.common.labels" . | indent 4 }}
   name: queue
+  {{- with .Values.annotations.queue.statefulset }}
+  annotations:
+  {{ toYaml . | indent 2 }}
+  {{- end }}
 spec:
   replicas: 1
   selector:
@@ -16,6 +20,10 @@ spec:
       labels:
         safe.k8s.fmeserver.component: queue
         {{- include "fmeserver.common.labels" . | indent 8 }}
+      {{- with .Values.annotations.queue.template }}
+      annotations:
+      {{ toYaml . | indent 2 }}
+      {{- end }}
     spec:
       containers:
         - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-queue:{{ template "fmeserver.image.tag" . }}

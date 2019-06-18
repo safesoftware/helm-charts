@@ -5,6 +5,10 @@ metadata:
     {{- include "fmeserver.common.labels" . | indent 4 }}
     safe.k8s.fmeserver.component: core
   name: core
+  {{- with .Values.annotations.core.statefulset }}
+  annotations:
+  {{ toYaml . | indent 2 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.deployment.numCores }}
   selector:
@@ -16,6 +20,10 @@ spec:
       labels:
         safe.k8s.fmeserver.component: core
         {{- include "fmeserver.common.labels" . | indent 8 }}
+      {{- with .Values.annotations.core.template }}
+      annotations:
+      {{ toYaml . | indent 2 }}
+      {{- end }}
     spec:
       securityContext:
         {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
@@ -51,6 +59,8 @@ spec:
               value: https
             - name: NODENAMENS
               value: fmeserver
+            - name: REMOVEENGINETAGSONDISCONNECT
+              value: "true"
             - name: PGSQLHOSTNAME
               value: "{{ template "fmeserver.database.host" . }}"
             - name: PGSQLPORT
@@ -97,6 +107,8 @@ spec:
               value: {{ .Values.fmeserver.webserver.maxThreads | quote }}
             - name: EXPERIMENTAL_JAVA_FLAGS
               value: {{ .Values.fmeserver.webserver.experimentalJavaFlags | quote }}
+            - name: READONLYQUEUES
+              value: 'true'
           livenessProbe:
             httpGet:
               path: /fmerest/v3/healthcheck?ready=false

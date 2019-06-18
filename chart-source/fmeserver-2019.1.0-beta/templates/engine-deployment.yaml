@@ -6,6 +6,10 @@ metadata:
     safe.k8s.fmeserver.component: engine
     {{- include "fmeserver.common.labels" $ | indent 4 }}
   name: "engine-{{ .name }}"
+  {{- with $.Values.annotations.engine.deployment }}
+  annotations:
+  {{ toYaml . | indent 2 }}
+  {{- end }}
 spec:
 {{- if $.Values.deployment.numEngines }}
   replicas: {{ $.Values.deployment.numEngines }}
@@ -20,6 +24,10 @@ spec:
       labels:
         safe.k8s.fmeserver.component: engine
         {{- include "fmeserver.common.labels" $ | indent 8 }}
+      {{- with $.Values.annotations.engine.template }}
+      annotations:
+      {{ toYaml . | indent 2 }}
+      {{- end }}
     spec:
       containers:
         - image: {{ template "fmeserver.image.registry" $ }}/{{ template "fmeserver.image.namespace" $ }}/fmeserver-engine:{{ template "fmeserver.image.tag" $ }}
@@ -43,6 +51,8 @@ spec:
                   fieldPath: status.podIP
             - name: FME_ENV_ENGINE_QUEUES
               value: {{ .queues | quote }}
+            - name: NODEMANAGED
+              value: "false"
             - name: PGSQLHOSTNAME
               value: "{{ template "fmeserver.database.host" $ }}"
             - name: PGSQLPORT

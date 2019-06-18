@@ -5,6 +5,10 @@ metadata:
     safe.k8s.fmeserver.component: websocket
     {{- include "fmeserver.common.labels" . | indent 4 }}
   name: websocket
+  {{- with .Values.annotations.websocket.statefulset }}
+  annotations:
+  {{ toYaml . | indent 2 }}
+  {{- end }}
 spec:
   replicas: 1
   selector:
@@ -16,6 +20,10 @@ spec:
       labels:
         safe.k8s.fmeserver.component: websocket
         {{- include "fmeserver.common.labels" . | indent 8 }}
+      {{- with .Values.annotations.websocket.template }}
+      annotations:
+      {{ toYaml . | indent 2 }}
+      {{- end }}
     spec:
       containers:
         - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-core:{{ template "fmeserver.image.tag" . }}
