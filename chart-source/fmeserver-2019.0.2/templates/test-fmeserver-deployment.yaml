@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name}}-deployment-test"
+  labels:
+    {{- include "fmeserver.common.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-deployment-tester:{{ template "fmeserver.image.tag" . }}
+      name: deployment-tester
+      env:
+        - name: FMESERVER_URL
+          value: "https://{{ .Values.deployment.hostname }}"
+        - name: FMESERVER_USER
+          value: "admin"
+        - name: FMESERVER_PASSWORD
+          value: "admin"
+  hostNetwork: true
+  restartPolicy: Never
