@@ -7,7 +7,7 @@ metadata:
   name: websocket
   {{- with .Values.annotations.websocket.statefulset }}
   annotations:
-  {{ toYaml . | indent 2 }}
+{{ toYaml . | indent 4 }}
   {{- end }}
 spec:
   replicas: 1
@@ -22,7 +22,7 @@ spec:
         {{- include "fmeserver.common.labels" . | indent 8 }}
       {{- with .Values.annotations.websocket.template }}
       annotations:
-      {{ toYaml . | indent 2 }}
+{{ toYaml . | indent 8 }}
       {{- end }}
     spec:
       containers:

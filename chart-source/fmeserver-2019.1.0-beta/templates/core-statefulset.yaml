@@ -7,7 +7,7 @@ metadata:
   name: core
   {{- with .Values.annotations.core.statefulset }}
   annotations:
-  {{ toYaml . | indent 2 }}
+{{ toYaml . | indent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.deployment.numCores }}
@@ -22,7 +22,7 @@ spec:
         {{- include "fmeserver.common.labels" . | indent 8 }}
       {{- with .Values.annotations.core.template }}
       annotations:
-      {{ toYaml . | indent 2 }}
+{{ toYaml . | indent 8 }}
       {{- end }}
     spec:
       securityContext:

@@ -8,7 +8,7 @@ metadata:
   name: "engine-{{ .name }}"
   {{- with $.Values.annotations.engine.deployment }}
   annotations:
-  {{ toYaml . | indent 2 }}
+{{ toYaml . | indent 4 }}
   {{- end }}
 spec:
 {{- if $.Values.deployment.numEngines }}
@@ -26,7 +26,7 @@ spec:
         {{- include "fmeserver.common.labels" $ | indent 8 }}
       {{- with $.Values.annotations.engine.template }}
       annotations:
-      {{ toYaml . | indent 2 }}
+{{ toYaml . | indent 8 }}
       {{- end }}
     spec:
       containers:
