@@ -29,6 +29,10 @@ fmeserver:
       affinity: {}
       nodeSelector: {}
       tolerations: []
+      resources:
+        requests:
+          memory: 512Mi
+          cpu: 200m
     
 
 deployment:
@@ -43,6 +47,7 @@ deployment:
   startAsRoot: false
   useHostnameIngress: true
   deployPostgresql: true
+  disableTLS: false
 
 annotations:
   core:
@@ -84,10 +89,6 @@ resources:
     limits:
       memory:
       cpu:
-  engine:
-    requests:
-      memory: 512Mi
-      cpu: 200m
   queue:
     requests:
       memory: 128Mi

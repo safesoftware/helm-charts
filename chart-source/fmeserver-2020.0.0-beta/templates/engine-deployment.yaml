@@ -36,7 +36,7 @@ spec:
             - name: EXTERNALHOSTNAME
               value: {{ $.Values.deployment.hostname }}
             - name: WEBPROTOCOL
-              value: https
+              value: {{ template "fmeserver.deployment.protocol" $ }}
             - name: EXTERNALPORT
               value: '443'
             - name: FMESERVERHOSTNAME
@@ -66,8 +66,10 @@ spec:
                 secretKeyRef:
                   name: {{ template "fmeserver.database.secretName" $ }}
                   key: {{ $.Values.fmeserver.database.passwordSecretKey }}
+          {{- if .resources }}
           resources:
-{{ toYaml $.Values.resources.engine | indent 12 }}
+{{ toYaml .resources | indent 12 }}
+          {{- end }}
       restartPolicy: Always
       volumes:
         - name: fmeserverdata

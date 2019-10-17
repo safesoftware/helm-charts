@@ -2,7 +2,7 @@ Congratulations, your FME Server should be ready shortly! You can check the prog
 
   $ helm status {{ .Release.Name }}
 
-Once all containers are running, you should be able to access your deployment under https://{{ .Values.deployment.hostname }}
+Once all containers are running, you should be able to access your deployment under {{ template "fmeserver.deployment.protocol" . }}://{{ .Values.deployment.hostname }}
 
 To ensure that everything is working correctly, helm provides a test framework which can be run once the FME Server is up and running (does currently NOT work for Docker on Mac/Windows):
 
