@@ -42,6 +42,7 @@ deployment:
   startAsRoot: false
   useHostnameIngress: true
   deployPostgresql: true
+  disableTLS: false
 
 annotations:
   core:

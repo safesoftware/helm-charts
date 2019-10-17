@@ -40,7 +40,7 @@ spec:
             - name: EXTERNALHOSTNAME
               value: {{ $.Values.deployment.hostname }}
             - name: WEBPROTOCOL
-              value: https
+              value: {{ template "fmeserver.deployment.protocol" $ }}
             - name: EXTERNALPORT
               value: '443'
             - name: FMESERVERHOSTNAME

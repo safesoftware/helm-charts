@@ -12,7 +12,7 @@ spec:
       name: deployment-tester
       env:
         - name: FMESERVER_URL
-          value: "https://{{ .Values.deployment.hostname }}"
+          value: "{{ template "fmeserver.deployment.protocol" . }}://{{ .Values.deployment.hostname }}"
         - name: FMESERVER_USER
           value: "admin"
         - name: FMESERVER_PASSWORD

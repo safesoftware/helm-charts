@@ -15,12 +15,19 @@ certmanager.k8s.io/issuer: {{ .Values.deployment.certManager.issuerName | quote 
 
 {{/* Generates ingress tls configuration  */}}
 {{- define "fmeserver.ingress.tls" }}
+{{- if not .Values.deployment.disableTLS }}
   tls:
     - hosts:
         - {{ .Values.deployment.hostname }}
       {{- if .Values.deployment.tlsSecretName }}
       secretName: {{ .Values.deployment.tlsSecretName }}
       {{- end }}
+{{- end }}
+{{- end }}
+
+
+{{- define "fmeserver.deployment.protocol" }}
+{{- if .Values.deployment.disableTLS }}http{{- else }}https{{- end }}
 {{- end }}
 
 {{/* Common labels */}}
