@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    safe.k8s.fmeserver.component: web
+    {{- include "fmeserver.common.labels" . | indent 4 }}
+  name: fmeserverweb
+spec:
+  ports:
+  - port: 8080
+  selector:
+    safe.k8s.fmeserver.component: core
