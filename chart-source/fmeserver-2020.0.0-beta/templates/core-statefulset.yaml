@@ -113,6 +113,19 @@ spec:
             {{- end }}
             - name: READONLYQUEUES
               value: 'true'
+            - name: PGSQLHOSTNAME
+              value: "{{ template "fmeserver.database.host" . }}"
+            - name: PGSQLPORT
+              value: "{{ .Values.fmeserver.database.port }}"
+            - name: PGSQLDATABASENAME
+              value: "{{ .Values.fmeserver.database.name }}"
+            - name: PGSQLUSERNAME
+              value: "{{ .Values.fmeserver.database.user }}"
+            - name: PGSQLPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeserver.database.secretName" . }}
+                  key: {{ .Values.fmeserver.database.passwordSecretKey }}
           livenessProbe:
             httpGet:
               path: /fmerest/v3/healthcheck?ready=false
