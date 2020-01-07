@@ -83,11 +83,11 @@ The following table lists the configurable parameters of the FME Server 2019.1.0
 | `annotations.websocket.statefulset` | `Annotations for the websocket statefulset` | `{}` |
 | `annotations.websocket.template` | `Annotations for the websocket pod template` | `{}` |
 
-## FME Server 2019.2 BETA
+## FME Server 2019.2
 
 ### Configuration
 
-The following table lists the configurable parameters of the FME Server 2019.2 BETA chart and their default values.
+The following table lists the configurable parameters of the FME Server 2019.2 chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
