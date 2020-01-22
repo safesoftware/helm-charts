@@ -21,6 +21,7 @@ fmeserver:
   webserver:
     maxThreads: 200
     experimentalJavaFlags: false
+  forcePasswordChange: true
   engines:
     - name: "default"
       engines: 2

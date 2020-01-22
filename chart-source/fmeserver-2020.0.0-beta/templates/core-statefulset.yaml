@@ -69,6 +69,8 @@ spec:
               value: "{{ .Values.fmeserver.database.port }}"
             - name: PGSQLDATABASENAME
               value: "{{ .Values.fmeserver.database.name }}"
+            - name: FIRSTLOGINCHANGEPASSWORD
+              value: "{{ .Values.fmeserver.forcePasswordChange }}"
             - name: PGSQLUSERNAME
               value: "{{ .Values.fmeserver.database.user }}"
             - name: PGSQLPASSWORD
@@ -159,6 +161,8 @@ spec:
               value: "{{ .Values.fmeserver.database.name }}"
             - name: PGSQLUSERNAME
               value: "{{ .Values.fmeserver.database.user }}"
+            - name: FIRSTLOGINCHANGEPASSWORD
+              value: "{{ .Values.fmeserver.forcePasswordChange }}"
             - name: PGSQLPASSWORD
               valueFrom:
                 secretKeyRef:
