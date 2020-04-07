@@ -27,7 +27,6 @@ fmeserver:
       engines: 2
       queues: "Default"
       type: "STANDARD"
-      engineMemoryRedLine: 0.75
       affinity: {}
       nodeSelector: {}
       tolerations: []

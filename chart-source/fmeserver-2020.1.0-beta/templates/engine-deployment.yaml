@@ -66,10 +66,6 @@ spec:
                 secretKeyRef:
                   name: {{ template "fmeserver.database.secretName" $ }}
                   key: {{ $.Values.fmeserver.database.passwordSecretKey }}
-            {{- if .engineMemoryRedLine }}
-            - name: FMEENGINEMEMORYREDLINE
-              value: "{{ .engineMemoryRedLine }}"
-            {{- end }}
           {{- if .resources }}
           resources:
 {{ toYaml .resources | indent 12 }}
