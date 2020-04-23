@@ -18,7 +18,7 @@ The following table lists the configurable parameters of the FME Server 2019.1.0
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
 | `fmeserver.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](http://fme.ly/k8s). |
-| `fmeserver.image.pullPolicy` | Image pull policy | `IfNotPresent` |
+| `fmeserver.image.pullPolicy` | Image pull policy. IfNotPresent means that the image is pulled only if it is not alreay present on the node. If this is changed to "Always", then the node will always try to pull to make sure it has the latest version of that tag. | `IfNotPresent` |
 | `fmeserver.image.registry` | Docker registry | `quay.io` This parameter should not be changed. |
 | `fmeserver.image.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
 | `deployment.hostname` | FME Server hostname | `localhost` |
