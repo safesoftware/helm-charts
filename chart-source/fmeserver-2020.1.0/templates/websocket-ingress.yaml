@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: fmeserver-websocket-ingress
+  annotations:
+    # 30 days read timeout for websocket connections
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "2592000"
+{{- include "fmeserver.ingress.annotations" . | indent 4 }}
+spec:
+  {{- include "fmeserver.ingress.tls" . }}
+  rules:
+    - http:
+        paths:
+          - backend:
+              serviceName: fmeserverwebsocket
+              servicePort: 7078
+            path: /websocket
+      {{- if .Values.deployment.useHostnameIngress }}
+      host: {{ .Values.deployment.hostname }}
+      {{ end }}

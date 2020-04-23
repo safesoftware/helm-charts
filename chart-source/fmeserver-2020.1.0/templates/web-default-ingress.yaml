@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: fmeserver-web-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.deployment.proxyReadTimeout | quote }}
+    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.deployment.proxyBodySize | quote }}
+{{- include "fmeserver.ingress.annotations" . | indent 4 }}
+spec:
+  {{- include "fmeserver.ingress.tls" . }}
+  rules:
+    - http:
+        paths:
+          - backend:
+              serviceName: fmeserverweb
+              servicePort: 8080
+            path: /
+      {{- if .Values.deployment.useHostnameIngress }}
+      host: {{ .Values.deployment.hostname }}
+      {{ end }}
