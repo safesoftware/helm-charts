@@ -128,20 +128,22 @@ spec:
                 secretKeyRef:
                   name: {{ template "fmeserver.database.secretName" . }}
                   key: {{ .Values.fmeserver.database.passwordSecretKey }}
+          {{- if .Values.fmeserver.healthcheck.enabled }}
           livenessProbe:
             httpGet:
               path: /fmerest/v3/healthcheck?ready=false
               port: 8080
             initialDelaySeconds: 60
-            failureThreshold: 6
-            timeoutSeconds: 5
+            failureThreshold: {{ .Values.fmeserver.healthcheck.liveness.failureThreshold }}
+            timeoutSeconds: {{ .Values.fmeserver.healthcheck.liveness.timeoutSeconds }}
           readinessProbe:
             httpGet:
               path: /fmerest/v3/healthcheck?ready=true
               port: 8080
             initialDelaySeconds: 20
-            timeoutSeconds: 3
-            periodSeconds: 5
+            timeoutSeconds: {{ .Values.fmeserver.healthcheck.readiness.failureThreshold }}
+            periodSeconds: {{ .Values.fmeserver.healthcheck.readiness.periodSeconds }}
+          {{- end }}  
       initContainers:
         - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-core:{{ template "fmeserver.image.tag" . }}
           name: dbinit

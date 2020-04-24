@@ -22,6 +22,14 @@ fmeserver:
     maxThreads: 200
     experimentalJavaFlags: false
   forcePasswordChange: true
+  healthcheck:
+    enabled: true
+    liveness:
+      failureThreshold: 6
+      timeoutSeconds: 5
+    readiness:
+      failureThreshold: 3
+      periodSeconds: 5
   engines:
     - name: "default"
       engines: 2
