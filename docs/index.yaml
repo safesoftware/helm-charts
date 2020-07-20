@@ -3,7 +3,11 @@ entries:
   fmeserver-2018.1.0:
   - apiVersion: v1
     appVersion: 2018.1.0
-    created: "2020-07-20T21:58:43.211238814Z"
+    created: "2020-07-20T22:27:44.596792876Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.13.1
     description: FME Server 2018.1.0
     digest: 6316eb359dd4bf8fa3961cba4abd82be01eb750c2c1c7340023498d5df8f24cb
     name: fmeserver-2018.1.0
@@ -12,7 +16,11 @@ entries:
     version: 1.0.1
   - apiVersion: v1
     appVersion: 2018.1.0
-    created: "2020-07-20T21:58:43.210339018Z"
+    created: "2020-07-20T22:27:44.595447762Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.13.1
     description: FME Server 2018.1.0
     digest: 1ea99173428fd2299aff7eaf41eb70933d977a36ad2b1be0924dc2a90f0a284b
     name: fmeserver-2018.1.0
@@ -22,7 +30,11 @@ entries:
   fmeserver-2018.1.0-beta:
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.228557955Z"
+    created: "2020-07-20T22:27:44.623501086Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.13.1
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 817639aeed397448a399161c9a5da1b7fd790b4c70932d81f9f7dbb26a7c1c87
@@ -32,7 +44,11 @@ entries:
     version: 0.5.8
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.227778407Z"
+    created: "2020-07-20T22:27:44.622158716Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.13.1
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 2ea5380f8e60a502647d00a3e28a3d10a79e062cc009e1b80ac3e19bb26eb47e
@@ -42,7 +58,11 @@ entries:
     version: 0.5.7
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.226928946Z"
+    created: "2020-07-20T22:27:44.620024135Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.13.1
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 183333ab9658bf6c2d22998ddd24706b974d217c9b30dfa6705f0d71668e0d34
@@ -52,7 +72,11 @@ entries:
     version: 0.5.6
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.226117351Z"
+    created: "2020-07-20T22:27:44.618645673Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.13.1
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 9e0fd1a002f02e123452da57c283a30cc2a39ccb352b96e2136fb2e7653db6e3
@@ -62,7 +86,11 @@ entries:
     version: 0.5.5
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.22531944Z"
+    created: "2020-07-20T22:27:44.617367204Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.13.1
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: a21ea3f0b24981a6f7261b27a9c44c55bf190b5919c0ce36b272fc7d7dd2c888
@@ -72,7 +100,11 @@ entries:
     version: 0.5.4
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.224558303Z"
+    created: "2020-07-20T22:27:44.616058661Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.13.1
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 83e6ad3d335182183b5b7d48047cdab1f1d4365ed3370ece40cc2727adf9b36a
@@ -82,7 +114,11 @@ entries:
     version: 0.5.3
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.223778261Z"
+    created: "2020-07-20T22:27:44.614849088Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.13.1
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 4cc2c9863aee14383ac79e0263637da3e38a6ce68d23e7702a31e3962918cfe4
@@ -92,7 +128,11 @@ entries:
     version: 0.5.2
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.221843001Z"
+    created: "2020-07-20T22:27:44.613693338Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.13.1
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: ebf23bfe770f123ac83b1bdec39f07b7a9ea49cb4f19bc9f60d1cde5226ddf05
@@ -102,7 +142,11 @@ entries:
     version: 0.5.1
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.220989382Z"
+    created: "2020-07-20T22:27:44.61250211Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.13.1
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 90fdc3eaa1e8a58bea152f9068f22a93fb59f48d582025fa52b725d67f57cfa8
@@ -112,7 +156,7 @@ entries:
     version: 0.5.0
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.220123974Z"
+    created: "2020-07-20T22:27:44.611274353Z"
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 71f3a861edac5a0b60ed7d86f668eb94a949771490f11bc2ba6724f3728e2c7a
@@ -122,7 +166,7 @@ entries:
     version: 0.4.1
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.219766623Z"
+    created: "2020-07-20T22:27:44.61031654Z"
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 2db0fbbce2dd5f777342781e84f6db68aecf6f66939fcc53ec301ade9a5afbd2
@@ -132,7 +176,7 @@ entries:
     version: 0.4.0
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.219355316Z"
+    created: "2020-07-20T22:27:44.609141845Z"
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 4965f46868af4770fcf85bf536044a5e4e8eb07924a1f2342fd38acb36485804
@@ -142,7 +186,7 @@ entries:
     version: 0.3.4
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.21899809Z"
+    created: "2020-07-20T22:27:44.608616516Z"
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 45e7aa01ec0b283e2eea673ebd9fef506647f7d44c079ed1cfe90a75e8772d83
@@ -152,7 +196,7 @@ entries:
     version: 0.3.3
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.218588066Z"
+    created: "2020-07-20T22:27:44.608099741Z"
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: d2400d18cba8a4358a2ab5399c3f841c13f18d249b1af511f29c2f9ca5fbbdd2
@@ -162,7 +206,7 @@ entries:
     version: 0.3.2
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.218224786Z"
+    created: "2020-07-20T22:27:44.607606753Z"
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: b28dd6dea0b587dd259b5b6eac31aa02dfb6704068c8467738fe02304d32f50b
@@ -172,7 +216,7 @@ entries:
     version: 0.3.1
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.217862292Z"
+    created: "2020-07-20T22:27:44.607159274Z"
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 7fc1c71538c526f38c3e66dc000c40e8c4d5d3718b3137155716f338fa4d0687
@@ -182,7 +226,12 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.21752745Z"
+    created: "2020-07-20T22:27:44.606708608Z"
+    dependencies:
+    - condition: nginx-ingress.enabled
+      name: nginx-ingress
+      repository: '@stable'
+      version: 0.16.0
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 70e4f6e4f3bcf9d5179ed708bf17d5f92e8d07b1211b2ed600c610ac3cb260fc
@@ -192,7 +241,11 @@ entries:
     version: 0.2.2
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.216527754Z"
+    created: "2020-07-20T22:27:44.604967692Z"
+    dependencies:
+    - name: nginx-ingress
+      repository: '@stable'
+      version: 0.16.0
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 47229ba0389b7b31cb5ccba4a916965c7e78324057e44b1630494ac0343953c0
@@ -202,7 +255,11 @@ entries:
     version: 0.2.1
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.215523603Z"
+    created: "2020-07-20T22:27:44.603298803Z"
+    dependencies:
+    - name: nginx-ingress
+      repository: '@stable'
+      version: 0.16.0
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 6aea9aebf887b7ef1596118867e717842ab677b11f3caa226f59c4483ffad21b
@@ -212,7 +269,11 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.213423802Z"
+    created: "2020-07-20T22:27:44.601583588Z"
+    dependencies:
+    - name: nginx-ingress
+      repository: '@stable'
+      version: 0.16.0
     description: FME Server 2018.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 74eb15a8d29a124071cc02c6293f9390e22b2b7d1188a1ba298f196d35bfaf3e
@@ -222,7 +283,11 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: 2018.1.0 BETA
-    created: "2020-07-20T21:58:43.212316973Z"
+    created: "2020-07-20T22:27:44.598681896Z"
+    dependencies:
+    - name: nginx-ingress
+      repository: '@stable'
+      version: 0.16.0
     description: A Helm chart for deploying FME Server 2018.1 BETA in Kubernetes
     digest: 2b1e2fa0365eea50401028e3539b0aeb3f60dbc9f263ed49ed3bb7971f7813b6
     name: fmeserver-2018.1.0-beta
@@ -232,7 +297,11 @@ entries:
   fmeserver-2018.1.1:
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.238952309Z"
+    created: "2020-07-20T22:27:44.640764097Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: 6633e617280835af83ccf72273ecd15f4383fd54da45a2cf0476ccfbb31fc35b
     name: fmeserver-2018.1.1
@@ -241,7 +310,11 @@ entries:
     version: 1.0.19
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.238141227Z"
+    created: "2020-07-20T22:27:44.639441949Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: df5ab73df426abbe151e92ae4abc86531cc4c95518baf593ec613b550bc7c765
     name: fmeserver-2018.1.1
@@ -250,7 +323,11 @@ entries:
     version: 1.0.18
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.237368624Z"
+    created: "2020-07-20T22:27:44.638095654Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: 828b9f8635f81241d1f77791528fa1ad044441b338ea399372716bceb940d4f9
     name: fmeserver-2018.1.1
@@ -259,7 +336,11 @@ entries:
     version: 1.0.17
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.236556124Z"
+    created: "2020-07-20T22:27:44.636753598Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: 64e56c7df87943b78da0011d62e6aafd9bedc6ce28a53887cc686de70cffde66
     name: fmeserver-2018.1.1
@@ -268,7 +349,11 @@ entries:
     version: 1.0.16
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.23577995Z"
+    created: "2020-07-20T22:27:44.635434278Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: e29a80de87e565ab9333e0b6df1699a0c7de76490093867d240d79a9764ffabf
     name: fmeserver-2018.1.1
@@ -277,7 +362,11 @@ entries:
     version: 1.0.15
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.234983327Z"
+    created: "2020-07-20T22:27:44.634026081Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: fe173f18138d7fe5b8ffc062b4ecd14a7551849f94671d3248eea43ec55455ba
     name: fmeserver-2018.1.1
@@ -286,7 +375,11 @@ entries:
     version: 1.0.14
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.234174547Z"
+    created: "2020-07-20T22:27:44.632692621Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: cdbf075e556752ddf074677762da53cc22ab3def4ae4ef74b26a3551ecb46086
     name: fmeserver-2018.1.1
@@ -295,7 +388,11 @@ entries:
     version: 1.0.13
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.233406909Z"
+    created: "2020-07-20T22:27:44.630302433Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: ce61f159b79a6aed939f952d8f89c13660361872cd2bc8a941155d1c006da25a
     name: fmeserver-2018.1.1
@@ -304,7 +401,11 @@ entries:
     version: 1.0.12
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.232626473Z"
+    created: "2020-07-20T22:27:44.628928722Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: ef88ddce28b2fa3b6ef6479334e2dadca2149a4462a2477a65178e57594baa36
     name: fmeserver-2018.1.1
@@ -313,7 +414,11 @@ entries:
     version: 1.0.11
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.231729452Z"
+    created: "2020-07-20T22:27:44.62759349Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: 52f0c343fe7aff45ab6d4d82fcaccbc0551eb0456acae94f80547f510ead19d7
     name: fmeserver-2018.1.1
@@ -322,7 +427,11 @@ entries:
     version: 1.0.10
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.246226144Z"
+    created: "2020-07-20T22:27:44.65343485Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: 8d7d93296131902355273a4465671c0ab1cc7e8f39ebc6bef02cb45d89178330
     name: fmeserver-2018.1.1
@@ -331,7 +440,11 @@ entries:
     version: 1.0.9
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.245408639Z"
+    created: "2020-07-20T22:27:44.651257045Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: 47c050f50370a20c3d809bef3fa3dd282a44f4321cafef94b88e8eb806d2a142
     name: fmeserver-2018.1.1
@@ -340,7 +453,11 @@ entries:
     version: 1.0.8
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.244607955Z"
+    created: "2020-07-20T22:27:44.649913304Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: 118e503f8ef00ae6db30cb00a03d859d02973df4681ecb724e175f4ba84ee032
     name: fmeserver-2018.1.1
@@ -349,7 +466,11 @@ entries:
     version: 1.0.7
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.243818341Z"
+    created: "2020-07-20T22:27:44.648594882Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: 13ddc4f51782bef1add29621bd1cb106f4a5fff2e4b3965e24b720d28e0c63f5
     name: fmeserver-2018.1.1
@@ -358,7 +479,11 @@ entries:
     version: 1.0.6
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.243037997Z"
+    created: "2020-07-20T22:27:44.647286372Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: 628c2968a58ce0942b4ef87ae5bb063afc2be34adec64459da2778f3535d9458
     name: fmeserver-2018.1.1
@@ -367,7 +492,11 @@ entries:
     version: 1.0.5
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.242215469Z"
+    created: "2020-07-20T22:27:44.645926834Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: c9b625a8be4072a81f6d7623d71d375509b9fdb469f1c123d2ecbb61e72f2139
     name: fmeserver-2018.1.1
@@ -376,7 +505,11 @@ entries:
     version: 1.0.4
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.241438597Z"
+    created: "2020-07-20T22:27:44.644536616Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: 8782f646f1ea11f53da499cb9e2d5c94dd9ef5d62981cd0bef2e6ac7ccb94b23
     name: fmeserver-2018.1.1
@@ -385,7 +518,11 @@ entries:
     version: 1.0.3
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.240616211Z"
+    created: "2020-07-20T22:27:44.643094861Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: 8e5d7a2c6c1fd3815b34be7176a08af205ac932867bd77a368ba997e2c430e01
     name: fmeserver-2018.1.1
@@ -394,7 +531,11 @@ entries:
     version: 1.0.2
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.230138585Z"
+    created: "2020-07-20T22:27:44.626217013Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: 8a39b0d9a4852a26218b1a4a15f79b4464b6eb183bdea419c972993843d62747
     name: fmeserver-2018.1.1
@@ -403,7 +544,11 @@ entries:
     version: 1.0.1
   - apiVersion: v1
     appVersion: 2018.1.1
-    created: "2020-07-20T21:58:43.229328054Z"
+    created: "2020-07-20T22:27:44.624826728Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.1
     digest: a72c87f170245346cd0775927caecbd9ef60a3467358123e958bcddf3a3e04e2
     name: fmeserver-2018.1.1
@@ -413,7 +558,11 @@ entries:
   fmeserver-2018.1.2:
   - apiVersion: v1
     appVersion: 2018.1.2
-    created: "2020-07-20T21:58:43.251048131Z"
+    created: "2020-07-20T22:27:44.659240667Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.2
     digest: 4a85c81b628e2946a53c2182820bef0d8b27c01efad7eb5e76f770d2a695bf10
     name: fmeserver-2018.1.2
@@ -422,7 +571,11 @@ entries:
     version: 1.0.13
   - apiVersion: v1
     appVersion: 2018.1.2
-    created: "2020-07-20T21:58:43.250238477Z"
+    created: "2020-07-20T22:27:44.657797684Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.2
     digest: 6b9a1d1a7069c898faba2bfe83b583bba664ec27e00b33ed45fec8904cebe031
     name: fmeserver-2018.1.2
@@ -431,7 +584,11 @@ entries:
     version: 1.0.12
   - apiVersion: v1
     appVersion: 2018.1.2
-    created: "2020-07-20T21:58:43.249363255Z"
+    created: "2020-07-20T22:27:44.656406267Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.2
     digest: 3284c2e64dbfb6399a9b91474789cb96a1dcbefb6fa69291613b5c18c5514337
     name: fmeserver-2018.1.2
@@ -440,7 +597,11 @@ entries:
     version: 1.0.11
   - apiVersion: v1
     appVersion: 2018.1.2
-    created: "2020-07-20T21:58:43.247075351Z"
+    created: "2020-07-20T22:27:44.654976886Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.2
     digest: b33bb650044672de224210f9fdd3b73187bb9d557c6a67e72228fcead4122262
     name: fmeserver-2018.1.2
@@ -449,7 +610,11 @@ entries:
     version: 1.0.10
   - apiVersion: v1
     appVersion: 2018.1.2
-    created: "2020-07-20T21:58:43.255854547Z"
+    created: "2020-07-20T22:27:44.668454065Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.2
     digest: b49b0cbd7d3f817a2eef133632da83ed1bb5ab2e219306ac9a73658c26e28861
     name: fmeserver-2018.1.2
@@ -458,7 +623,11 @@ entries:
     version: 1.0.9
   - apiVersion: v1
     appVersion: 2018.1.2
-    created: "2020-07-20T21:58:43.25503994Z"
+    created: "2020-07-20T22:27:44.667034119Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.2
     digest: 93a054d3a2cb55c99fd2dc9485096c659a9e5ac7a18a2fb6e893ec4c48a7fc93
     name: fmeserver-2018.1.2
@@ -467,7 +636,11 @@ entries:
     version: 1.0.8
   - apiVersion: v1
     appVersion: 2018.1.2
-    created: "2020-07-20T21:58:43.254192488Z"
+    created: "2020-07-20T22:27:44.665505524Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.2
     digest: 790f84add50bd5e8fb91543a2872adacfb1a1fa241d7b0a4fbd4f51a33ccba45
     name: fmeserver-2018.1.2
@@ -476,7 +649,11 @@ entries:
     version: 1.0.7
   - apiVersion: v1
     appVersion: 2018.1.2
-    created: "2020-07-20T21:58:43.253389048Z"
+    created: "2020-07-20T22:27:44.66420436Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.2
     digest: 4c42f20e673dcb61314478fdffc010b383fc297e9982aa844f58d880c81ee9ca
     name: fmeserver-2018.1.2
@@ -485,7 +662,11 @@ entries:
     version: 1.0.6
   - apiVersion: v1
     appVersion: 2018.1.2
-    created: "2020-07-20T21:58:43.252615159Z"
+    created: "2020-07-20T22:27:44.661885443Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.2
     digest: 3673e1d0b65a68ff73db7f0c9c0a85ab4c4f9d561a1fb37e3b7b3deab4986d68
     name: fmeserver-2018.1.2
@@ -494,7 +675,11 @@ entries:
     version: 1.0.5
   - apiVersion: v1
     appVersion: 2018.1.2
-    created: "2020-07-20T21:58:43.251838825Z"
+    created: "2020-07-20T22:27:44.660565697Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2018.1.2
     digest: 3d533e5433d3f115094e691bf1c0520decbfca880478e6906eb36ff4c19e14fb
     name: fmeserver-2018.1.2
@@ -504,7 +689,12 @@ entries:
   fmeserver-2019.0.0:
   - apiVersion: v1
     appVersion: 2019.0.0
-    created: "2020-07-20T21:58:43.25788567Z"
+    created: "2020-07-20T22:27:44.670555025Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0
     digest: 49fe09665db8f0c4d2619f90c9cec4fdcb10f3e260a5779f9edaabe3ac456a72
     name: fmeserver-2019.0.0
@@ -514,7 +704,12 @@ entries:
   fmeserver-2019.0.0-beta:
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.282872489Z"
+    created: "2020-07-20T22:27:44.711472493Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 7d4def3c08d99a2bd5cb7237880ca969e1576c4cb0b10fdff33e6f0edb61bbb5
@@ -524,7 +719,12 @@ entries:
     version: 0.1.25
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.281597061Z"
+    created: "2020-07-20T22:27:44.709289421Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 4f3653ff08226e1797c3bb6e914849a4f84f974f462f00f444659b5d934be3b0
@@ -534,7 +734,12 @@ entries:
     version: 0.1.24
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.280376908Z"
+    created: "2020-07-20T22:27:44.707160313Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 0a5a71c2ceda03379d9fbf9db7440e8f246f1ba8ef92f6b1c374b329f7bf9c7a
@@ -544,7 +749,12 @@ entries:
     version: 0.1.23
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.278924284Z"
+    created: "2020-07-20T22:27:44.70403475Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: bef9a8fc8b01a9d4d0f66f859581f47b520e76cdd1ba2b9e5a2eab6dc5761f4c
@@ -554,7 +764,12 @@ entries:
     version: 0.1.22
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.277350309Z"
+    created: "2020-07-20T22:27:44.701906594Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 2e91952ea85fde1fbe684133d97357cde357be7ba74f3c4d854ada048c0499f4
@@ -564,7 +779,12 @@ entries:
     version: 0.1.21
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.275780937Z"
+    created: "2020-07-20T22:27:44.699842014Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 57484d833fd8f8aa86e8d8ce110c6bd6e2bc7bfc6accc9669f0efe0d7871113e
@@ -574,7 +794,12 @@ entries:
     version: 0.1.20
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.27286086Z"
+    created: "2020-07-20T22:27:44.696320824Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 7beec5a96ce77e1126e4cf8f5419c80dd2cb4063bf3a6aa282fc9cb523f8122c
@@ -584,7 +809,12 @@ entries:
     version: 0.1.19
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.271665429Z"
+    created: "2020-07-20T22:27:44.693449111Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 9764644e40941047a14846ec71303cf221012166ca84c20dfebfc5548ae08e65
@@ -594,7 +824,12 @@ entries:
     version: 0.1.18
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.270407285Z"
+    created: "2020-07-20T22:27:44.691408588Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 588c8df349f3fd6f3f269088470e9c23552e459d255a461843f40e692b3e2795
@@ -604,7 +839,12 @@ entries:
     version: 0.1.17
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.269210322Z"
+    created: "2020-07-20T22:27:44.689322768Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 3decef1db91e4ae1a38c661eb6fdb021f7cb2a418914967fb9a99e04045eb749
@@ -614,7 +854,12 @@ entries:
     version: 0.1.16
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.267992518Z"
+    created: "2020-07-20T22:27:44.687254072Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 820897109e24a3c3c641b17a120616eacf6ec248cf6ecca2fa4e400e5301830b
@@ -624,7 +869,12 @@ entries:
     version: 0.1.15
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.266585978Z"
+    created: "2020-07-20T22:27:44.685200775Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 0f2c7146a550169ed8dcf2df0c2714bf9af788da285b201bf146141cd2966fe2
@@ -634,7 +884,12 @@ entries:
     version: 0.1.14
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.26450528Z"
+    created: "2020-07-20T22:27:44.68220598Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: bea8fec8a170ce7a5dc25f7e09868b230a7dd70aeab680df7c0692f216c18e14
@@ -644,7 +899,12 @@ entries:
     version: 0.1.13
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.263277487Z"
+    created: "2020-07-20T22:27:44.680186878Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: f81268b5314fa75a1378b8938cb39cda7dae1a67e9ee873eec4d8661e7f5cd6b
@@ -654,7 +914,12 @@ entries:
     version: 0.1.12
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.262026373Z"
+    created: "2020-07-20T22:27:44.678136315Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: c72386f3eb0a814b7f2ef8cc9c1c1d7ba3286a416079f41edd133f21a8ee39a0
@@ -664,7 +929,12 @@ entries:
     version: 0.1.11
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.26078945Z"
+    created: "2020-07-20T22:27:44.676134311Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 90e4cdc25eaf62965ef760102f93427fd0fff296eeabcc4758e8012af34756a1
@@ -674,7 +944,11 @@ entries:
     version: 0.1.10
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.290087992Z"
+    created: "2020-07-20T22:27:44.72198008Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: da544a1037537990870eaac0b39e4ae5311efb363334cee672faeaecbd3828e2
@@ -684,7 +958,11 @@ entries:
     version: 0.1.9
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.289300703Z"
+    created: "2020-07-20T22:27:44.720660007Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 70a73d48a481b94be852e48b32fadbfe7569a33ef430766f59cee869710d4941
@@ -694,7 +972,11 @@ entries:
     version: 0.1.8
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.28850396Z"
+    created: "2020-07-20T22:27:44.719286954Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 40021188ab45bb0a658d305c892f53ecaca0ca6c5211566b46d4bead1ada6a47
@@ -704,7 +986,11 @@ entries:
     version: 0.1.7
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.28770954Z"
+    created: "2020-07-20T22:27:44.717950598Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 08c66fc468272f46b237ee0522c4e137f0f049330e662c47ab8c5065f490f03b
@@ -714,7 +1000,11 @@ entries:
     version: 0.1.6
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.286906078Z"
+    created: "2020-07-20T22:27:44.715476507Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 41f2239811ae5d3de71459bb762c5fe77b3e157e57bef57c9dcef48d4c704d03
@@ -724,7 +1014,11 @@ entries:
     version: 0.1.5
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.285698526Z"
+    created: "2020-07-20T22:27:44.714149729Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 8dc0bbe4feceb10cc57a40cb8e4c9077c217055ea1cd0a64ce60b9e42033e561
@@ -734,7 +1028,11 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.284101851Z"
+    created: "2020-07-20T22:27:44.712813452Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 152687a1e02557029d6c3124bc40759b664dbf43be5b84fae0645af9b10de9bf
@@ -744,7 +1042,11 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.273648188Z"
+    created: "2020-07-20T22:27:44.697649161Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: f1ee91bcf54d1aee662caefabd5f6a3edbcf770e6dde3fd0d5eabd4036e8214b
@@ -754,7 +1056,11 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.259619777Z"
+    created: "2020-07-20T22:27:44.674076401Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: b988a82df8fe1fae02e30730110a8c1b7d93dab887764f53467188490e7fce8b
@@ -764,7 +1070,11 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: 2019.0.0 BETA
-    created: "2020-07-20T21:58:43.258799769Z"
+    created: "2020-07-20T22:27:44.671885175Z"
+    dependencies:
+    - name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 0.14.3
     description: FME Server 2019.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 21874c615b45e87a96b0d1daaa697f46554b8fd229f74cac3e3245a51fb09f21
@@ -775,7 +1085,12 @@ entries:
   fmeserver-2019.0.1:
   - apiVersion: v1
     appVersion: 2019.0.1
-    created: "2020-07-20T21:58:43.291341548Z"
+    created: "2020-07-20T22:27:44.724087896Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0
     digest: 4624c4bbdf2cd81af2d6100234908aa02822e65d767ff8fc42740918d09facca
     name: fmeserver-2019.0.1
@@ -785,7 +1100,12 @@ entries:
   fmeserver-2019.0.2:
   - apiVersion: v1
     appVersion: 2019.0.2
-    created: "2020-07-20T21:58:43.292551741Z"
+    created: "2020-07-20T22:27:44.72614104Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.0
     digest: e8c41494fd43dd1f8d166140da46c26b6dd7aee9ed50924a4d847487e6c15f65
     name: fmeserver-2019.0.2
@@ -795,7 +1115,12 @@ entries:
   fmeserver-2019.1.0:
   - apiVersion: v1
     appVersion: 2019.1.0
-    created: "2020-07-20T21:58:43.294805103Z"
+    created: "2020-07-20T22:27:44.729402873Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.1
     digest: 45a86a95f22513623e1606501f13b39466c1598230800b7bb532a22d0b7ec55d
     name: fmeserver-2019.1.0
@@ -805,7 +1130,12 @@ entries:
   fmeserver-2019.1.0-beta:
   - apiVersion: v1
     appVersion: 2019.1.0 BETA
-    created: "2020-07-20T21:58:43.301587885Z"
+    created: "2020-07-20T22:27:44.73586025Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: e98f13bb479b12beaac317d16d82cca7abbfe663bf17c9addd267a7d9df87bba
@@ -815,7 +1145,12 @@ entries:
     version: 0.2.4
   - apiVersion: v1
     appVersion: 2019.1.0 BETA
-    created: "2020-07-20T21:58:43.299779649Z"
+    created: "2020-07-20T22:27:44.733675787Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 3e38769e2fc98c4bd56dd2d7c041d488815372625711e0e54648921b1285e6d2
@@ -825,7 +1160,12 @@ entries:
     version: 0.2.3
   - apiVersion: v1
     appVersion: 2019.1.0 BETA
-    created: "2020-07-20T21:58:43.297354292Z"
+    created: "2020-07-20T22:27:44.731544696Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 6f29eea27e7d6f1b0347991b381bea289dd92be7186a1ef876c9bc8cb909eca9
@@ -836,7 +1176,12 @@ entries:
   fmeserver-2019.1.1:
   - apiVersion: v1
     appVersion: 2019.1.1
-    created: "2020-07-20T21:58:43.303670683Z"
+    created: "2020-07-20T22:27:44.738384329Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.1
     digest: f93004ed085773be5d022167ac1ff1e01f38633239c064bfd77745a9c3389f85
     name: fmeserver-2019.1.1
@@ -846,7 +1191,12 @@ entries:
   fmeserver-2019.1.2:
   - apiVersion: v1
     appVersion: 2019.1.2
-    created: "2020-07-20T21:58:43.305048018Z"
+    created: "2020-07-20T22:27:44.741076693Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.1
     digest: 4dbfa7a572bbb8a6f7f3a846895e39cbee47a8b8969564df8fea5393202268a5
     name: fmeserver-2019.1.2
@@ -856,7 +1206,12 @@ entries:
   fmeserver-2019.1.3:
   - apiVersion: v1
     appVersion: 2019.1.3
-    created: "2020-07-20T21:58:43.306435537Z"
+    created: "2020-07-20T22:27:44.743243121Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.1
     digest: f0ce92354ffeb4f888b8ad7bdfee95754468ea0da71afa733524f85c35d7b9db
     name: fmeserver-2019.1.3
@@ -866,7 +1221,12 @@ entries:
   fmeserver-2019.2.0:
   - apiVersion: v1
     appVersion: 2019.2.0
-    created: "2020-07-20T21:58:43.307912513Z"
+    created: "2020-07-20T22:27:44.74546515Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.2
     digest: 9273f9ce56b09c47a7a1833deb48531ce6620fcf3d6b521c2a886f768477d93e
     name: fmeserver-2019.2.0
@@ -876,7 +1236,12 @@ entries:
   fmeserver-2019.2.0-beta:
   - apiVersion: v1
     appVersion: 2019.2.0 BETA
-    created: "2020-07-20T21:58:43.310795055Z"
+    created: "2020-07-20T22:27:44.751110294Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.2 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 3cce6366a6b4f70b67afd7c3b5956be5e57246ecca83bb2843ca67158a0b3bf4
@@ -886,7 +1251,12 @@ entries:
     version: 0.2.6
   - apiVersion: v1
     appVersion: 2019.2.0 BETA
-    created: "2020-07-20T21:58:43.309256339Z"
+    created: "2020-07-20T22:27:44.747636714Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.2 BETA (this Chart is not upgradable, do not use
       in production)
     digest: bbc3179b990c0b67fe99964770273c2bf1b8a7c212d19f5a3da10770b5157dfc
@@ -897,7 +1267,12 @@ entries:
   fmeserver-2019.2.2:
   - apiVersion: v1
     appVersion: 2019.2.2
-    created: "2020-07-20T21:58:43.312198031Z"
+    created: "2020-07-20T22:27:44.753295902Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2019.2
     digest: bb3432207e05a458c08cb8d7170adba2d6c7961aa1ad1cef4d3419827ef38d41
     name: fmeserver-2019.2.2
@@ -907,7 +1282,12 @@ entries:
   fmeserver-2020.0.0:
   - apiVersion: v1
     appVersion: 2020.0.0
-    created: "2020-07-20T21:58:43.314865061Z"
+    created: "2020-07-20T22:27:44.755499552Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2020.0
     digest: ed65449eea9b5a7146336914a8b7dd2a3ca72b45d118a36f5c49cc4a52f94db3
     name: fmeserver-2020.0.0
@@ -917,7 +1297,12 @@ entries:
   fmeserver-2020.0.0-beta:
   - apiVersion: v1
     appVersion: 2020.0.0 BETA
-    created: "2020-07-20T21:58:43.319057248Z"
+    created: "2020-07-20T22:27:44.760156191Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2020.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 401cbb5c60aa989d5a359bc5c56d8554c31026a2f823e8751da0d72246735fad
@@ -927,7 +1312,12 @@ entries:
     version: 0.2.11
   - apiVersion: v1
     appVersion: 2020.0.0 BETA
-    created: "2020-07-20T21:58:43.317002786Z"
+    created: "2020-07-20T22:27:44.75767701Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2020.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 806dd578112037f34dccf4b105fd231f778023561e66e7e077e66599752b5967
@@ -937,7 +1327,12 @@ entries:
     version: 0.2.10
   - apiVersion: v1
     appVersion: 2020.0.0 BETA
-    created: "2020-07-20T21:58:43.323183257Z"
+    created: "2020-07-20T22:27:44.765290189Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2020.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: b0caa6bd394a3b473c9a0698326411b8452313d8c1dfd374df5c780c20b12171
@@ -947,7 +1342,12 @@ entries:
     version: 0.2.9
   - apiVersion: v1
     appVersion: 2020.0.0 BETA
-    created: "2020-07-20T21:58:43.321146296Z"
+    created: "2020-07-20T22:27:44.763153434Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2020.0 BETA (this Chart is not upgradable, do not use
       in production)
     digest: 3cefb31823c3c651427d402ca59089f094a7474f2bba658bfcb43818a1dff962
@@ -958,7 +1358,12 @@ entries:
   fmeserver-2020.0.1:
   - apiVersion: v1
     appVersion: 2020.0.1
-    created: "2020-07-20T21:58:43.325295949Z"
+    created: "2020-07-20T22:27:44.767530823Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2020.0
     digest: 45d0c79f0df8f8031a887f296b9a4470c3c12158be9b54daa1dd54f68fdc04f4
     name: fmeserver-2020.0.1
@@ -968,7 +1373,12 @@ entries:
   fmeserver-2020.0.2:
   - apiVersion: v1
     appVersion: 2020.0.2
-    created: "2020-07-20T21:58:43.328003596Z"
+    created: "2020-07-20T22:27:44.76967268Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2020.0
     digest: 8bcab245d69776b3c784c150354dd56ea75514cadbc02666faba28f6cb8c80ec
     name: fmeserver-2020.0.2
@@ -978,7 +1388,12 @@ entries:
   fmeserver-2020.0.3:
   - apiVersion: v1
     appVersion: 2020.0.3
-    created: "2020-07-20T21:58:43.331989407Z"
+    created: "2020-07-20T22:27:44.776152648Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 8.10.11
     description: FME Server 2020.0
     digest: 6e9aca2a02dc6d3024aac2495301baae8bf516b63b82978ce81d0ab8a04f3822
     name: fmeserver-2020.0.3
@@ -987,7 +1402,12 @@ entries:
     version: 0.2.17
   - apiVersion: v1
     appVersion: 2020.0.3
-    created: "2020-07-20T21:58:43.329788049Z"
+    created: "2020-07-20T22:27:44.772970142Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2020.0
     digest: 66f0c26f899ca43a6d2e3f7e5af826827be163944ccdf9a1d19c8ed663265e65
     name: fmeserver-2020.0.3
@@ -997,7 +1417,12 @@ entries:
   fmeserver-2020.0.3-beta:
   - apiVersion: v1
     appVersion: 2020.0.3
-    created: "2020-07-20T21:58:43.334053939Z"
+    created: "2020-07-20T22:27:44.779410558Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 8.10.11
     description: FME Server 2020.0
     digest: d3db8e0f282ac5af44d3097004b5761a8bc6137c6e2e63f1629dc8cb74266bcb
     name: fmeserver-2020.0.3-beta
@@ -1007,7 +1432,12 @@ entries:
   fmeserver-2020.1.0:
   - apiVersion: v1
     appVersion: 2020.1.0
-    created: "2020-07-20T21:58:43.335375138Z"
+    created: "2020-07-20T22:27:44.78205548Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2020.1
     digest: 7d8f161688502d4c44eed4c3d30d751904101e0dca2b22076ce99c6d9ee5ceed
     name: fmeserver-2020.1.0
@@ -1017,7 +1447,12 @@ entries:
   fmeserver-2020.1.0-beta:
   - apiVersion: v1
     appVersion: 2020.1.0-beta BETA
-    created: "2020-07-20T21:58:43.340655354Z"
+    created: "2020-07-20T22:27:44.789449991Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2020.1 BETA (this Chart is not upgradable, do not use
       in production)
     digest: e4382de3481e8d9db4f137a4a524fc9da767c30f526356ca4ebc93844043b7fa
@@ -1027,7 +1462,12 @@ entries:
     version: 0.2.18
   - apiVersion: v1
     appVersion: 2020.1.0 BETA
-    created: "2020-07-20T21:58:43.338622776Z"
+    created: "2020-07-20T22:27:44.787109325Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2020.1 BETA \(this Chart is not upgradable, do not use
       in production\)
     digest: 8d439c72c94d8dafbab83fc62e0d8f9e6cf1ced75d6a18849c42663821e9de17
@@ -1037,7 +1477,12 @@ entries:
     version: 0.2.16
   - apiVersion: v1
     appVersion: 2020.1.0 BETA
-    created: "2020-07-20T21:58:43.336642103Z"
+    created: "2020-07-20T22:27:44.784863497Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2020.1 BETA \(this Chart is not upgradable, do not use
       in production\)
     digest: 0ba712dd7220f04db9b8c7d13b16b1e416b8fa787e15a47a55214ff68efa6eb5
@@ -1048,7 +1493,12 @@ entries:
   fmeserver-2020.2.0-beta:
   - apiVersion: v1
     appVersion: 2020.2.0-beta BETA
-    created: "2020-07-20T21:58:43.343940803Z"
+    created: "2020-07-20T22:27:44.796065817Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 8.10.11
     description: FME Server 2020.2 BETA (this Chart is not upgradable, do not use
       in production)
     digest: cb65a62204f64e261f808d52f7856c559b8f50c971ec3e6116a5e1310ab7909d
@@ -1058,7 +1508,12 @@ entries:
     version: 0.2.19
   - apiVersion: v1
     appVersion: 2020.2.0-beta BETA
-    created: "2020-07-20T21:58:43.341906936Z"
+    created: "2020-07-20T22:27:44.791829092Z"
+    dependencies:
+    - condition: deployment.deployPostgresql
+      name: postgresql
+      repository: https://kubernetes-charts.storage.googleapis.com
+      version: 3.9.4
     description: FME Server 2020.2 BETA (this Chart is not upgradable, do not use
       in production)
     digest: ef98ee3429456991ae0b388d6c7d1f6c2b087ac50e21975bb448821fb6394a5a
@@ -1066,4 +1521,4 @@ entries:
     urls:
     - https://safesoftware.github.io/helm-charts/fmeserver-2020.2.0-beta-0.2.18.tgz
     version: 0.2.18
-generated: "2020-07-20T21:58:43.209405294Z"
+generated: "2020-07-20T22:27:44.593858116Z"
