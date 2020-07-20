@@ -1,7 +1,8 @@
+{{- if and .Values.metrics.enabled .Values.metrics.customMetrics }}
 apiVersion: v1
-kind: Service
+kind: ConfigMap
 metadata:
-  name: {{ template "postgresql.fullname" . }}-headless
+  name: {{ template "postgresql.metricsCM" . }}
   labels:
     app: {{ template "postgresql.name" . }}
     chart: {{ template "postgresql.chart" . }}
@@ -10,13 +11,6 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-spec:
-  type: ClusterIP
-  clusterIP: None
-  ports:
-    - name: tcp-postgresql
-      port: {{ template "postgresql.port" . }}
-      targetPort: tcp-postgresql
-  selector:
-    app: {{ template "postgresql.name" . }}
-    release: {{ .Release.Name | quote }}
+data:
+  custom-metrics.yaml: {{ toYaml .Values.metrics.customMetrics | quote }}
+{{- end }}
