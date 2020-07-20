@@ -8,6 +8,9 @@ metadata:
     chart: {{ template "postgresql.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   podSelector:
     matchLabels:
@@ -16,14 +19,23 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-      - port: 5432
-    {{- if not .Values.networkPolicy.allowExternal }}
+        - port: {{ template "postgresql.port" . }}
+      {{- if not .Values.networkPolicy.allowExternal }}
       from:
-      - podSelector:
-          matchLabels:
-            {{ template "postgresql.fullname" . }}-client: "true"
-    {{- end }}
+        - podSelector:
+            matchLabels:
+              {{ template "postgresql.fullname" . }}-client: "true"
+          {{- if .Values.networkPolicy.explicitNamespacesSelector }}
+          namespaceSelector:
+{{ toYaml .Values.networkPolicy.explicitNamespacesSelector | indent 12 }}
+          {{- end }}
+        - podSelector:
+            matchLabels:
+              app: {{ template "postgresql.name" . }}
+              release: {{ .Release.Name | quote }}
+              role: slave
+      {{- end }}
     # Allow prometheus scrapes
     - ports:
-      - port: 9187
+        - port: 9187
 {{- end }}
