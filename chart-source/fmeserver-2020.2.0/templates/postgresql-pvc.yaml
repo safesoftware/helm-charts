@@ -1,0 +1,18 @@
+{{ if .Values.deployment.deployPostgresql }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    safe.k8s.fmeserver.component: db
+    {{- include "fmeserver.common.labels" . | indent 4 }}
+  name: fmeserver-postgresql
+spec:
+  accessModes:
+  - ReadWriteOnce
+  {{- if and (not .Values.storage.useHostDir) .Values.storage.postgresql.class }}
+  storageClassName: {{.Values.storage.postgresql.class}}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{.Values.storage.postgresql.size}}
+{{ end }}
