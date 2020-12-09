@@ -42,10 +42,11 @@ fmeserver:
         requests:
           memory: 512Mi
           cpu: 200m
-    
+
 
 deployment:
   hostname: localhost
+  port: 443
   proxyReadTimeout: 300
   backupReadTimeout: 1800
   proxyBodySize: 0

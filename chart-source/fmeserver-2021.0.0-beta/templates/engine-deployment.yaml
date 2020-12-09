@@ -38,7 +38,7 @@ spec:
             - name: WEBPROTOCOL
               value: {{ template "fmeserver.deployment.protocol" $ }}
             - name: EXTERNALPORT
-              value: '443'
+              value: "{{ $.Values.deployment.port }}"
             - name: FMESERVERHOSTNAME
               value: engineregistration
             - name: NODENAME
