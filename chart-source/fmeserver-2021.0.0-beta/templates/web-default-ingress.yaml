@@ -3,8 +3,12 @@ kind: Ingress
 metadata:
   name: fmeserver-web-ingress
   annotations:
-    nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.deployment.proxyReadTimeout | quote }}
-    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.deployment.proxyBodySize | quote }}
+{{- if .Values.deployment.ingress.general.annotations }}    
+{{ toYaml .Values.deployment.ingress.general.annotations | indent 4 }}
+{{ end }}
+{{- if .Values.deployment.ingress.web.annotations }}
+{{ toYaml .Values.deployment.ingress.web.annotations | indent 4 }}
+{{ end }}
 {{- include "fmeserver.ingress.annotations" . | indent 4 }}
 spec:
   {{- include "fmeserver.ingress.tls" . }}

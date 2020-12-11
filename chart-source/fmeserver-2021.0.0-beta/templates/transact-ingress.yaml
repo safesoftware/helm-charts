@@ -3,8 +3,12 @@ kind: Ingress
 metadata:
   name: fmeserver-transact-ingress
   annotations:
-    # 14 days read timeout for transact jobs
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "1209600"
+{{- if .Values.deployment.ingress.general.annotations }}
+{{ toYaml .Values.deployment.ingress.general.annotations | indent 4 }}
+{{ end }}
+{{- if .Values.deployment.ingress.transact.annotations }}
+{{ toYaml .Values.deployment.ingress.transact.annotations | indent 4 }}
+{{ end }}
 {{- include "fmeserver.ingress.annotations" . | indent 4 }}
 spec:
   {{- include "fmeserver.ingress.tls" . }}
