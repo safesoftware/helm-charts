@@ -20,6 +20,9 @@ spec:
       labels:
         safe.k8s.fmeserver.component: core
         {{- include "fmeserver.common.labels" . | indent 8 }}
+        {{- with .Values.labels.core }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
       {{- with .Values.annotations.core.template }}
       annotations:
 {{ toYaml . | indent 8 }}

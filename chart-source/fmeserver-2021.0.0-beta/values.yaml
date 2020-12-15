@@ -35,6 +35,7 @@ fmeserver:
       engines: 2
       queues: "Default"
       type: "STANDARD"
+      labels: {}
       affinity: {}
       nodeSelector: {}
       tolerations: []
@@ -97,6 +98,11 @@ annotations:
   websocket:
     statefulset: {}
     template: {}
+
+labels:
+  core: {}
+  queue: {}
+  websocket: {}
 
 scheduling:
   core:
