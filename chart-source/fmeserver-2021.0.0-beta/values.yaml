@@ -31,9 +31,8 @@ fmeserver:
       failureThreshold: 3
       periodSeconds: 5
   engines:
-    - name: "default"
+    - name: "standard-group"
       engines: 2
-      queues: "Default"
       type: "STANDARD"
       labels: {}
       affinity: {}

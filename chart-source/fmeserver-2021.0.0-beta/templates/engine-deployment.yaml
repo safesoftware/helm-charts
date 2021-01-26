@@ -48,14 +48,22 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-            - name: FME_ENV_ENGINE_QUEUES
+            {{- if .queues }}
+            - name: FME_ENV_ENGINE_QUEUES	
               value: {{ .queues | quote }}
+            {{- end }}
             {{- if .type }}
             - name: ENGINETYPE
               value: {{ .type | quote }}
             {{- end }}
             - name: NODEMANAGED
               value: "false"
+            - name: ENGINEPROPERTIES
+              {{- if .engineProperties }} 
+              value: "{{ .engineProperties }},{{ .name }}"
+              {{- else }}
+              value: "{{ .name }}"
+              {{- end }}
             - name: PGSQLHOSTNAME
               value: "{{ template "fmeserver.database.host" $ }}"
             - name: PGSQLPORT
