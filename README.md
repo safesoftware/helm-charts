@@ -44,11 +44,11 @@ The following table lists the configurable parameters of the FME Server 2021.0.0
 | `storage.fmeserver.class` | Storage class for FME Server data. Ignored if host dir mapping is used. | `Nil` |
 | `storage.fmeserver.size` | FME Server data volume size | `10Gi` |
 | `storage.fmeserver.path` | Absolute path where FME Server data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
-| `fmeserver.engines` | An array of engine deployments. Each deployment defines a name, queues to join, number of replicas, and scheduling information. |  |
-| `fmeserver.engines[].name` | The name of this group of engines. | `default` |
+| `fmeserver.engines[].name` | The name of this group of engines. | `standard-group` |
 | `fmeserver.engines[].engines` | The number of engines to deploy in this engine deployment. | `2` |
-| `fmeserver.engines[].queues` | The queues that the engines in this deployment should join. This is a comma delimited list of queues and optionally priorities for those queues of the form `<QueueName>[:<QueuePriority>],<QueueName>[:<QueuePriority>],...`. The default priority is 100. For example: `Queue1:100,Queue2:200,Queue3:1` or `Queue1,Queue4,Queue5` | `Default` |
+| `fmeserver.engines[].queues` | The queues that the engines in this deployment should join. This is a comma delimited list of queues and optionally priorities for those queues of the form `<QueueName>[:<QueuePriority>],<QueueName>[:<QueuePriority>],...`. The default priority is 100. For example: `Queue1:100,Queue2:200,Queue3:1` or `Queue1,Queue4,Queue5` | `""` |
 | `fmeserver.engines[].type` | The FME Engine licensing type to use. Must be STANDARD or DYNAMIC. | `STANDARD` |
+| `fmeserver.engines[].engineProperties` | A comma delimited list of properties to set on this engine. The engine deployment `name` will be automatically added. | `""` |
 | `fmeserver.engines[].resources` | [Engine CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `512Mi`, CPU: `200m` |
 | `fmeserver.engines[].affinity` | Affinity labels for pod assignment for this engine deployment | `{}` |
 | `fmeserver.engines[].nodeSelector` | Map of nodeselector annotations to add to this engine deployment | `{}` |
