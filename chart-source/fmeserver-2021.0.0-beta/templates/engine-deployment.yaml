@@ -57,9 +57,9 @@ spec:
               value: {{ .type | quote }}
             {{- end }}
             - name: NODEMANAGED
-              value: "false"
+              value: "{{ $.Values.fmeserver.enginesNodeManaged }}"
             - name: ENGINEPROPERTIES
-              {{- if .engineProperties }} 
+              {{- if .engineProperties }}
               value: "{{ .engineProperties }},{{ .name }}"
               {{- else }}
               value: "{{ .name }}"

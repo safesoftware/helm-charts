@@ -133,7 +133,9 @@ spec:
               value: "true"
             {{- end }}
             - name: READONLYQUEUES
-              value: 'true'
+              value: "{{ .Values.fmeserver.readOnlyQueues }}"
+            - name: HIDEHOSTCONTENT
+              value: "{{ .Values.fmeserver.hideHostContent }}"
             - name: PGSQLHOSTNAME
               value: "{{ template "fmeserver.database.host" . }}"
             - name: PGSQLPORT

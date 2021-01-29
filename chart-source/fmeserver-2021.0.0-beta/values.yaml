@@ -42,7 +42,9 @@ fmeserver:
         requests:
           memory: 512Mi
           cpu: 200m
-
+  hideHostContent: true
+  readOnlyQueues: true
+  enginesNodeManaged: false
 
 deployment:
   hostname: localhost
@@ -82,7 +84,7 @@ deployment:
     websocket:
       annotations:
         nginx.ingress.kubernetes.io/proxy-read-timeout: "2592000"
-    
+
 
 annotations:
   core:
