@@ -13,11 +13,16 @@ fmeserver:
     password: 4fmmsgrz09
     passwordSecret:
     passwordSecretKey: fmeserver-db-password
+    # require ssl on the connection
+    ssl: false
+    # set to true if using Azure Postgresql to make sure connection strings are formatted correctly
+    azure: false
 
     # This user and password must be a database user that can create databases and users in the postgresql database
     adminUser: postgres
     adminPasswordSecret:
     adminPasswordSecretKey:  postgresql-password
+    adminDatabase: postgres
   webserver:
     maxThreads: 200
     experimentalJavaFlags: false
