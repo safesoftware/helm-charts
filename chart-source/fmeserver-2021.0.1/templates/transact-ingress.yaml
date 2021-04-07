@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: fmeserver-transact-ingress
+  annotations:
+{{- if .Values.deployment.ingress.general.annotations }}
+{{ toYaml .Values.deployment.ingress.general.annotations | indent 4 }}
+{{ end }}
+{{- if .Values.deployment.ingress.transact.annotations }}
+{{ toYaml .Values.deployment.ingress.transact.annotations | indent 4 }}
+{{ end }}
+{{- include "fmeserver.ingress.annotations" . | indent 4 }}
+spec:
+  {{- include "fmeserver.ingress.tls" . }}
+  rules:
+    - http:
+        paths:
+          - backend:
+              serviceName: fmeserverweb
+              servicePort: 8080
+            path: /fmerest/v3/transformations/transact
+          - backend:
+              serviceName: fmeserverweb
+              servicePort: 8080
+            path: /fmerest/v3/transformations/transactjobs
+          - backend:
+              serviceName: fmeserverweb
+              servicePort: 8080
+            path: /fmerest/v3/transformations/transactdata
+      {{- if .Values.deployment.useHostnameIngress }}
+      host: {{ .Values.deployment.hostname }}
+      {{ end }}
