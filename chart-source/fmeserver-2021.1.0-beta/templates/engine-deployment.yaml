@@ -90,6 +90,11 @@ spec:
           resources:
 {{ toYaml .resources | indent 12 }}
           {{- end }}
+      {{- if $.Values.serviceAccount.create }}
+      serviceAccountName: "{{ $.Values.serviceAccount.awsAccountRole }}"
+      securityContext:
+        fsGroup: 65534
+      {{- end }}
       restartPolicy: Always
       volumes:
         - name: fmeserverdata
