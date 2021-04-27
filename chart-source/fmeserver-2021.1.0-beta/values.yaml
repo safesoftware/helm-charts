@@ -170,3 +170,5 @@ postgresql:
       memory: 256Mi
       cpu: 100m
   postgresqlPassword: a6av3abwzi
+  livenessProbe:
+    initialDelaySeconds: 300
