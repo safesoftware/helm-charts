@@ -1,3 +1,9 @@
+serviceAccount:
+  # Specifies whether a ServiceAccount for FME-Engine should be created
+  create: false
+  awsAccountId: "123456789012"
+  awsAccountRole: "fme-engine-default"
+
 fmeserver:
   image:
     tag:
