@@ -29,9 +29,9 @@ spec:
       {{- end }}
     spec:
       containers:
-        - image: {{ template "fmeserver.image.registry" $ }}/{{ template "fmeserver.image.namespace" $ }}/fmeserver-engine:{{ template "fmeserver.image.tag" $ }}
+        - image: {{ if .image }}{{ if .image.registry }}{{ .image.registry }}{{ else }}{{ template "fmeserver.image.registry" $ }}{{ end }}/{{ if .image.namespace }}{{ .image.namespace }}{{ else }}{{ template "fmeserver.image.namespace" $ }}{{ end }}/fmeserver-engine:{{ if .image.tag }}{{ .image.tag }}{{ else }}{{ template "fmeserver.image.tag" $ }}{{ end }}{{else}}{{ template "fmeserver.image.registry" $ }}/{{ template "fmeserver.image.namespace" $ }}/fmeserver-engine:{{ template "fmeserver.image.tag" $ }}{{ end }}
           name: engine
-          imagePullPolicy: {{ template "fmeserver.image.pullPolicy" $ }}
+          imagePullPolicy: {{ if .image }}{{ if .image.pullPolicy }}{{ .image.pullPolicy }}{{ else }}{{ template "fmeserver.image.pullPolicy" $ }}{{ end }}{{ else }}{{ template "fmeserver.image.pullPolicy" $ }}{{ end }}
           volumeMounts:
             - mountPath: /data/fmeserverdata
               name: fmeserverdata
