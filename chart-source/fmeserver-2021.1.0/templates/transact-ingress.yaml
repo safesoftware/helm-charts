@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: {{ include "fmeserver.ingress.apiversion" . }}
 kind: Ingress
 metadata:
   name: fmeserver-transact-ingress
