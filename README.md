@@ -269,3 +269,6 @@ The following table lists the configurable parameters of the FME Server 2020.2 B
 
 1. `helm plugin install https://github.com/lrills/helm-unittest`
 2. `helm unittest <path/to/chart/source>`
+
+## Third Party Dependancies
+PostgreSQL Helm Chart  - Apache 2.0 - Available from [Bitnami](https://github.com/bitnami/charts/tree/master/bitnami/postgresql).
