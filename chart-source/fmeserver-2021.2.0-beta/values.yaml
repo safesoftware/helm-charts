@@ -161,7 +161,7 @@ storage:
 
 # It is recommended not to modify those parameters
 # For more options regarding PostgreSQL deployement, check the helm chart documentation:
-# https://github.com/kubernetes/charts/tree/master/stable/postgresql
+# https://github.com/bitnami/charts/tree/master/bitnami/postgresql
 postgresql:
   persistence:
     existingClaim: fmeserver-postgresql
