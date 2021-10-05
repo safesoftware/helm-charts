@@ -58,6 +58,8 @@ spec:
             {{- end }}
             - name: NODEMANAGED
               value: "{{ $.Values.fmeserver.engines.enginesNodeManaged }}"
+            - name: ENGINEDEBUGLEVEL
+              value: "{{ $.Values.fmeserver.engines.debugLevel }}"
             - name: ENGINEPROPERTIES
               {{- if .engineProperties }}
               value: "{{ .engineProperties }},{{ .name }}"

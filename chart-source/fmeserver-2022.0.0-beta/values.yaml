@@ -27,6 +27,7 @@ fmeserver:
     maxThreads: 200
     experimentalJavaFlags: false
   forcePasswordChange: true
+  debugLevel: "NONE"
   healthcheck:
     enabled: true
     simple: true
@@ -39,6 +40,7 @@ fmeserver:
       timeoutSeconds: 5
       periodSeconds: 5
   engines:
+    debugLevel: "NONE"
     hideHostContent: true
     readOnlyQueues: true
     enginesNodeManaged: false
