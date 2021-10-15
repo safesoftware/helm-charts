@@ -13,7 +13,7 @@ To walk you through the helm installation process, a quick-start script for all 
 
 ### Configuration
 
-The following table lists the configurable parameters of the FME Server 2021.1.0 chart and their default values.
+The following table lists the configurable parameters of the FME Server 2021.1 chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
@@ -47,9 +47,9 @@ The following table lists the configurable parameters of the FME Server 2021.1.0
 | `fmeserver.engines` | An array of engine deployments. Each deployment defines a name, queues to join, number of replicas, and scheduling information. |  |
 | `fmeserver.engines[].name` | The name of this group of engines. | `standard-group` |
 | `fmeserver.engines[].engines` | The number of engines to deploy in this engine deployment. | `2` |
-| `fmeserver.engines[].queues` | The queues that the engines in this deployment should join. This is a comma delimited list of queues and optionally priorities for those queues of the form `<QueueName>[:<QueuePriority>],<QueueName>[:<QueuePriority>],...`. The default priority is 100. For example: `Queue1:100,Queue2:200,Queue3:1` or `Queue1,Queue4,Queue5` | `""` |
 | `fmeserver.engines[].type` | The FME Engine licensing type to use. Must be STANDARD or DYNAMIC. | `STANDARD` |
 | `fmeserver.engines[].engineProperties` | A comma delimited list of properties to set on this engine. The engine deployment `name` will be automatically added. | `""` |
+| `fmeserver.engines[].groups[].queues` | The queues that the engines in this deployment should join. This is a comma delimited list of queues and optionally priorities for those queues of the form `<QueueName>[:<QueuePriority>],<QueueName>[:<QueuePriority>],...`. The default priority is 100. For example: `Queue1:100,Queue2:200,Queue3:1` or `Queue1,Queue4,Queue5` <br /> **NOTE:** Engines can be assigned to queues in the Web UI using engine properties. That is the preferred method of managing engine queue assignments. This `queues` settings is provided for backwards compatibility.   | `""` |
 | `fmeserver.engines[].resources` | [Engine CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `512Mi`, CPU: `200m` |
 | `fmeserver.engines[].affinity` | Affinity labels for pod assignment for this engine deployment | `{}` |
 | `fmeserver.engines[].nodeSelector` | Map of nodeselector annotations to add to this engine deployment | `{}` |
@@ -105,7 +105,7 @@ The following table lists the configurable parameters of the FME Server 2021.1.0
 
 ### Configuration
 
-The following table lists the configurable parameters of the FME Server 2021.0.0 BETA chart and their default values.
+The following table lists the configurable parameters of the FME Server 2021.0.0 chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
@@ -193,7 +193,7 @@ The following table lists the configurable parameters of the FME Server 2021.0.0
 
 ### Configuration
 
-The following table lists the configurable parameters of the FME Server 2020.2 BETA chart and their default values.
+The following table lists the configurable parameters of the FME Server 2020.2 chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
