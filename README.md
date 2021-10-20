@@ -106,7 +106,7 @@ The following table lists the configurable parameters of the FME Server 2021.1 c
 | `labels.queue` | Labels to apply to the core pods | `{}` |
 | `labels.websocket` | Labels to apply to the core pods | `{}` |
 
-See configuration parameters for older versions of FME Server [here](https://github.com/safesoftware/helm-charts/tree/master/readme-archive).
+See configuration parameters for older versions of FME Server [here](readme-archive).
 ## Development
 
 ### Run unit tests
