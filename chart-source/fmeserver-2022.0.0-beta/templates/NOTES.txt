@@ -24,4 +24,13 @@ To uninstall/delete FME Server (this deletes all data):
 Helm V2:
   $ helm del --purge {{ .Release.Name }}
 
+{{- $queueWarning := false }} 
+{{- range .Values.fmeserver.engines.groups }}
+{{- if and .queues (eq $queueWarning false) }}
+
+NOTE: It is recommended to assign engines to queues in the Web UI using engine properties instead of fmeserver.engines.groups[].queues. See https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing for more info.
+{{- $queueWarning = true }}
+{{- end }}
+{{- end }}
+
 If you have issues, you can contact us here: https://www.safe.com/support/
