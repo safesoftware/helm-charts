@@ -14,7 +14,7 @@ Then run the command specifying the docker tag found above:
 
 See all available parameters below.
 
-For more information see the [documentation](https://docs.safe.com/fme/2020.2/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-Intro.htm).
+For more information see the [documentation](https://docs.safe.com/fme/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-Intro.htm) and our [FME Community landing page for Kubernetes](https://community.safe.com/s/article/Getting-Started-with-FME-Server-and-Kubernetes).
 
 ## Configuration
 
