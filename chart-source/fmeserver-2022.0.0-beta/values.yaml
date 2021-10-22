@@ -1,7 +1,7 @@
 fmeserver:
   image:
     tag:
-    registry: quay.io
+    registry: docker.io
     namespace: safesoftware
     # Supported values: Always or IfNotPresent
     pullPolicy: IfNotPresent
