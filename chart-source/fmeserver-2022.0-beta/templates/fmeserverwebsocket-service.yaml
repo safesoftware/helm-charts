@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    safe.k8s.fmeserver.component: websocket
+    {{- include "fmeserver.common.labels" . | indent 4 }}
+  name: fmeserverwebsocket
+spec:
+  ports:
+  - name: websocket
+    port: 7078
+  clusterIP: None
+  selector:
+    safe.k8s.fmeserver.component: websocket

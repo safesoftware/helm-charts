@@ -1,0 +1,36 @@
+Congratulations, your FME Server should be ready shortly! You can check the progress of the deployment by typing:
+
+  $ helm status {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+Helm V2:
+  $ helm status {{ .Release.Name }}
+
+Once all containers are running, you should be able to access your deployment under {{ template "fmeserver.deployment.protocol" . }}://{{ .Values.deployment.hostname }}
+
+To ensure that everything is working correctly, helm provides a test framework which can be run once the FME Server is up and running (does currently NOT work for Docker on Mac/Windows):
+
+  $ helm test {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+Helm V2:
+  $ helm test {{ .Release.Name }}
+
+Things to check if something does not work:
+  - Is the NGINX ingress controller deployed? Check the following link for more details: https://kubernetes.github.io/ingress-nginx/deploy/
+  - Does your server have enough disk storage?
+
+To uninstall/delete FME Server (this deletes all data):
+  $ helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+Helm V2:
+  $ helm del --purge {{ .Release.Name }}
+
+{{- $queueWarning := false }} 
+{{- range .Values.fmeserver.engines.groups }}
+{{- if and .queues (eq $queueWarning false) }}
+
+NOTE: It is recommended to assign engines to queues in the Web UI using engine properties instead of fmeserver.engines.groups[].queues. See https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing for more info.
+{{- $queueWarning = true }}
+{{- end }}
+{{- end }}
+
+If you have issues, you can contact us here: https://www.safe.com/support/
