@@ -1,6 +1,6 @@
 fmeserver:
   image:
-    tag:
+    tag: 2022.0-beta
     registry: docker.io
     namespace: safesoftware
     # Supported values: Always or IfNotPresent
