@@ -58,6 +58,8 @@ spec:
             {{- end }}
             - name: NODEMANAGED
               value: "{{ $.Values.fmeserver.engines.enginesNodeManaged }}"
+            - name: ENGINERECEIVETIMEOUT
+              value: "{{ $.Values.fmeserver.engines.receiveTimeout }}"
             - name: ENGINEDEBUGLEVEL
               value: "{{ $.Values.fmeserver.engines.debugLevel }}"
             - name: ENGINEPROPERTIES

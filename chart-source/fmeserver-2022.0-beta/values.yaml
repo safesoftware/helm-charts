@@ -44,6 +44,7 @@ fmeserver:
     hideHostContent: true
     readOnlyQueues: true
     enginesNodeManaged: false
+    receiveTimeout: 0
     groups:
       - name: "standard-group"
         engines: 2
