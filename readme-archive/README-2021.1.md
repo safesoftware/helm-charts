@@ -7,10 +7,10 @@ To add the Safe Software charts repository:
 
 ## Installing the Chart
 
-To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2021.2&ordering=last_updated).
+To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2021.1&ordering=last_updated).
 
 Then run the command specifying the docker tag found above:
-`helm install fmeserver safesoftware/fmeserver-2021.2.0-beta --set fmeserver.image.tag=<docker_tag>`
+`helm install fmeserver safesoftware/fmeserver-2021.1.3 --set fmeserver.image.tag=<docker_tag>`
 
 See all available parameters below.
 
@@ -18,13 +18,13 @@ For more information see the [documentation](https://docs.safe.com/fme/html/FME_
 
 ## Configuration
 
-The following table lists the configurable parameters of the FME Server 2021.2 chart and their default values.
+The following table lists the configurable parameters of the FME Server 2021.1 chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
-| `fmeserver.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2021.2&ordering=last_updated). |
+| `fmeserver.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2021.1&ordering=last_updated). |
 | `fmeserver.image.pullPolicy` | Image pull policy. IfNotPresent means that the image is pulled only if it is not already present on the node. If this is changed to "Always", then the node will always try to pull to make sure it has the latest version of that tag. | `IfNotPresent` |
-| `fmeserver.image.registry` | Docker registry | `docker.io` This parameter should not be changed. |
+| `fmeserver.image.registry` | Docker registry | `quay.io` This parameter should not be changed. |
 | `fmeserver.image.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
 | `deployment.hostname` | FME Server hostname | `localhost` |
 | `deployment.port` | FME Server port | `443` |
@@ -50,7 +50,7 @@ The following table lists the configurable parameters of the FME Server 2021.2 c
 | `storage.fmeserver.size` | FME Server data volume size | `10Gi` |
 | `storage.fmeserver.path` | Absolute path where FME Server data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
 | `fmeserver.engines` | An array of engine deployments. Each deployment defines a name, queues to join, number of replicas, and scheduling information. |  |
-| `fmeserver.engines[].name` | The name of this group of engines. | `default` |
+| `fmeserver.engines[].name` | The name of this group of engines. | `standard-group` |
 | `fmeserver.engines[].engines` | The number of engines to deploy in this engine deployment. | `2` |
 | `fmeserver.engines[].type` | The FME Engine licensing type to use. Must be STANDARD or DYNAMIC. | `STANDARD` |
 | `fmeserver.engines[].engineProperties` | A comma delimited list of properties to set on this engine. The engine deployment `name` will be automatically added. [See this link for more info](https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing) | `""` |
@@ -106,6 +106,7 @@ The following table lists the configurable parameters of the FME Server 2021.2 c
 | `labels.queue` | Labels to apply to the core pods | `{}` |
 | `labels.websocket` | Labels to apply to the core pods | `{}` |
 
+See configuration parameters for older versions of FME Server [here](readme-archive).
 ## Development
 
 ### Run unit tests
