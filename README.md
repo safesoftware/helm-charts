@@ -50,7 +50,7 @@ The following table lists the configurable parameters of the FME Server 2021.2 c
 | `storage.fmeserver.size` | FME Server data volume size | `10Gi` |
 | `storage.fmeserver.path` | Absolute path where FME Server data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
 | `fmeserver.engines` | An array of engine deployments. Each deployment defines a name, queues to join, number of replicas, and scheduling information. |  |
-| `fmeserver.engines[].name` | The name of this group of engines. | `default` |
+| `fmeserver.engines[].name` | The name of this group of engines. | `standard-group` |
 | `fmeserver.engines[].engines` | The number of engines to deploy in this engine deployment. | `2` |
 | `fmeserver.engines[].type` | The FME Engine licensing type to use. Must be STANDARD or DYNAMIC. | `STANDARD` |
 | `fmeserver.engines[].engineProperties` | A comma delimited list of properties to set on this engine. The engine deployment `name` will be automatically added. [See this link for more info](https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing) | `""` |
@@ -105,6 +105,8 @@ The following table lists the configurable parameters of the FME Server 2021.2 c
 | `labels.core` | Labels to apply to the core pods | `{}` |
 | `labels.queue` | Labels to apply to the core pods | `{}` |
 | `labels.websocket` | Labels to apply to the core pods | `{}` |
+
+See configuration parameters for older versions of FME Server [here](readme-archive).
 
 ## Development
 
