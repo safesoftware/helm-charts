@@ -10,7 +10,7 @@ To add the Safe Software charts repository:
 To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2021.2&ordering=last_updated).
 
 Then run the command specifying the docker tag found above:
-`helm install fmeserver safesoftware/fmeserver-2021.2.0-beta --set fmeserver.image.tag=<docker_tag>`
+`helm install fmeserver safesoftware/fmeserver-2021.2 --set fmeserver.image.tag=<docker_tag>`
 
 See all available parameters below.
 
