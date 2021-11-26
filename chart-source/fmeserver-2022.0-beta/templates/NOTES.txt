@@ -28,7 +28,7 @@ Helm V2:
 {{- range .Values.fmeserver.engines.groups }}
 {{- if and .queues (eq $queueWarning false) }}
 
-NOTE: It is recommended to assign engines to queues in the Web UI using engine properties instead of fmeserver.engines.groups[].queues. See https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing for more info.
+NOTE:  The parameter fmeserver.engines.groups[].queues is DEPRECATED. Engine assignment should be done through engine properties. See https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing for more info.
 {{- $queueWarning = true }}
 {{- end }}
 {{- end }}

@@ -66,8 +66,6 @@ spec:
               value: fmeserverqueue
             - name: COREDEBUGLEVEL
               value: "{{ .Values.fmeserver.debugLevel }}"
-            - name: REMOVEENGINETAGSONDISCONNECT
-              value: "true"
             - name: PGSQLHOSTNAME
               value: "{{ template "fmeserver.database.host" . }}"
             - name: PGSQLPORT
