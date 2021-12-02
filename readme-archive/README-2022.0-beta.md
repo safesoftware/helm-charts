@@ -18,7 +18,7 @@ For more information see the [documentation](https://docs.safe.com/fme/html/FME_
 
 ## Configuration
 
-The following table lists the configurable parameters of the FME Server 2022.0.0 BETA chart and their default values.
+The following table lists the configurable parameters of the FME Server 2022.0 BETA chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
@@ -51,12 +51,13 @@ The following table lists the configurable parameters of the FME Server 2022.0.0
 | `storage.fmeserver.size` | FME Server data volume size | `10Gi` |
 | `storage.fmeserver.path` | Absolute path where FME Server data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
 | `fmeserver.engines.debugLevel` | Set the verbosity of the FME Server Engine logs. Can be set to NONE, LOW, MEDIUM, HIGH or SUPER_VERBOSE. | `NONE` |
+| `fmeserver.engines.receiveTimeout` | Engines that have not received a job in this period of time (measured in milliseconds) will be restarted. Set to 0 to never restart. | `0` |
 | `fmeserver.engines.groups` | An array of engine deployments. Each deployment defines a name, queues to join, number of replicas, and scheduling information. |  |
 | `fmeserver.engines.groups[].name` | The name of this group of engines. | `default` |
 | `fmeserver.engines.groups[].engines` | The number of engines to deploy in this engine deployment. | `2` |
 | `fmeserver.engines.groups[].type` | The FME Engine licensing type to use. Must be STANDARD or DYNAMIC. | `STANDARD` |
 | `fmeserver.engines.groups[].engineProperties` | A comma delimited list of properties to set on this engine. The engine deployment `name` will be automatically added. [See this link for more info](https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing) | `""` |
-| `fmeserver.engines.groups[].queues` | The queues that the engines in this deployment should join. This is a comma delimited list of queues and optionally priorities for those queues of the form `<QueueName>[:<QueuePriority>],<QueueName>[:<QueuePriority>],...`. The default priority is 100. For example: `Queue1:100,Queue2:200,Queue3:1` or `Queue1,Queue4,Queue5` <br /> **NOTE:** It is recommended to assign engines to queues in the Web UI using engine properties. That is the preferred method of managing engine queue assignments. This `queues` settings is provided for backwards compatibility. [See this link for more info](https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing)   | `""` |
+| `fmeserver.engines.groups[].queues` | **DEPRECATED:** This parameter is deprecated. Assigning engines to queues is now done in the Web UI using engine properties. [See this link for more info](https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing) <br /><br /> The queues that the engines in this deployment should join. This is a comma delimited list of queues and optionally priorities for those queues of the form `<QueueName>[:<QueuePriority>],<QueueName>[:<QueuePriority>],...`. The default priority is 100. For example: `Queue1:100,Queue2:200,Queue3:1` or `Queue1,Queue4,Queue5` | `""` |
 | `fmeserver.engines.groups[].resources` | [Engine CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `512Mi`, CPU: `200m` |
 | `fmeserver.engines.groups[].affinity` | Affinity labels for pod assignment for this engine deployment | `{}` |
 | `fmeserver.engines.groups[].nodeSelector` | Map of nodeselector annotations to add to this engine deployment | `{}` |
