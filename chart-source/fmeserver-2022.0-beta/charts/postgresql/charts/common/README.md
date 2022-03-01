@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Parameters
 
@@ -50,17 +50,18 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Capabilities
 
-| Helper identifier                            | Description                                                                                    | Expected Input    |
-|----------------------------------------------|------------------------------------------------------------------------------------------------|-------------------|
-| `common.capabilities.kubeVersion`            | Return the target Kubernetes version (using client default if .Values.kubeVersion is not set). | `.` Chart context |
-| `common.capabilities.cronjob.apiVersion`     | Return the appropriate apiVersion for cronjob.                                                 | `.` Chart context |
-| `common.capabilities.deployment.apiVersion`  | Return the appropriate apiVersion for deployment.                                              | `.` Chart context |
-| `common.capabilities.statefulset.apiVersion` | Return the appropriate apiVersion for statefulset.                                             | `.` Chart context |
-| `common.capabilities.ingress.apiVersion`     | Return the appropriate apiVersion for ingress.                                                 | `.` Chart context |
-| `common.capabilities.rbac.apiVersion`        | Return the appropriate apiVersion for RBAC resources.                                          | `.` Chart context |
-| `common.capabilities.crd.apiVersion`         | Return the appropriate apiVersion for CRDs.                                                    | `.` Chart context |
-| `common.capabilities.policy.apiVersion`      | Return the appropriate apiVersion for policy                                                   | `.` Chart context |
-| `common.capabilities.supportsHelmVersion`    | Returns true if the used Helm version is 3.3+                                                  | `.` Chart context |
+| Helper identifier                              | Description                                                                                    | Expected Input    |
+|------------------------------------------------|------------------------------------------------------------------------------------------------|-------------------|
+| `common.capabilities.kubeVersion`              | Return the target Kubernetes version (using client default if .Values.kubeVersion is not set). | `.` Chart context |
+| `common.capabilities.cronjob.apiVersion`       | Return the appropriate apiVersion for cronjob.                                                 | `.` Chart context |
+| `common.capabilities.deployment.apiVersion`    | Return the appropriate apiVersion for deployment.                                              | `.` Chart context |
+| `common.capabilities.statefulset.apiVersion`   | Return the appropriate apiVersion for statefulset.                                             | `.` Chart context |
+| `common.capabilities.ingress.apiVersion`       | Return the appropriate apiVersion for ingress.                                                 | `.` Chart context |
+| `common.capabilities.rbac.apiVersion`          | Return the appropriate apiVersion for RBAC resources.                                          | `.` Chart context |
+| `common.capabilities.crd.apiVersion`           | Return the appropriate apiVersion for CRDs.                                                    | `.` Chart context |
+| `common.capabilities.policy.apiVersion`        | Return the appropriate apiVersion for podsecuritypolicy.                                       | `.` Chart context |
+| `common.capabilities.networkPolicy.apiVersion` | Return the appropriate apiVersion for networkpolicy.                                           | `.` Chart context |
+| `common.capabilities.supportsHelmVersion`      | Returns true if the used Helm version is 3.3+                                                  | `.` Chart context |
 
 ### Errors
 
@@ -78,11 +79,12 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Ingress
 
-| Helper identifier                         | Description                                                          | Expected Input                                                                                                                                                                   |
-|-------------------------------------------|----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `common.ingress.backend`                  | Generate a proper Ingress backend entry depending on the API version | `dict "serviceName" "foo" "servicePort" "bar"`, see the [Ingress deprecation notice](https://kubernetes.io/blog/2019/07/18/api-deprecations-in-1-16/) for the syntax differences |
-| `common.ingress.supportsPathType`         | Prints "true" if the pathType field is supported                     | `.` Chart context                                                                                                                                                                |
-| `common.ingress.supportsIngressClassname` | Prints "true" if the ingressClassname field is supported             | `.` Chart context                                                                                                                                                                |
+| Helper identifier                         | Description                                                                                                       | Expected Input                                                                                                                                                                   |
+|-------------------------------------------|-------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common.ingress.backend`                  | Generate a proper Ingress backend entry depending on the API version                                              | `dict "serviceName" "foo" "servicePort" "bar"`, see the [Ingress deprecation notice](https://kubernetes.io/blog/2019/07/18/api-deprecations-in-1-16/) for the syntax differences |
+| `common.ingress.supportsPathType`         | Prints "true" if the pathType field is supported                                                                  | `.` Chart context                                                                                                                                                                |
+| `common.ingress.supportsIngressClassname` | Prints "true" if the ingressClassname field is supported                                                          | `.` Chart context                                                                                                                                                                |
+| `common.ingress.certManagerRequest`       | Prints "true" if required cert-manager annotations for TLS signed certificates are set in the Ingress annotations | `dict "annotations" .Values.path.to.the.ingress.annotations`                                                                                                                     |
 
 ### Labels
 
@@ -93,7 +95,7 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Names
 
-| Helper identifier       | Description                                                | Expected Inpput   |
+| Helper identifier       | Description                                                | Expected Input   |
 |-------------------------|------------------------------------------------------------|-------------------|
 | `common.names.name`     | Expand the name of the chart or use `.Values.nameOverride` | `.` Chart context |
 | `common.names.fullname` | Create a default fully qualified app name.                 | `.` Chart context |
@@ -112,7 +114,7 @@ The following table lists the helpers available in the library which are scoped 
 
 | Helper identifier             | Description                           | Expected Input                                                                                                      |
 |-------------------------------|---------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| `common.affinities.node.soft` | Return a soft nodeAffinity definition | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure. |
+| `common.storage.class` | Return  the proper Storage Class | `dict "persistence" .Values.path.to.the.persistence "global" $`, see [Persistence](#persistence) for the structure. |
 
 ### TplValues
 
@@ -325,3 +327,19 @@ $ helm install test mychart --set path.to.value00="",path.to.value01=""
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

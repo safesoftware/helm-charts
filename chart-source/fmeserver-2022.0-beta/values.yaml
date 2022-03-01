@@ -21,7 +21,7 @@ fmeserver:
     # This user and password must be a database user that can create databases and users in the postgresql database
     adminUser: postgres
     adminPasswordSecret:
-    adminPasswordSecretKey:  postgresql-password
+    adminPasswordSecretKey:  postgres-password
     adminDatabase: postgres
   webserver:
     maxThreads: 200
@@ -176,6 +176,7 @@ postgresql:
     requests:
       memory: 256Mi
       cpu: 100m
-  postgresqlPassword: a6av3abwzi
+  auth:
+    postgresqlPassword: a6av3abwzi
   livenessProbe:
     initialDelaySeconds: 300
