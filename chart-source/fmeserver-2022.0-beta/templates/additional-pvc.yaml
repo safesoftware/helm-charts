@@ -1,0 +1,20 @@
+{{ if .Values.additionalStorage }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    safe.k8s.fmeserver.component: data
+    {{- include "fmeserver.common.labels" . | indent 4 }}
+  name: {{ .Values.additionalStorage.name | default "geodata"}}
+spec:
+  {{- with .Values.additionalStorage }}
+  accessModes:
+  - {{ .fmeserver.accessMode }}
+  {{- if and (not .useHostDir) .fmeserver.class }}
+  storageClassName: {{ .fmeserver.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .fmeserver.size }}
+  {{- end }}
+{{- end }}

@@ -69,7 +69,7 @@ deployment:
   numCores: 1
   startAsRoot: false
   useHostnameIngress: true
-  deployPostgresql: true
+  deployPostgresql: false
   disableTLS: false
   ingress:
     # general annotations are applied to all ingresses
@@ -160,6 +160,17 @@ storage:
     size: 1Gi
     class:
     path:
+  fmeserver:
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    class:
+    path:
+
+additionalStorage:
+  useHostDir: false
+  reclaimPolicy: Delete
+  mountPath: /opt/geodata
+  name: geodata
   fmeserver:
     accessMode: ReadWriteOnce
     size: 10Gi
