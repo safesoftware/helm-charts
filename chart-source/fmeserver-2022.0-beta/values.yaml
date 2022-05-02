@@ -69,7 +69,7 @@ deployment:
   numCores: 1
   startAsRoot: false
   useHostnameIngress: true
-  deployPostgresql: false
+  deployPostgresql: true
   disableTLS: false
   ingress:
     # general annotations are applied to all ingresses
