@@ -1,5 +1,0 @@
-dependencies:
-- name: postgresql
-  version: 11.0.8
-  repository: https://charts.bitnami.com/bitnami
-  condition: deployment.deployPostgresql
