@@ -1,0 +1,188 @@
+{{- range .Values.fmeserver.engines.groups }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    safe.k8s.fmeserver.component: engine
+    {{- include "fmeserver.common.labels" $ | indent 4 }}
+  name: "engine-{{ .name }}"
+  {{- with $.Values.annotations.engine.deployment }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .engines }}
+  selector:
+    matchLabels:
+      safe.k8s.fmeserver.component: engine
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeserver.component: engine
+        {{- include "fmeserver.common.labels" $ | indent 8 }}
+        {{- with .labels }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
+      {{- with $.Values.annotations.engine.template }}
+      annotations:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+    spec:
+      containers:
+        - image: {{ if .image }}{{ if .image.registry }}{{ .image.registry }}{{ else }}{{ template "fmeserver.image.registry" $ }}{{ end }}/{{ if .image.namespace }}{{ .image.namespace }}{{ else }}{{ template "fmeserver.image.namespace" $ }}{{ end }}/fmeserver-engine:{{ if .image.tag }}{{ .image.tag }}{{ else }}{{ template "fmeserver.image.tag" $ }}{{ end }}{{else}}{{ template "fmeserver.image.registry" $ }}/{{ template "fmeserver.image.namespace" $ }}/fmeserver-engine:{{ template "fmeserver.image.tag" $ }}{{ end }}
+          name: engine
+          imagePullPolicy: {{ if .image }}{{ if .image.pullPolicy }}{{ .image.pullPolicy }}{{ else }}{{ template "fmeserver.image.pullPolicy" $ }}{{ end }}{{ else }}{{ template "fmeserver.image.pullPolicy" $ }}{{ end }}
+          volumeMounts:
+            - mountPath: /data/fmeserverdata
+              name: fmeserverdata
+          env:
+            - name: EXTERNALHOSTNAME
+              value: {{ $.Values.deployment.hostname }}
+            - name: WEBPROTOCOL
+              value: {{ template "fmeserver.deployment.protocol" $ }}
+            - name: EXTERNALPORT
+              value: "{{ $.Values.deployment.port }}"
+            - name: FMESERVERHOSTNAME
+              value: engineregistration
+            - name: NODENAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            {{- if .queues }}
+            - name: FME_ENV_ENGINE_QUEUES
+              value: {{ .queues | quote }}
+            {{- end }}
+            {{- if .type }}
+            - name: ENGINETYPE
+              value: {{ .type | quote }}
+            {{- end }}
+            - name: NODEMANAGED
+              value: "{{ $.Values.fmeserver.engines.enginesNodeManaged }}"
+            - name: ENGINERECEIVETIMEOUT
+              value: "{{ $.Values.fmeserver.engines.receiveTimeout }}"
+            - name: ENGINEDEBUGLEVEL
+              value: "{{ $.Values.fmeserver.engines.debugLevel }}"
+            - name: ENGINEPROPERTIES
+              {{- if .engineProperties }}
+              value: "{{ .engineProperties }},{{ .name }}"
+              {{- else }}
+              value: "{{ .name }}"
+              {{- end }}
+            - name: PGSQLHOSTNAME
+              value: "{{ template "fmeserver.database.host" $ }}"
+            - name: PGSQLPORT
+              value: "{{ $.Values.fmeserver.database.port }}"
+            - name: PGSQLDATABASENAME
+              value: "{{ $.Values.fmeserver.database.name }}"
+            {{- if $.Values.fmeserver.database.azure}}
+            - name: PGSQLUSERNAME
+              value: "{{ $.Values.fmeserver.database.user }}@{{ template "fmeserver.database.host" $ }}"
+            {{- else }}
+            - name: PGSQLUSERNAME
+              value: "{{ $.Values.fmeserver.database.user }}"
+            {{- end }}
+            - name: PGSQLPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeserver.database.secretName" $ }}
+                  key: {{ $.Values.fmeserver.database.passwordSecretKey }}
+            {{- if $.Values.fmeserver.database.ssl }}
+            - name: POSTGRESQLSSL
+              value: 'true'
+            {{- end }}
+            {{- if .memorylimit }}
+            {{- if or ( and (.memorylimit.top) (not .memorylimit.bottom)) ( and (not .memorylimit.top) (.memorylimit.bottom)) }}
+            {{- fail "Both memorylimit.top and memorylimit.bottom must be set, not just one" }}
+            {{- else if or (lt (.memorylimit.top) 0.0) (ge (.memorylimit.top) 1.0)}}
+            {{- fail "memorylimit.top must be between 0.0 and 1.0"}}
+            {{- else if or (lt (.memorylimit.bottom) 0.0) (ge (.memorylimit.bottom) 1.0)}}
+            {{- fail "memorylimit.bottom must be between 0.0 and 1.0"}}
+            {{- else if lt (.memorylimit.top) (.memorylimit.bottom)}}
+            {{- fail "memorylimit.top must be greater than memorylimit.bottom"}}
+            {{- else }}
+            {{- if and (.memorylimit.top) (.memorylimit.bottom) }}
+            - name: MEMORYLIMITTOP
+              value: {{ .memorylimit.top | quote }}
+            - name: MEMORYLIMITBOTTOM
+              value: {{ .memorylimit.bottom | quote }}
+            {{- end}}
+            {{- end}}
+            {{- else if .resources }}
+            {{- if .resources.limits }}
+            {{- if .resources.limits.memory }}
+            {{- $memoryLimitTop := 0.8}}
+            {{- $memoryLimitBottom := 0.7}}
+            {{- $megabytes := 0 }}
+            {{- if hasSuffix "Ki" (toString .resources.limits.memory) }}
+              {{- $megabytes = divf (float64 (trimSuffix "Ki" .resources.limits.memory)) 1024 }}
+            {{- else if hasSuffix "Mi" (toString .resources.limits.memory) }}
+              {{- $megabytes = float64 (trimSuffix "Mi" .resources.limits.memory) }}
+            {{- else if hasSuffix "Gi" (toString .resources.limits.memory) }}
+              {{- $megabytes = mulf (float64 (trimSuffix "Gi" .resources.limits.memory)) 1024 }}
+            {{- else if hasSuffix "Ti" (toString .resources.limits.memory) }}
+              {{- $megabytes = mulf (float64 (trimSuffix "Ti" .resources.limits.memory)) 1024 1024 }}
+            {{- else if hasSuffix "Pi" (toString .resources.limits.memory) }}
+              {{- $megabytes = mulf (float64 (trimSuffix "Pi" .resources.limits.memory)) 1024 1024 1024 }}
+            {{- else if hasSuffix "Ei" (toString .resources.limits.memory) }}
+              {{- $megabytes = mulf (float64 (trimSuffix "Ei" .resources.limits.memory)) 1024 1024 1024 1024 }}
+            {{- else if hasSuffix "k" (toString .resources.limits.memory) }}
+              {{- $megabytes = divf (float64 (trimSuffix "k" .resources.limits.memory)) 1000 }}
+            {{- else if hasSuffix "M" (toString .resources.limits.memory) }}
+              {{- $megabytes = float64 (trimSuffix "M" .resources.limits.memory) }}
+            {{- else if hasSuffix "G" (toString .resources.limits.memory) }}
+              {{- $megabytes = mulf (float64 (trimSuffix "G" .resources.limits.memory)) 1000 }}
+            {{- else if hasSuffix "T" (toString .resources.limits.memory) }}
+              {{- $megabytes = mulf (float64 (trimSuffix "T" .resources.limits.memory)) 1000 1000 }}
+            {{- else if hasSuffix "P" (toString .resources.limits.memory) }}
+              {{- $megabytes = mulf (float64 (trimSuffix "P" .resources.limits.memory)) 1000 1000 1000 }}
+            {{- else if hasSuffix "E" (toString .resources.limits.memory) }}
+              {{- $megabytes = mulf (float64 (trimSuffix "E" .resources.limits.memory)) 1000 1000 1000 1000 }}
+            {{- else if hasSuffix "E" (toString .resources.limits.memory) }}
+              {{- $megabytes = mulf (float64 (trimSuffix "E" .resources.limits.memory)) 1000 1000 1000 1000 }}
+            {{- else if or (regexMatch "^[0-9]+$" (toString .resources.limits.memory)) (regexMatch "^[0-1]\\.?[0-9]*e[\\+|-][0-9]+$" (toString .resources.limits.memory)) }}
+              {{- $megabytes = divf (float64 .resources.limits.memory) 1024 1024 }}
+            {{- end }}         
+            {{- if and (ge (float64 $megabytes) 2048.0) (le (float64 $megabytes) 4096.0)}}
+              {{- $memoryLimitTop = 0.6}}
+              {{- $memoryLimitBottom = 0.5}}
+            {{- else if (gt (float64 $megabytes) 4096.0)}}
+              {{- $memoryLimitTop = 0.8}}
+              {{- $memoryLimitBottom = 0.7}}
+            {{- end }}
+            {{- if ge (float64 $megabytes) 2048.0 }}
+            - name: MEMORYLIMITTOP
+              value: {{ $memoryLimitTop | quote }}
+            - name: MEMORYLIMITBOTTOM
+              value: {{ $memoryLimitBottom | quote }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+            {{- end -}}
+
+          {{- if .resources }}
+          resources:
+{{ toYaml .resources | indent 12 }}
+          {{- end }}
+      {{- if not (empty $.Values.fmeserver.engines.awsServiceAccount) }}
+      serviceAccountName: "fme-engine-aws"
+      {{- end }}
+      restartPolicy: Always
+      volumes:
+        - name: fmeserverdata
+          persistentVolumeClaim:
+            claimName: {{ template "fmeserver.storage.data.claimName" $ }}
+      affinity:
+        {{- include "fmeserver.deployment.dataVolumeAffinity" $ | indent 8 }}
+      {{- if .affinity }}
+{{ toYaml .affinity | indent 8 }}
+      {{- end }}
+      {{- if .nodeSelector }}
+      nodeSelector:
+{{ toYaml .nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .tolerations }}
+      tolerations:
+{{ toYaml .tolerations | indent 8 }}
+      {{- end }}
+---
+{{- end }}
