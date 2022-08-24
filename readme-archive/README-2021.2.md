@@ -7,10 +7,10 @@ To add the Safe Software charts repository:
 
 ## Installing the Chart
 
-To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2022.0&ordering=last_updated).
+To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2021.2&ordering=last_updated).
 
 Then run the command specifying the docker tag found above:
-`helm install fmeserver safesoftware/fmeserver-2022.0.0-beta --set fmeserver.image.tag=<docker_tag>`
+`helm install fmeserver safesoftware/fmeserver-2021.2 --set fmeserver.image.tag=<docker_tag>`
 
 See all available parameters below.
 
@@ -18,15 +18,14 @@ For more information see the [documentation](https://docs.safe.com/fme/html/FME_
 
 ## Configuration
 
-The following table lists the configurable parameters of the FME Server 2022.0 BETA chart and their default values.
+The following table lists the configurable parameters of the FME Server 2021.2 chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
-| `fmeserver.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2022.0&ordering=last_updated). |
+| `fmeserver.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2021.2&ordering=last_updated). |
 | `fmeserver.image.pullPolicy` | Image pull policy. IfNotPresent means that the image is pulled only if it is not already present on the node. If this is changed to "Always", then the node will always try to pull to make sure it has the latest version of that tag. | `IfNotPresent` |
 | `fmeserver.image.registry` | Docker registry | `docker.io` This parameter should not be changed. |
 | `fmeserver.image.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
-| `fmeserver.debugLevel` | Set the verbosity of the FME Server Core logs. Can be set to NONE, LOW, MEDIUM, HIGH or SUPER_VERBOSE. | `NONE` |
 | `deployment.hostname` | FME Server hostname | `localhost` |
 | `deployment.port` | FME Server port | `443` |
 | `deployment.tlsSecretName` | Custom TLS certificate, see [documentation](http://docs.safe.com/fme/2021.0/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `Nil` |
@@ -50,25 +49,22 @@ The following table lists the configurable parameters of the FME Server 2022.0 B
 | `storage.fmeserver.class` | Storage class for FME Server data. Ignored if host dir mapping is used. | `Nil` |
 | `storage.fmeserver.size` | FME Server data volume size | `10Gi` |
 | `storage.fmeserver.path` | Absolute path where FME Server data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
-| `fmeserver.engines.debugLevel` | Set the verbosity of the FME Server Engine logs. Can be set to NONE, LOW, MEDIUM, HIGH or SUPER_VERBOSE. | `NONE` |
-| `fmeserver.engines.receiveTimeout` | Engines that have not received a job in this period of time (measured in milliseconds) will be restarted. Set to 0 to never restart. | `0` |
-| `fmeserver.engines.groups` | An array of engine deployments. Each deployment defines a name, queues to join, number of replicas, and scheduling information. |  |
-| `fmeserver.engines.groups[].name` | The name of this group of engines. | `default` |
-| `fmeserver.engines.groups[].engines` | The number of engines to deploy in this engine deployment. | `2` |
-| `fmeserver.engines.groups[].type` | The FME Engine licensing type to use. Must be STANDARD or DYNAMIC. | `STANDARD` |
-| `fmeserver.engines.groups[].engineProperties` | A comma delimited list of properties to set on this engine. The engine deployment `name` will be automatically added. [See this link for more info](https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing) | `""` |
-| `fmeserver.engines.groups[].queues` | **DEPRECATED:** This parameter is deprecated. Assigning engines to queues is now done in the Web UI using engine properties. [See this link for more info](https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing) <br /><br /> The queues that the engines in this deployment should join. This is a comma delimited list of queues and optionally priorities for those queues of the form `<QueueName>[:<QueuePriority>],<QueueName>[:<QueuePriority>],...`. The default priority is 100. For example: `Queue1:100,Queue2:200,Queue3:1` or `Queue1,Queue4,Queue5` | `""` |
-| `fmeserver.engines.groups[].resources` | [Engine CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `512Mi`, CPU: `200m` |
-| `fmeserver.engines.groups[].affinity` | Affinity labels for pod assignment for this engine deployment | `{}` |
-| `fmeserver.engines.groups[].nodeSelector` | Map of nodeselector annotations to add to this engine deployment | `{}` |
-| `fmeserver.engines.groups[].tolerations` | Toleration labels for pod assignment for this engine deployment | `[]` |
-| `fmeserver.engines.groups[].labels` | Labels to apply to the engine pods | `{}` |
-| `fmeserver.engines.awsServiceAccount.iamRoleArn` | `IAM Role to associate with the FME Engine pods (this will create a service account for FME Engine to access AWS)` | `Nil` |
-| `fmeserver.engines.groups[].image` | Changes the image that the engine uses. Defaults to the image set in the `fmeserver.image` settings if not set. | |
-| `fmeserver.engines.groups[].image.tag` | The docker image tag to use. |  |
-| `fmeserver.engines.groups[].image.pullPolicy` | Image pull policy. IfNotPresent means that the image is pulled only if it is not already present on the node. If this is changed to "Always", then the node will always try to pull to make sure it has the latest version of that tag. |  |
-| `fmeserver.engines.groups[].image.registry` | Docker registry |  |
-| `fmeserver.engines.groups[].image.namespace` | Docker registry namespace |  |
+| `fmeserver.engines` | An array of engine deployments. Each deployment defines a name, queues to join, number of replicas, and scheduling information. |  |
+| `fmeserver.engines[].name` | The name of this group of engines. | `standard-group` |
+| `fmeserver.engines[].engines` | The number of engines to deploy in this engine deployment. | `2` |
+| `fmeserver.engines[].type` | The FME Engine licensing type to use. Must be STANDARD or DYNAMIC. | `STANDARD` |
+| `fmeserver.engines[].engineProperties` | A comma delimited list of properties to set on this engine. The engine deployment `name` will be automatically added. [See this link for more info](https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing) | `""` |
+| `fmeserver.engines[].queues` | The queues that the engines in this deployment should join. This is a comma delimited list of queues and optionally priorities for those queues of the form `<QueueName>[:<QueuePriority>],<QueueName>[:<QueuePriority>],...`. The default priority is 100. For example: `Queue1:100,Queue2:200,Queue3:1` or `Queue1,Queue4,Queue5` <br /> **NOTE:** It is recommended to assign engines to queues in the Web UI using engine properties. That is the preferred method of managing engine queue assignments. This `queues` settings is provided for backwards compatibility. [See this link for more info](https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing)   | `""` |
+| `fmeserver.engines[].resources` | [Engine CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `512Mi`, CPU: `200m` |
+| `fmeserver.engines[].affinity` | Affinity labels for pod assignment for this engine deployment | `{}` |
+| `fmeserver.engines[].nodeSelector` | Map of nodeselector annotations to add to this engine deployment | `{}` |
+| `fmeserver.engines[].tolerations` | Toleration labels for pod assignment for this engine deployment | `[]` |
+| `fmeserver.engines[].labels` | Labels to apply to the engine pods | `{}` |
+| `fmeserver.engines[].image` | Changes the image that the engine uses. Defaults to the image set in the `fmeserver.image` settings if not set. | |
+| `fmeserver.engines[].image.tag` | The docker image tag to use. |  |
+| `fmeserver.engines[].image.pullPolicy` | Image pull policy. IfNotPresent means that the image is pulled only if it is not already present on the node. If this is changed to "Always", then the node will always try to pull to make sure it has the latest version of that tag. |  |
+| `fmeserver.engines[].image.registry` | Docker registry |  |
+| `fmeserver.engines[].image.namespace` | Docker registry namespace |  |
 | `fmeserver.database.host` | The hostname of the Postgres database to use. Only set this if you are not using the included Postgres database |  _The service DNS of the Postgresql database deployed with this chart_ |
 | `fmeserver.database.port` | The port of the Postgres database to use. |  `5432` |
 | `fmeserver.database.name` | The database name for FME Server to use for its schema. |  `fmeserver` |
@@ -110,4 +106,14 @@ The following table lists the configurable parameters of the FME Server 2022.0 B
 | `labels.queue` | Labels to apply to the core pods | `{}` |
 | `labels.websocket` | Labels to apply to the core pods | `{}` |
 
+See configuration parameters for older versions of FME Server [here](readme-archive).
 
+## Development
+
+### Run unit tests
+
+1. `helm plugin install https://github.com/lrills/helm-unittest`
+2. `helm unittest <path/to/chart/source>`
+
+## Third Party Dependancies
+PostgreSQL Helm Chart  - Apache 2.0 - Available from [Bitnami](https://github.com/bitnami/charts/tree/master/bitnami/postgresql).
