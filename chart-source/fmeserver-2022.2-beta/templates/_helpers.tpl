@@ -245,3 +245,11 @@ servicePort: 7078
 pathType: Prefix
 {{- end -}}
 {{- end -}}
+
+{{- define "fmeserver.pdb.apiversion" }}
+{{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.Version -}}
+policy/v1
+{{- else -}}
+policy/v1beta1
+{{- end -}}
+{{- end -}}
