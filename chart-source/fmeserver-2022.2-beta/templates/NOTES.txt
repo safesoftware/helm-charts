@@ -1,28 +1,28 @@
 Congratulations, your FME Server should be ready shortly! You can check the progress of the deployment by typing:
 
-  $ helm status {{ .Release.Name }} -n {{ .Release.Namespace }}
-
-Helm V2:
-  $ helm status {{ .Release.Name }}
+  $ kubectl -n {{ .Release.Namespace }} get pods
 
 Once all containers are running, you should be able to access your deployment under {{ template "fmeserver.deployment.protocol" . }}://{{ .Values.deployment.hostname }}
 
-To ensure that everything is working correctly, helm provides a test framework which can be run once the FME Server is up and running (does currently NOT work for Docker on Mac/Windows):
+To ensure that everything is working correctly, helm provides a test framework which can be run once the FME Server is up and running and licensed:
 
-  $ helm test {{ .Release.Name }} -n {{ .Release.Namespace }}
+  $ helm test {{ .Release.Name }} -n {{ .Release.Namespace }} --logs --timeout 10m0s
 
-Helm V2:
-  $ helm test {{ .Release.Name }}
+This runs a set of tests that test basic FME Server functionality.
 
 Things to check if something does not work:
   - Is the NGINX ingress controller deployed? Check the following link for more details: https://kubernetes.github.io/ingress-nginx/deploy/
   - Does your server have enough disk storage?
+  - Are your nodes large enough / do you have enough nodes?
+  - Check if there any negative events on any of the fmeserver resources by running the command:
+    $ kubectl get events --sort-by=.metadata.creationTimestamp -n {{ .Release.Namespace }} --field-selector type!=Normal
+
+If you still have issues, please review the Useful Commands for FME Server and Kubernetes article, which contains troubleshooting tips and commands. https://community.safe.com/s/article/Useful-commands-for-FME-Server-for-Kubernetes
+
+If you aren't able to resolve the issue, or you think you've found a bug you can contact us here: https://www.safe.com/support/
 
 To uninstall/delete FME Server (this deletes all data):
   $ helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}
-
-Helm V2:
-  $ helm del --purge {{ .Release.Name }}
 
 {{- $queueWarning := false }} 
 {{- range .Values.fmeserver.engines.groups }}
@@ -32,5 +32,3 @@ NOTE:  The parameter fmeserver.engines.groups[].queues is DEPRECATED. Engine ass
 {{- $queueWarning = true }}
 {{- end }}
 {{- end }}
-
-If you have issues, you can contact us here: https://www.safe.com/support/
