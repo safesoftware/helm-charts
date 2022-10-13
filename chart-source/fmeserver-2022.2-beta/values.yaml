@@ -170,12 +170,13 @@ storage:
 # For more options regarding PostgreSQL deployement, check the helm chart documentation:
 # https://github.com/bitnami/charts/tree/master/bitnami/postgresql
 postgresql:
-  persistence:
-    existingClaim: fmeserver-postgresql
-  resources:
-    requests:
-      memory: 256Mi
-      cpu: 100m
+  primary:
+    persistence:
+      existingClaim: fmeserver-postgresql
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 100m
   auth:
     postgresqlPassword: a6av3abwzi
   livenessProbe:
