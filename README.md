@@ -7,10 +7,10 @@ To add the Safe Software charts repository:
 
 ## Installing the Chart
 
-To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2022.1&ordering=last_updated).
+To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2022.2&ordering=last_updated).
 
 Then run the command specifying the docker tag found above:
-`helm install fmeserver safesoftware/fmeserver-2022.1 --set fmeserver.image.tag=<docker_tag>`
+`helm install fmeserver safesoftware/fmeserver-2022.2 --set fmeserver.image.tag=<docker_tag>`
 
 See all available parameters below.
 
@@ -18,7 +18,7 @@ For more information see the [documentation](https://docs.safe.com/fme/html/FME_
 
 ## Configuration
 
-The following table lists the configurable parameters of the FME Server 2022.0.0 BETA chart and their default values.
+The following table lists the configurable parameters of the FME Server 2022.2 BETA chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
