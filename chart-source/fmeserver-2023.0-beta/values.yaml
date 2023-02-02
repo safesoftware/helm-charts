@@ -169,6 +169,8 @@ storage:
 # For more options regarding PostgreSQL deployement, check the helm chart documentation:
 # https://github.com/bitnami/charts/tree/master/bitnami/postgresql
 postgresql:
+  image: 
+    tag: 11.18.0-debian-11-r28
   primary:
     persistence:
       existingClaim: fmeserver-postgresql
