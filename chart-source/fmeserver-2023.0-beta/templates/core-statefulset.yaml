@@ -74,6 +74,8 @@ spec:
               value: "{{ .Values.fmeserver.database.name }}"
             - name: FIRSTLOGINCHANGEPASSWORD
               value: "{{ .Values.fmeserver.forcePasswordChange }}"
+            - name: SCHEDULERIDLEWAITTIME
+              value: "{{ .Values.fmeserver.scheduler.idleWaitTime }}"
             {{- if .Values.fmeserver.database.azure }}
             - name: PGSQLUSERNAME
               value: "{{ .Values.fmeserver.database.user }}@{{ template "fmeserver.database.host" . }}"

@@ -28,6 +28,8 @@ fmeserver:
     experimentalJavaFlags: false
   forcePasswordChange: true
   debugLevel: "NONE"
+  scheduler:
+    idleWaitTime: 5000
   healthcheck:
     enabled: true
     liveness:

@@ -2,4 +2,4 @@ apiVersion: v1
 appVersion: 2023.0-beta BETA
 description: FME Server 2023.0 BETA (this Chart is not upgradable, do not use in production)
 name: fmeserver-2023.0-beta
-version: 0.2.53
+version: 0.2.54
