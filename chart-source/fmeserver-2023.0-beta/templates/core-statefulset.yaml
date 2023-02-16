@@ -76,6 +76,8 @@ spec:
               value: "{{ .Values.fmeserver.forcePasswordChange }}"
             - name: SCHEDULERIDLEWAITTIME
               value: "{{ .Values.fmeserver.scheduler.idleWaitTime }}"
+            - name: ENABLETRANSACTIONQUEUETIMEOUT
+              value: "{{ .Values.fmeserver.enableTransactionQueueTimeout }}"
             {{- if .Values.fmeserver.database.azure }}
             - name: PGSQLUSERNAME
               value: "{{ .Values.fmeserver.database.user }}@{{ template "fmeserver.database.host" . }}"

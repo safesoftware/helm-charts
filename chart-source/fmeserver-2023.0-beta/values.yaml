@@ -28,6 +28,7 @@ fmeserver:
     experimentalJavaFlags: false
   forcePasswordChange: true
   debugLevel: "NONE"
+  enableTransactionQueueTimeout: false
   scheduler:
     idleWaitTime: 5000
   healthcheck:
