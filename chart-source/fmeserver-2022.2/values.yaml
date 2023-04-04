@@ -32,10 +32,12 @@ fmeserver:
     enabled: true
     simple: false
     liveness:
+      initialDelaySeconds: 60
       failureThreshold: 6
       timeoutSeconds: 5
       periodSeconds: 10
     readiness:
+      initialDelaySeconds: 60
       failureThreshold: 3
       timeoutSeconds: 5
       periodSeconds: 5

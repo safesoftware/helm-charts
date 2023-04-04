@@ -101,7 +101,7 @@ spec:
             httpGet:
               path: {{ template "fmeserver.liveness.url" . }}
               port: 8080
-            initialDelaySeconds: 60
+            initialDelaySeconds: {{ .Values.fmeserver.healthcheck.liveness.initialDelaySeconds }}
             failureThreshold: {{ .Values.fmeserver.healthcheck.liveness.failureThreshold }}
             timeoutSeconds: {{ .Values.fmeserver.healthcheck.liveness.timeoutSeconds }}
             periodSeconds: {{ .Values.fmeserver.healthcheck.readiness.periodSeconds }}
@@ -109,7 +109,7 @@ spec:
             httpGet:
               path: {{ template "fmeserver.healthcheck.url" . }}
               port: 8080
-            initialDelaySeconds: 60
+            initialDelaySeconds: {{ .Values.fmeserver.healthcheck.readiness.initialDelaySeconds }}
             failureThreshold: {{ .Values.fmeserver.healthcheck.readiness.failureThreshold }}
             timeoutSeconds: {{ .Values.fmeserver.healthcheck.readiness.timeoutSeconds }}
             periodSeconds: {{ .Values.fmeserver.healthcheck.readiness.periodSeconds }}
@@ -175,14 +175,14 @@ spec:
           livenessProbe:
             tcpSocket:
               port: 8080
-            initialDelaySeconds: 60
+            initialDelaySeconds: {{ .Values.fmeserver.healthcheck.liveness.initialDelaySeconds }}
             failureThreshold: {{ .Values.fmeserver.healthcheck.liveness.failureThreshold }}
             timeoutSeconds: {{ .Values.fmeserver.healthcheck.liveness.timeoutSeconds }}
           readinessProbe:
             httpGet:
               path: {{ template "fmeserver.healthcheck.url" . }}
               port: 8080
-            initialDelaySeconds: 60
+            initialDelaySeconds: {{ .Values.fmeserver.healthcheck.readiness.initialDelaySeconds }}
             timeoutSeconds: {{ .Values.fmeserver.healthcheck.readiness.failureThreshold }}
             periodSeconds: {{ .Values.fmeserver.healthcheck.readiness.periodSeconds }}
           {{- end }}
