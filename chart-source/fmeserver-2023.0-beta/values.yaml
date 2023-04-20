@@ -34,10 +34,12 @@ fmeserver:
   healthcheck:
     enabled: true
     liveness:
+      initialDelaySeconds: 60
       failureThreshold: 6
       timeoutSeconds: 5
       periodSeconds: 10
     readiness:
+      initialDelaySeconds: 60
       failureThreshold: 3
       timeoutSeconds: 5
       periodSeconds: 5
@@ -76,8 +78,8 @@ deployment:
   ingress:
     # general annotations are applied to all ingresses
     general:
+      ingressClassName: "nginx"
       annotations:
-        kubernetes.io/ingress.class: "nginx"
         nginx.ingress.kubernetes.io/proxy-body-size: "0"
         nginx.ingress.kubernetes.io/affinity: cookie
         nginx.ingress.kubernetes.io/session-cookie-name: fmeserver-ingress

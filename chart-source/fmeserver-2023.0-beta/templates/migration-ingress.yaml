@@ -11,6 +11,7 @@ metadata:
 {{ end }}
 {{- include "fmeserver.ingress.annotations" . | indent 4 }}
 spec:
+  ingressClassName: {{ .Values.deployment.ingress.general.ingressClassName }}
   {{- include "fmeserver.ingress.tls" . }}
   rules:
     - http:
