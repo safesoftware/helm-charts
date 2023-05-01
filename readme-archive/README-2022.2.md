@@ -7,10 +7,10 @@ To add the Safe Software charts repository:
 
 ## Installing the Chart
 
-To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2023.0&ordering=last_updated).
+To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2022.2&ordering=last_updated).
 
 Then run the command specifying the docker tag found above:
-`helm install fmeserver safesoftware/fmeserver-2023-0 --set fmeserver.image.tag=<docker_tag>`
+`helm install fmeserver safesoftware/fmeserver-2022.2 --set fmeserver.image.tag=<docker_tag>`
 
 See all available parameters below.
 
@@ -18,7 +18,7 @@ For more information see the [documentation](https://docs.safe.com/fme/html/FME_
 
 ## Configuration
 
-The following table lists the configurable parameters of the FME Server 2023.0 chart and their default values.
+The following table lists the configurable parameters of the FME Server 2022.2 chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
@@ -86,7 +86,6 @@ The following table lists the configurable parameters of the FME Server 2023.0 c
 | `fmeserver.database.azure` | Set this to `true` if connecting to an Azure Managed Postgresql database to format the username properly when connecting. |  `false` |
 | `fmeserver.webserver.maxThreads` | Max threads the Tomcat webserver can use (more info [here](https://tomcat.apache.org/tomcat-8.0-doc/config/http.html)) | 200 |
 | `fmeserver.forcePasswordChange` | Force the admin user to change password on first login | `true` |
-| `fmeserver.enableTransactionQueueTimeout` | Enable timeout on queue connections. | `false` |
 | `scheduling.core.affinity` | Affinity labels for pod assignment for Core pod. For information on how to assign pods to specific nodes using the affinity feature, read the [official documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/). | `{}` |
 | `scheduling.core.nodeselector` | Map of nodeselector annotations to add to the Core pod. For information on how to assign pods to specific nodes using the nodeSelector parameter, read the [official documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/). | `{}` |
 | `scheduling.core.tolerations` | Toleration labels for pod assignment for Core pod. [Official documentation](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) on taints and tolerations. | `[]` |
