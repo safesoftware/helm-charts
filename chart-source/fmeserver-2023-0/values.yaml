@@ -1,0 +1,189 @@
+fmeserver:
+  image:
+    tag:
+    registry: docker.io
+    namespace: safesoftware
+    # Supported values: Always or IfNotPresent
+    pullPolicy: IfNotPresent
+  database:
+    host:
+    port: '5432'
+    name: fmeserver
+    user: fmeserver
+    password: 4fmmsgrz09
+    passwordSecret:
+    passwordSecretKey: fmeserver-db-password
+    # require ssl on the connection
+    ssl: false
+    # set to true if using Azure Postgresql to make sure connection strings are formatted correctly
+    azure: false
+
+    # This user and password must be a database user that can create databases and users in the postgresql database
+    adminUser: postgres
+    adminPasswordSecret:
+    adminPasswordSecretKey:  postgres-password
+    adminDatabase: postgres
+  webserver:
+    maxThreads: 200
+    experimentalJavaFlags: false
+  forcePasswordChange: true
+  debugLevel: "NONE"
+  enableTransactionQueueTimeout: false
+  scheduler:
+    idleWaitTime: 5000
+  healthcheck:
+    enabled: true
+    liveness:
+      initialDelaySeconds: 60
+      failureThreshold: 6
+      timeoutSeconds: 5
+      periodSeconds: 10
+    readiness:
+      initialDelaySeconds: 60
+      failureThreshold: 3
+      timeoutSeconds: 5
+      periodSeconds: 5
+  engines:
+    debugLevel: "NONE"
+    hideHostContent: true
+    readOnlyQueues: true
+    enginesNodeManaged: false
+    receiveTimeout: 0
+    groups:
+      - name: "standard-group"
+        engines: 2
+        type: "STANDARD"
+        labels: {}
+        affinity: {}
+        nodeSelector: {}
+        tolerations: []
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: 200m
+
+
+deployment:
+  hostname: localhost
+  port: 443
+  tlsSecretName:
+  certManager:
+    issuerName:
+    issuerType: cluster
+  numCores: 1
+  startAsRoot: false
+  useHostnameIngress: true
+  deployPostgresql: true
+  disableTLS: false
+  ingress:
+    # general annotations are applied to all ingresses
+    general:
+      ingressClassName: "nginx"
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-body-size: "0"
+        nginx.ingress.kubernetes.io/affinity: cookie
+        nginx.ingress.kubernetes.io/session-cookie-name: fmeserver-ingress
+        nginx.ingress.kubernetes.io/session-cookie-hash: md5
+    # annotations on the default web traffic ingress
+    web:
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+        nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    # annotations on the migration endpoint
+    migration:
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "1800"
+    # annotations on the transact api endpoint
+    transact:
+      annotations:
+        # 14 days read timeout for transact jobs
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "1209600"
+    websocket:
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "2592000"
+
+
+annotations:
+  core:
+    statefulset: {}
+    template: {}
+  engine:
+    deployment: {}
+    template: {}
+  queue:
+    statefulset: {}
+    template: {}
+  websocket:
+    statefulset: {}
+    template: {}
+
+labels:
+  core: {}
+  queue: {}
+  websocket: {}
+
+scheduling:
+  core:
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+  queue:
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+  websocket:
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+
+resources:
+  core:
+    requests:
+      memory: 1.5Gi
+      cpu: 200m
+  web:
+    requests:
+      memory: 1Gi
+      cpu: 200m
+    limits:
+      memory:
+      cpu:
+  queue:
+    requests:
+      memory: 128Mi
+      cpu: 100m
+  websocket:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+
+storage:
+  useHostDir: false
+  reclaimPolicy: Delete
+  postgresql:
+    size: 1Gi
+    class:
+    path:
+  fmeserver:
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    class:
+    path:
+
+# It is recommended not to modify those parameters
+# For more options regarding PostgreSQL deployement, check the helm chart documentation:
+# https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+postgresql:
+  image: 
+    tag:
+  primary:
+    persistence:
+      existingClaim: fmeserver-postgresql
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 100m
+  auth:
+    postgresqlPassword: a6av3abwzi
+  livenessProbe:
+    initialDelaySeconds: 300
