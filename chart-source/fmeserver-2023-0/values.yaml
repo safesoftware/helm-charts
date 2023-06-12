@@ -1,6 +1,6 @@
 fmeserver:
   image:
-    tag:
+    tag: ""
     registry: docker.io
     namespace: safesoftware
     # Supported values: Always or IfNotPresent
@@ -175,7 +175,7 @@ storage:
 # https://github.com/bitnami/charts/tree/master/bitnami/postgresql
 postgresql:
   image: 
-    tag:
+    tag: 11.18.0-debian-11-r28
   primary:
     persistence:
       existingClaim: fmeserver-postgresql
