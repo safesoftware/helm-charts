@@ -35,6 +35,10 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeserverdata
               name: fmeserverdata
+            {{- if $.Values.additionalStorage }}
+            - mountPath: {{ $.Values.additionalStorage.mountPath | default "/opt/geodata" }}
+              name: {{ $.Values.additionalStorage.name | default "geodata" }}
+            {{- end }}
           env:
             - name: EXTERNALHOSTNAME
               value: {{ $.Values.deployment.hostname }}
