@@ -88,7 +88,6 @@ deployment:
     web:
       annotations:
         nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
-        nginx.ingress.kubernetes.io/proxy-body-size: "0"
     # annotations on the migration endpoint
     migration:
       annotations:
