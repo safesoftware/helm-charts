@@ -18,11 +18,13 @@ For more information see the [documentation](https://docs.safe.com/fme/html/FME_
 
 ## Configuration
 
+NOTE: starting in 2023.0, ingress class name is now set using `ingress.general.ingressClassName`
+
 The following table lists the configurable parameters of the FME Server 2023.0 chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
-| `fmeserver.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2022.0&ordering=last_updated). |
+| `fmeserver.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2023.0&ordering=last_updated). |
 | `fmeserver.image.pullPolicy` | Image pull policy. IfNotPresent means that the image is pulled only if it is not already present on the node. If this is changed to "Always", then the node will always try to pull to make sure it has the latest version of that tag. | `IfNotPresent` |
 | `fmeserver.image.registry` | Docker registry | `docker.io` This parameter should not be changed. |
 | `fmeserver.image.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
@@ -87,6 +89,9 @@ The following table lists the configurable parameters of the FME Server 2023.0 c
 | `fmeserver.webserver.maxThreads` | Max threads the Tomcat webserver can use (more info [here](https://tomcat.apache.org/tomcat-8.0-doc/config/http.html)) | 200 |
 | `fmeserver.forcePasswordChange` | Force the admin user to change password on first login | `true` |
 | `fmeserver.enableTransactionQueueTimeout` | Enable timeout on queue connections. | `false` |
+| `fmeserver.portpool` | Range of ports which can be assigned to FME Engines, Subscribers and Protocols when connecting to the FME Server. Port pools may be specified as a comma-seperated list of port numbers and port number ranges. E.g. 20000-21000,21200 | `Nil` |
+| `fmeserver.healthcheck.liveness.initialDelaySeconds` | Set the initial delay before running the liveness probes. Increase this if pods take longer to start in your cluster. | `60` |
+| `fmeserver.healthcheck.readiness.initialDelaySeconds` | Set the initial delay before running the readiness probes. Increase this if pods take longer to start in your cluster. | `60` |
 | `scheduling.core.affinity` | Affinity labels for pod assignment for Core pod. For information on how to assign pods to specific nodes using the affinity feature, read the [official documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/). | `{}` |
 | `scheduling.core.nodeselector` | Map of nodeselector annotations to add to the Core pod. For information on how to assign pods to specific nodes using the nodeSelector parameter, read the [official documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/). | `{}` |
 | `scheduling.core.tolerations` | Toleration labels for pod assignment for Core pod. [Official documentation](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) on taints and tolerations. | `[]` |
@@ -104,7 +109,8 @@ The following table lists the configurable parameters of the FME Server 2023.0 c
 | `annotations.queue.template` | `Annotations for the queue pod template` | `{}` |
 | `annotations.websocket.statefulset` | `Annotations for the websocket statefulset` | `{}` |
 | `annotations.websocket.template` | `Annotations for the websocket pod template` | `{}` |
-| `ingress.general.annotations` | `Annotations to apply to all ingress objects. Set ingress class here if using an ingress other than nginx.` | `kubernetes.io/ingress.class: "nginx"`<br/>`nginx.ingress.kubernetes.io/proxy-body-size: "0"`<br/>`nginx.ingress.kubernetes.io/affinity: cookie`<br/>`nginx.ingress.kubernetes.io/session-cookie-name: fmeserver-ingress`<br/>`nginx.ingress.kubernetes.io/session-cookie-hash: md5` |
+| `ingress.general.ingressClassName` | `Ingress class name to use for ingress objects.` | `nginx` |
+| `ingress.general.annotations` | `Annotations to apply to all ingress objects.` | `nginx.ingress.kubernetes.io/proxy-body-size: "0"`<br/>`nginx.ingress.kubernetes.io/affinity: cookie`<br/>`nginx.ingress.kubernetes.io/session-cookie-name: fmeserver-ingress`<br/>`nginx.ingress.kubernetes.io/session-cookie-hash: md5` |
 | `ingress.web.annotations` | `Annotations to apply to the default web ingress` | `nginx.ingress.kubernetes.io/proxy-read-timeout: "300"`<br/>`nginx.ingress.kubernetes.io/proxy-body-size: "0"` |
 | `ingress.migration.annotations` | `Annotations to apply to the migration REST endpoint ingress. Typically a longer timeout is set for large backup and restore REST calls.` | `nginx.ingress.kubernetes.io/proxy-read-timeout: "1800"` |
 | `ingress.transact.annotations` | `Annotations to apply to the transact REST endpoint ingress. Typically a long timeout is set for synchronous calls to execute long running jobs.` | `nginx.ingress.kubernetes.io/proxy-read-timeout: "1209600"` |
