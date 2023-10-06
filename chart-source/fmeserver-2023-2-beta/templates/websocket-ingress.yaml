@@ -1,0 +1,25 @@
+apiVersion: {{ include "fmeserver.ingress.apiversion" . }}
+kind: Ingress
+metadata:
+  name: fmeserver-websocket-ingress
+  annotations:
+{{- if .Values.deployment.ingress.general.annotations }}
+{{ toYaml .Values.deployment.ingress.general.annotations | indent 4 }}
+{{ end }}
+{{- if .Values.deployment.ingress.websocket.annotations }}
+{{ toYaml .Values.deployment.ingress.websocket.annotations | indent 4 }}
+{{ end }}
+{{- include "fmeserver.ingress.annotations" . | indent 4 }}
+spec:
+  ingressClassName: {{ .Values.deployment.ingress.general.ingressClassName }}
+  {{- include "fmeserver.ingress.tls" . }}
+  rules:
+    - http:
+        paths:
+          - backend:
+{{ include "fmeserver.ingress.websocket.service" . | indent 14 }}
+            path: /websocket
+            {{ include "fmeserver.ingress.pathType" . }}
+      {{- if .Values.deployment.useHostnameIngress }}
+      host: {{ .Values.deployment.hostname }}
+      {{ end }}
