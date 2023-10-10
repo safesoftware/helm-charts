@@ -7,7 +7,7 @@ To add the Safe Software charts repository:
 
 ## Installing the Chart
 
-To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2023.1&ordering=last_updated).
+To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2023.0&ordering=last_updated).
 
 Then run the command specifying the docker tag found above:
 `helm install fmeserver safesoftware/fmeserver-2023-0 --set fmeserver.image.tag=<docker_tag>`
@@ -18,9 +18,9 @@ For more information see the [documentation](https://docs.safe.com/fme/html/FME_
 
 ## Configuration
 
-NOTE: starting in 2023.1, ingress class name is now set using `ingress.general.ingressClassName`
+NOTE: starting in 2023.0, ingress class name is now set using `ingress.general.ingressClassName`
 
-The following table lists the configurable parameters of the FME Server 2023.1 chart and their default values.
+The following table lists the configurable parameters of the FME Server 2023.0 chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
