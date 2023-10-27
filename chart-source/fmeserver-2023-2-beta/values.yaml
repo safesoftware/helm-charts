@@ -26,6 +26,7 @@ fmeserver:
   webserver:
     maxThreads: 200
     experimentalJavaFlags: false
+    hikariDBMaxConnections: 30
   forcePasswordChange: true
   debugLevel: "NONE"
   enableTransactionQueueTimeout: false

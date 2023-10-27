@@ -35,7 +35,7 @@ spec:
         fsGroup: 1363
         {{- end }}
       containers:
-        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-core:{{ template "fmeserver.image.tag" . }}
+        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeflow-core:{{ template "fmeserver.image.tag" . }}
           name: core
           imagePullPolicy: {{ template "fmeserver.image.pullPolicy" . }}
           ports:
@@ -130,7 +130,7 @@ spec:
             timeoutSeconds: {{ .Values.fmeserver.healthcheck.startup.timeoutSeconds }}
             periodSeconds: {{ .Values.fmeserver.healthcheck.startup.periodSeconds }}
           {{- end }}
-        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-web:{{ template "fmeserver.image.tag" . }}
+        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeflow-web:{{ template "fmeserver.image.tag" . }}
           name: web
           imagePullPolicy: {{ template "fmeserver.image.pullPolicy" . }}
           ports:
@@ -157,6 +157,8 @@ spec:
               value: "{{ .Values.deployment.port }}"
             - name: MAXTHREADS
               value: {{ .Values.fmeserver.webserver.maxThreads | quote }}
+            - name: HIKARIDBMAXCONNECTIONS
+              value: "{{ .Values.fmeserver.webserver.hikariDBMaxConnections }}"
             {{- if .Values.resources.web.limits.memory }}
             - name: USE_CGROUP_MEMORY_FOR_HEAP
               value: "true"
@@ -211,7 +213,7 @@ spec:
             periodSeconds: {{ .Values.fmeserver.healthcheck.startup.periodSeconds }}
           {{- end }}
       initContainers:
-        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-core:{{ template "fmeserver.image.tag" . }}
+        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeflow-core:{{ template "fmeserver.image.tag" . }}
           name: dbinit
           imagePullPolicy: {{ template "fmeserver.image.pullPolicy" . }}
           volumeMounts:
