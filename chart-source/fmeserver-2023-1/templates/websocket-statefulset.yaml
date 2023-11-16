@@ -29,7 +29,7 @@ spec:
       {{- end }}
     spec:
       containers:
-        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-core:{{ template "fmeserver.image.tag" . }}
+        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeflow-core:{{ template "fmeserver.image.tag" . }}
           name: websocket
           imagePullPolicy: {{ template "fmeserver.image.pullPolicy" . }}
           env:

@@ -35,7 +35,7 @@ spec:
         fsGroup: 1363
         {{- end }}
       containers:
-        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-core:{{ template "fmeserver.image.tag" . }}
+        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeflow-core:{{ template "fmeserver.image.tag" . }}
           name: core
           imagePullPolicy: {{ template "fmeserver.image.pullPolicy" . }}
           ports:
@@ -122,7 +122,7 @@ spec:
             timeoutSeconds: {{ .Values.fmeserver.healthcheck.readiness.timeoutSeconds }}
             periodSeconds: {{ .Values.fmeserver.healthcheck.readiness.periodSeconds }}
           {{- end }}
-        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-web:{{ template "fmeserver.image.tag" . }}
+        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeflow-web:{{ template "fmeserver.image.tag" . }}
           name: web
           imagePullPolicy: {{ template "fmeserver.image.pullPolicy" . }}
           ports:
@@ -195,7 +195,7 @@ spec:
             periodSeconds: {{ .Values.fmeserver.healthcheck.readiness.periodSeconds }}
           {{- end }}
       initContainers:
-        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeserver-core:{{ template "fmeserver.image.tag" . }}
+        - image: {{ template "fmeserver.image.registry" . }}/{{ template "fmeserver.image.namespace" . }}/fmeflow-core:{{ template "fmeserver.image.tag" . }}
           name: dbinit
           imagePullPolicy: {{ template "fmeserver.image.pullPolicy" . }}
           volumeMounts:
