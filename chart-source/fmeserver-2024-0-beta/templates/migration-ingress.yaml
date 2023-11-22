@@ -1,0 +1,29 @@
+apiVersion: {{ include "fmeserver.ingress.apiversion" . }}
+kind: Ingress
+metadata:
+  name: fmeserver-migration-ingress
+  annotations:
+{{- if .Values.deployment.ingress.general.annotations }}
+{{ toYaml .Values.deployment.ingress.general.annotations | indent 4 }}
+{{ end }}
+{{- if .Values.deployment.ingress.migration.annotations }}
+{{ toYaml .Values.deployment.ingress.migration.annotations | indent 4 }}
+{{ end }}
+{{- include "fmeserver.ingress.annotations" . | indent 4 }}
+spec:
+  ingressClassName: {{ .Values.deployment.ingress.general.ingressClassName }}
+  {{- include "fmeserver.ingress.tls" . }}
+  rules:
+    - http:
+        paths:
+          - backend:
+{{ include "fmeserver.ingress.web.service" . | indent 14 }}
+            path: /fmerest/v3/migration/backup/download
+            {{ include "fmeserver.ingress.pathType" . }}
+          - backend:
+{{ include "fmeserver.ingress.web.service" . | indent 14 }}
+            path: /fmerest/v3/migration/restore/upload
+            {{ include "fmeserver.ingress.pathType" . }}
+      {{- if .Values.deployment.useHostnameIngress }}
+      host: {{ .Values.deployment.hostname }}
+      {{ end }}
