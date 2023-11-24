@@ -1,0 +1,280 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    {{- include "fmeflow.common.labels" . | indent 4 }}
+    safe.k8s.fmeflow.component: core
+  name: core
+  {{- with .Values.annotations.core.statefulset }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.deployment.numCores }}
+  selector:
+    matchLabels:
+      safe.k8s.fmeflow.component: core
+  serviceName: fmeflow
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeflow.component: core
+        {{- include "fmeflow.common.labels" . | indent 8 }}
+        {{- with .Values.labels.core }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
+      {{- with .Values.annotations.core.template }}
+      annotations:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+    spec:
+      securityContext:
+        {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
+        runAsUser: 0
+        {{- else }}
+        fsGroup: 1363
+        {{- end }}
+      containers:
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-core:{{ template "fmeflow.image.tag" . }}
+          name: core
+          imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
+          ports:
+            - containerPort: 7070
+          resources:
+{{ toYaml .Values.resources.core | indent 12 }}
+          volumeMounts:
+            - mountPath: /data/fmeflowdata
+              name: fmeflowdata
+          env:
+            - name: PRIMARY_PROCESS
+              value: core
+            - name: FMESERVERHOSTNAME
+              value: localhost
+            - name: WEBSERVERHOSTNAME
+              value: localhost
+            - name: FMESERVERHOSTNAMELOCAL
+              value: localhost
+            - name: EXTERNALHOSTNAME
+              value: {{ .Values.deployment.hostname }}
+            - name: EXTERNALPORT
+              value: "{{ .Values.deployment.port }}"
+            - name: WEBPROTOCOL
+              value: {{ template "fmeflow.deployment.protocol" . }}
+            - name: NODENAMENS
+              value: fmeflow
+            - name: QUEUENAMENS
+              value: fmeflowqueue
+            - name: COREDEBUGLEVEL
+              value: "{{ .Values.fmeflow.debugLevel }}"
+            - name: PGSQLHOSTNAME
+              value: "{{ template "fmeflow.database.host" . }}"
+            - name: PGSQLPORT
+              value: "{{ .Values.fmeflow.database.port }}"
+            - name: PGSQLDATABASENAME
+              value: "{{ .Values.fmeflow.database.name }}"
+            - name: FIRSTLOGINCHANGEPASSWORD
+              value: "{{ .Values.fmeflow.forcePasswordChange }}"
+            - name: SCHEDULERIDLEWAITTIME
+              value: "{{ .Values.fmeflow.scheduler.idleWaitTime }}"
+            - name: ENABLETRANSACTIONQUEUETIMEOUT
+              value: "{{ .Values.fmeflow.enableTransactionQueueTimeout }}"
+            {{- if .Values.fmeflow.portpool }}
+            - name: PORTPOOL
+              value: "{{ .Values.fmeflow.portpool }}"
+            {{- end }}
+            {{- if .Values.fmeflow.database.azure }}
+            - name: PGSQLUSERNAME
+              value: "{{ .Values.fmeflow.database.user }}@{{ template "fmeflow.database.host" . }}"
+            {{- else }}
+            - name: PGSQLUSERNAME
+              value: "{{ .Values.fmeflow.database.user }}"
+            {{- end }}
+            - name: PGSQLPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeflow.database.secretName" . }}
+                  key: {{ .Values.fmeflow.database.passwordSecretKey }}
+            {{- if .Values.fmeflow.database.ssl }}
+            - name: POSTGRESQLSSL
+              value: 'true'
+            {{- end }}
+            {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
+            - name: FMESERVER_UID
+              value: '1363'
+            - name: FMESERVER_GID
+              value: '1363'
+            {{- end }}
+          {{- if .Values.fmeflow.healthcheck.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ template "fmeflow.liveness.url" . }}
+              port: 8080
+            initialDelaySeconds: {{ .Values.fmeflow.healthcheck.liveness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.fmeflow.healthcheck.liveness.failureThreshold }}
+            timeoutSeconds: {{ .Values.fmeflow.healthcheck.liveness.timeoutSeconds }}
+            periodSeconds: {{ .Values.fmeflow.healthcheck.readiness.periodSeconds }}
+          readinessProbe:
+            httpGet:
+              path: {{ template "fmeflow.healthcheck.url" . }}
+              port: 8080
+            initialDelaySeconds: {{ .Values.fmeflow.healthcheck.readiness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.fmeflow.healthcheck.readiness.failureThreshold }}
+            timeoutSeconds: {{ .Values.fmeflow.healthcheck.readiness.timeoutSeconds }}
+            periodSeconds: {{ .Values.fmeflow.healthcheck.readiness.periodSeconds }}
+          startupProbe:
+            httpGet:
+              path: {{ template "fmeflow.healthcheck.url" . }}
+              port: 8080
+            initialDelaySeconds: {{ .Values.fmeflow.healthcheck.startup.initialDelaySeconds }}
+            failureThreshold: {{ .Values.fmeflow.healthcheck.startup.failureThreshold }}
+            timeoutSeconds: {{ .Values.fmeflow.healthcheck.startup.timeoutSeconds }}
+            periodSeconds: {{ .Values.fmeflow.healthcheck.startup.periodSeconds }}
+          {{- end }}
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-web:{{ template "fmeflow.image.tag" . }}
+          name: web
+          imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
+          ports:
+            - containerPort: 8080
+          resources:
+{{- include "fmeflow.resources.web" . | indent 12 }}
+          volumeMounts:
+            - mountPath: /data/fmeflowdata
+              name: fmeflowdata
+          env:
+            - name: FMESERVERHOSTNAME
+              value: localhost
+            - name: WEBSERVERHOSTNAME
+              value: localhost
+            - name: FMESERVERHOSTNAMELOCAL
+              value: localhost
+            - name: EXTERNALHOSTNAME
+              value: {{ .Values.deployment.hostname }}
+            - name: NODENAMENS
+              value: fmeflow
+            - name: WEBPROTOCOL
+              value: {{ template "fmeflow.deployment.protocol" . }}
+            - name: EXTERNALPORT
+              value: "{{ .Values.deployment.port }}"
+            - name: MAXTHREADS
+              value: {{ .Values.fmeflow.webserver.maxThreads | quote }}
+            - name: HIKARIDBMAXCONNECTIONS
+              value: "{{ .Values.fmeflow.webserver.hikariDBMaxConnections }}"
+            {{- if .Values.resources.web.limits.memory }}
+            - name: USE_CGROUP_MEMORY_FOR_HEAP
+              value: "true"
+            {{- end }}
+            - name: HIDEHOSTCONTENT
+              value: "{{ .Values.fmeflow.engines.hideHostContent }}"
+            - name: COREDEBUGLEVEL
+              value: "{{ .Values.fmeflow.debugLevel }}"
+            - name: PGSQLHOSTNAME
+              value: "{{ template "fmeflow.database.host" . }}"
+            - name: PGSQLPORT
+              value: "{{ .Values.fmeflow.database.port }}"
+            - name: PGSQLDATABASENAME
+              value: "{{ .Values.fmeflow.database.name }}"
+            {{- if .Values.fmeflow.database.azure }}
+            - name: PGSQLUSERNAME
+              value: "{{ .Values.fmeflow.database.user }}@{{ template "fmeflow.database.host" . }}"
+            {{- else }}
+            - name: PGSQLUSERNAME
+              value: "{{ .Values.fmeflow.database.user }}"
+            {{- end }}
+            - name: PGSQLPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeflow.database.secretName" . }}
+                  key: {{ .Values.fmeflow.database.passwordSecretKey }}
+            {{- if .Values.fmeflow.database.ssl }}
+            - name: POSTGRESQLSSL
+              value: 'true'
+            {{- end }}
+          {{- if .Values.fmeflow.healthcheck.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: {{ .Values.fmeflow.healthcheck.liveness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.fmeflow.healthcheck.liveness.failureThreshold }}
+            timeoutSeconds: {{ .Values.fmeflow.healthcheck.liveness.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: {{ template "fmeflow.healthcheck.url" . }}
+              port: 8080
+            initialDelaySeconds: {{ .Values.fmeflow.healthcheck.readiness.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.fmeflow.healthcheck.readiness.failureThreshold }}
+            periodSeconds: {{ .Values.fmeflow.healthcheck.readiness.periodSeconds }}
+          startupProbe:
+            httpGet:
+              path: {{ template "fmeflow.healthcheck.url" . }}
+              port: 8080
+            initialDelaySeconds: {{ .Values.fmeflow.healthcheck.startup.initialDelaySeconds }}
+            failureThreshold: {{ .Values.fmeflow.healthcheck.startup.failureThreshold }}
+            timeoutSeconds: {{ .Values.fmeflow.healthcheck.startup.timeoutSeconds }}
+            periodSeconds: {{ .Values.fmeflow.healthcheck.startup.periodSeconds }}
+          {{- end }}
+      initContainers:
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-core:{{ template "fmeflow.image.tag" . }}
+          name: dbinit
+          imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
+          volumeMounts:
+            - mountPath: /data/fmeflowdata
+              name: fmeflowdata
+          env:
+            - name: PRIMARY_PROCESS
+              value: initpgsql
+            - name: RUNSETUP
+              value: 'true'
+            - name: PGSQLHOSTNAME
+              value: "{{ template "fmeflow.database.host" . }}"
+            - name: PGSQLPORT
+              value: "{{ .Values.fmeflow.database.port }}"
+            - name: PGSQLDATABASENAME
+              value: "{{ .Values.fmeflow.database.name }}"
+            - name: PGSQLUSERNAME
+              value: "{{ .Values.fmeflow.database.user }}"
+            - name: FIRSTLOGINCHANGEPASSWORD
+              value: "{{ .Values.fmeflow.forcePasswordChange }}"
+            - name: PGSQLPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeflow.database.secretName" . }}
+                  key: {{ .Values.fmeflow.database.passwordSecretKey }}
+            - name: PGSQLADMINUSER
+              value: {{ .Values.fmeflow.database.adminUser }}
+            - name: PGSQLADMINPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeflow.database.adminPasswordSecret" . }}
+                  key: {{ .Values.fmeflow.database.adminPasswordSecretKey }}
+            - name: PGSQLADMINDATABASE
+              value: {{ .Values.fmeflow.database.adminDatabase }}
+            {{- if .Values.fmeflow.database.azure }}
+            - name: AZUREPOSTGRESQL
+              value: 'true'
+            {{- end }}
+      restartPolicy: Always
+      volumes:
+        - name: fmeflowdata
+          persistentVolumeClaim:
+            claimName: {{ template "fmeflow.storage.data.claimName" . }}
+      {{- if .Values.scheduling.core.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.scheduling.core.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.core.tolerations }}
+      tolerations:
+{{ toYaml .Values.scheduling.core.tolerations | indent 8 }}
+      {{- end }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: safe.k8s.fmeflow.component
+                operator: In
+                values:
+                - core
+            topologyKey: "kubernetes.io/hostname"
+        {{- if .Values.scheduling.core.affinity }}
+{{ toYaml .Values.scheduling.core.affinity | indent 8 }}
+        {{- end }}

@@ -1,0 +1,11 @@
+{{ if gt (int .Values.deployment.numCores) 1}}
+apiVersion: {{ include "fmeflow.pdb.apiversion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: core-pdb
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      safe.k8s.fmeflow.component: core
+{{ end }}

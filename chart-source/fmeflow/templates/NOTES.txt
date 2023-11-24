@@ -1,0 +1,34 @@
+Congratulations, your FME Flow should be ready shortly! You can check the progress of the deployment by typing:
+
+  $ kubectl -n {{ .Release.Namespace }} get pods
+
+Once all containers are running, you should be able to access your deployment under {{ template "fmeflow.deployment.protocol" . }}://{{ .Values.deployment.hostname }}
+
+To ensure that everything is working correctly, helm provides a test framework which can be run once the FME Flow is up and running and licensed:
+
+  $ helm test {{ .Release.Name }} -n {{ .Release.Namespace }} --logs --timeout 10m0s
+
+This runs a set of tests that test basic FME Flow functionality.
+
+Things to check if something does not work:
+  - Is the NGINX ingress controller deployed? Check the following link for more details: https://kubernetes.github.io/ingress-nginx/deploy/
+  - Does your server have enough disk storage?
+  - Are your nodes large enough / do you have enough nodes?
+  - Check if there any negative events on any of the fmeflow resources by running the command:
+    $ kubectl get events --sort-by=.metadata.creationTimestamp -n {{ .Release.Namespace }} --field-selector type!=Normal
+
+If you still have issues, please review the Useful Commands for FME Flow and Kubernetes article, which contains troubleshooting tips and commands. https://community.safe.com/s/article/Useful-commands-for-FME-Server-for-Kubernetes
+
+If you aren't able to resolve the issue, or you think you've found a bug you can contact us here: https://www.safe.com/support/
+
+To uninstall/delete FME Flow (this deletes all data):
+  $ helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+{{- $queueWarning := false }} 
+{{- range .Values.fmeflow.engines.groups }}
+{{- if and .queues (eq $queueWarning false) }}
+
+NOTE:  The parameter fmeflow.engines.groups[].queues is DEPRECATED. Engine assignment should be done through engine properties. See https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing for more info.
+{{- $queueWarning = true }}
+{{- end }}
+{{- end }}

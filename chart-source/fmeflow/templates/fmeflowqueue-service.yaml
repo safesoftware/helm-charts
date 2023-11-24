@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    safe.k8s.fmeflow.component: queue
+    {{- include "fmeflow.common.labels" . | indent 4 }}
+  name: fmeflowqueue
+spec:
+  ports:
+  - name: redis
+    port: 6379
+  clusterIP: None
+  selector:
+    safe.k8s.fmeflow.component: queue

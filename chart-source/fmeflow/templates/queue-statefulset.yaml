@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    safe.k8s.fmeflow.component: queue
+    {{- include "fmeflow.common.labels" . | indent 4 }}
+  name: queue
+  {{- with .Values.annotations.queue.statefulset }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.deployment.numCores }}
+  selector:
+    matchLabels:
+      safe.k8s.fmeflow.component: queue
+  serviceName: fmeflowqueue
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeflow.component: queue
+        {{- include "fmeflow.common.labels" . | indent 8 }}
+        {{- with .Values.labels.queue }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
+      {{- with .Values.annotations.queue.template }}
+      annotations:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+    spec:
+      containers:
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-queue:{{ template "fmeflow.image.tag" . }}
+          name: queue
+          imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - mountPath: /data/fmeflowdata
+              name: fmeflowdata
+          env:
+          - name: POD_IP
+            valueFrom: { fieldRef: { fieldPath: status.podIP } }
+          resources:
+{{ toYaml .Values.resources.queue | indent 12 }}
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec redis-cli -a sozPpbLfgdI9WJoPejNMpSxGw -h $POD_IP ping
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 5
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec redis-cli -a sozPpbLfgdI9WJoPejNMpSxGw -h $POD_IP ping
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 5
+      restartPolicy: Always
+      volumes:
+        - name: fmeflowdata
+          persistentVolumeClaim:
+            claimName: {{ template "fmeflow.storage.data.claimName" . }}
+      affinity:
+        {{- include "fmeflow.deployment.dataVolumeAffinity" . | indent 8 }}
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: safe.k8s.fmeflow.component
+                operator: In
+                values:
+                - queue
+            topologyKey: "kubernetes.io/hostname"
+      {{- if .Values.scheduling.queue.affinity }}
+{{ toYaml .Values.scheduling.queue.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.queue.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.scheduling.queue.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.queue.tolerations }}
+      tolerations:
+{{ toYaml .Values.scheduling.queue.tolerations | indent 8 }}
+      {{- end }}
+      
