@@ -48,11 +48,11 @@ spec:
           env:
             - name: PRIMARY_PROCESS
               value: core
-            - name: FMESERVERHOSTNAME
+            - name: FMEFLOWHOSTNAME
               value: localhost
             - name: WEBSERVERHOSTNAME
               value: localhost
-            - name: FMESERVERHOSTNAMELOCAL
+            - name: FMEFLOWHOSTNAMELOCAL
               value: localhost
             - name: EXTERNALHOSTNAME
               value: {{ .Values.deployment.hostname }}
@@ -99,9 +99,9 @@ spec:
               value: 'true'
             {{- end }}
             {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
-            - name: FMESERVER_UID
+            - name: FMEFLOW_UID
               value: '1363'
-            - name: FMESERVER_GID
+            - name: FMEFLOW_GID
               value: '1363'
             {{- end }}
           {{- if .Values.fmeflow.healthcheck.enabled }}
@@ -141,11 +141,11 @@ spec:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
           env:
-            - name: FMESERVERHOSTNAME
+            - name: FMEFLOWHOSTNAME
               value: localhost
             - name: WEBSERVERHOSTNAME
               value: localhost
-            - name: FMESERVERHOSTNAMELOCAL
+            - name: FMEFLOWHOSTNAMELOCAL
               value: localhost
             - name: EXTERNALHOSTNAME
               value: {{ .Values.deployment.hostname }}

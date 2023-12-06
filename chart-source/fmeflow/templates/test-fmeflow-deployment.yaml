@@ -10,12 +10,13 @@ spec:
   containers:
     - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-deployment-tester:{{ template "fmeflow.image.tag" . }}
       name: deployment-tester
+      imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
       env:
-        - name: FMESERVER_URL
+        - name: FMEFLOW_URL
           value: "{{ template "fmeflow.deployment.protocol" . }}://{{ .Values.deployment.hostname }}"
-        - name: FMESERVER_USER
+        - name: FMEFLOW_USER
           value: "admin"
-        - name: FMESERVER_PASSWORD
+        - name: FMEFLOW_PASSWORD
           value: "admin"
   hostNetwork: true
   restartPolicy: Never
