@@ -98,6 +98,14 @@ spec:
             - name: POSTGRESQLSSL
               value: 'true'
             {{- end }}
+            {{- if not .Values.fmeflow.waitForDatabase }}
+            - name: WAITFORDATABASE
+              value: 'false'
+            {{- end }}
+            {{- if not .Values.fmeflow.waitForQueue }}
+            - name: WAITFORQUEUE
+              value: 'false'
+            {{- end }}
             {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
             - name: FMEFLOW_UID
               value: '1363'

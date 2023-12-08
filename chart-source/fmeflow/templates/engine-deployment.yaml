@@ -90,6 +90,10 @@ spec:
             - name: POSTGRESQLSSL
               value: 'true'
             {{- end }}
+            {{- if not $.Values.fmeflow.waitForDatabase }}
+            - name: WAITFORDATABASE
+              value: 'false'
+            {{- end }}
             {{- if .memorylimit }}
             {{- if or ( and (.memorylimit.top) (not .memorylimit.bottom)) ( and (not .memorylimit.top) (.memorylimit.bottom)) }}
             {{- fail "Both memorylimit.top and memorylimit.bottom must be set, not just one" }}

@@ -30,6 +30,8 @@ fmeflow:
   forcePasswordChange: true
   debugLevel: "NONE"
   enableTransactionQueueTimeout: false
+  waitForDatabase: true
+  waitForQueue: true
   scheduler:
     idleWaitTime: 5000
   healthcheck:
