@@ -167,10 +167,6 @@ spec:
               value: {{ .Values.fmeflow.webserver.maxThreads | quote }}
             - name: HIKARIDBMAXCONNECTIONS
               value: "{{ .Values.fmeflow.webserver.hikariDBMaxConnections }}"
-            {{- if .Values.resources.web.limits.memory }}
-            - name: USE_CGROUP_MEMORY_FOR_HEAP
-              value: "true"
-            {{- end }}
             - name: HIDEHOSTCONTENT
               value: "{{ .Values.fmeflow.engines.hideHostContent }}"
             - name: COREDEBUGLEVEL
