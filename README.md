@@ -23,7 +23,7 @@ For more information see the [documentation](https://docs.safe.com/fme/html/FME_
 
 ## Configuration
 
-NOTE: starting in 2023.2, ingress class name is now set using `ingress.general.ingressClassName`
+NOTE: starting in 2023.0, ingress class name is now set using `ingress.general.ingressClassName`
 
 The following table lists the configurable parameters of the FME Server 2023.2 chart and their default values.
 

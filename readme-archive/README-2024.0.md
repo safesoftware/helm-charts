@@ -29,13 +29,11 @@ For more information see the [documentation](https://docs.safe.com/fme/html/FME_
 
 ## Configuration
 
-NOTE: starting in 2023.0, ingress class name is now set using `ingress.general.ingressClassName`
-
 The following table lists the configurable parameters of the FME Flow helm chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
-| `fmeflow.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?page=1&name=2023.0&ordering=last_updated). |
+| `fmeflow.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?page=1&name=2024.0&ordering=last_updated). |
 | `fmeflow.image.pullPolicy` | Image pull policy. IfNotPresent means that the image is pulled only if it is not already present on the node. If this is changed to "Always", then the node will always try to pull to make sure it has the latest version of that tag. | `IfNotPresent` |
 | `fmeflow.image.registry` | Docker registry | `docker.io` This parameter should not be changed. |
 | `fmeflow.image.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
