@@ -1,10 +1,5 @@
 # Official Safe Software Helm Charts
 
-## !!! Changes to this Chart for 2024.0 beta !!!
-
-With 2024.0 now available as a beta, we have also renamed and changed the usage of this helm chart when deploying 2024.0. Please see the [readme for the 2024.0 beta](./readme-archive/README-2024.0.md) for more information.
-
-
 ## Prerequisites
 
 To add the Safe Software charts repository:  
@@ -12,10 +7,10 @@ To add the Safe Software charts repository:
 
 ## Installing the Chart
 
-To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?page=1&name=2023.2&ordering=last_updated).
+To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2023.1&ordering=last_updated).
 
 Then run the command specifying the docker tag found above:
-`helm install fmeflow safesoftware/fmeserver-2023-2 --set fmeserver.image.tag=<docker_tag>`
+`helm install fmeserver safesoftware/fmeserver-2023-1 --set fmeserver.image.tag=<docker_tag>`
 
 See all available parameters below.
 
@@ -23,22 +18,22 @@ For more information see the [documentation](https://docs.safe.com/fme/html/FME_
 
 ## Configuration
 
-NOTE: starting in 2023.0, ingress class name is now set using `ingress.general.ingressClassName`
+NOTE: starting in 2023.1, ingress class name is now set using `ingress.general.ingressClassName`
 
-The following table lists the configurable parameters of the FME Server 2023.2 chart and their default values.
+The following table lists the configurable parameters of the FME Server 2023.1 chart and their default values.
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
-| `fmeserver.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2023.2&ordering=last_updated). |
+| `fmeserver.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeserver-core/tags?page=1&name=2023.0&ordering=last_updated). |
 | `fmeserver.image.pullPolicy` | Image pull policy. IfNotPresent means that the image is pulled only if it is not already present on the node. If this is changed to "Always", then the node will always try to pull to make sure it has the latest version of that tag. | `IfNotPresent` |
 | `fmeserver.image.registry` | Docker registry | `docker.io` This parameter should not be changed. |
 | `fmeserver.image.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
 | `fmeserver.debugLevel` | Set the verbosity of the FME Server Core logs. Can be set to NONE, LOW, MEDIUM, HIGH or SUPER_VERBOSE. | `NONE` |
 | `deployment.hostname` | FME Server hostname | `localhost` |
 | `deployment.port` | FME Server port | `443` |
-| `deployment.tlsSecretName` | Custom TLS certificate, see [documentation](http://docs.safe.com/fme/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `Nil` |
-| `deployment.certManager.issuerName` | Cert Manager issuer name, see [documentation](http://docs.safe.com/fme/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `Nil` |
-| `deployment.certManager.issuerType` | Can be `cluster` or `namespace`, ignored if no issuerName is provided. See [documentation](http://docs.safe.com/fme/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `cluster` |
+| `deployment.tlsSecretName` | Custom TLS certificate, see [documentation](http://docs.safe.com/fme/2021.0/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `Nil` |
+| `deployment.certManager.issuerName` | Cert Manager issuer name, see [documentation](http://docs.safe.com/fme/2021.0/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `Nil` |
+| `deployment.certManager.issuerType` | Can be `cluster` or `namespace`, ignored if no issuerName is provided. See [documentation](http://docs.safe.com/fme/2021.0/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `cluster` |
 | `deployment.numCores` | Number of cores to launch. Multi-core only works in a multi-host cluster with ReadWriteMany storage | `1` |
 | `deployment.startAsRoot` | Starts core container as root and grants the fmeserver user access to the file system. | `false` |
 | `deployment.useHostnameIngress` | Configures the ingress to route traffic to FME Server only if the request matches the value of `deployment.hostname`. Setting this to false will route all traffic on the ingress to FME Server. | `true` |
@@ -95,10 +90,8 @@ The following table lists the configurable parameters of the FME Server 2023.2 c
 | `fmeserver.forcePasswordChange` | Force the admin user to change password on first login | `true` |
 | `fmeserver.enableTransactionQueueTimeout` | Enable timeout on queue connections. | `false` |
 | `fmeserver.portpool` | Range of ports which can be assigned to FME Engines, Subscribers and Protocols when connecting to the FME Server. Port pools may be specified as a comma-seperated list of port numbers and port number ranges. E.g. 20000-21000,21200 | `Nil` |
-| `fmeserver.healthcheck.startup.initialDelaySeconds` | Set the initial delay before running the startup probes. | `10` |
-| `fmeserver.healthcheck.startup.failureThreshold` | Set the failure threshold for the startup probes. This can be increased if pods take longer to start in your cluster. | `20` |
-| `fmeserver.healthcheck.startup.timeoutSeconds` | Set the timeout for the the startup probes. | `5` |
-| `fmeserver.healthcheck.startup.periodSeconds` | Set the time (in seconds) between startup probe invocations. This can be increased if pods take longer to start in your cluster. | `30` |
+| `fmeserver.healthcheck.liveness.initialDelaySeconds` | Set the initial delay before running the liveness probes. Increase this if pods take longer to start in your cluster. | `60` |
+| `fmeserver.healthcheck.readiness.initialDelaySeconds` | Set the initial delay before running the readiness probes. Increase this if pods take longer to start in your cluster. | `60` |
 | `scheduling.core.affinity` | Affinity labels for pod assignment for Core pod. For information on how to assign pods to specific nodes using the affinity feature, read the [official documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/). | `{}` |
 | `scheduling.core.nodeselector` | Map of nodeselector annotations to add to the Core pod. For information on how to assign pods to specific nodes using the nodeSelector parameter, read the [official documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/). | `{}` |
 | `scheduling.core.tolerations` | Toleration labels for pod assignment for Core pod. [Official documentation](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) on taints and tolerations. | `[]` |
