@@ -2,7 +2,7 @@
 
 ## !!! Changes to this Chart for 2024.0 beta !!!
 
-With 2024.0 now available as a beta, we have also renamed and changed the usage of this helm chart when deploying 2024.0. Please see the [readme for 2024.0](./readme-archive/README-2024.0.md) for more information.
+With 2024.0 now available as a beta, we have also renamed and changed the usage of this helm chart when deploying 2024.0. Please see the [readme for the 2024.0 beta](./readme-archive/README-2024.0.md) for more information.
 
 
 ## Prerequisites
@@ -15,7 +15,7 @@ To add the Safe Software charts repository:
 To quickly get started, find the latest docker image tag for this version of FME Server [here](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?page=1&name=2023.2&ordering=last_updated).
 
 Then run the command specifying the docker tag found above:
-`helm install fmeflow safesoftware/fmeserver-2023.2 --set fmeserver.image.tag=<docker_tag>`
+`helm install fmeflow safesoftware/fmeserver-2023-2 --set fmeserver.image.tag=<docker_tag>`
 
 See all available parameters below.
 
