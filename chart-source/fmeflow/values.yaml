@@ -1,6 +1,6 @@
 fmeflow:
   image:
-    tag: 2024.0-beta
+    tag: 2024.1-beta
     registry: docker.io
     namespace: safesoftware
     # Supported values: Always or IfNotPresent

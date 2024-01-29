@@ -23,12 +23,3 @@ If you aren't able to resolve the issue, or you think you've found a bug you can
 
 To uninstall/delete FME Flow (this deletes all data):
   $ helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}
-
-{{- $queueWarning := false }} 
-{{- range .Values.fmeflow.engines.groups }}
-{{- if and .queues (eq $queueWarning false) }}
-
-NOTE:  The parameter fmeflow.engines.groups[].queues is DEPRECATED. Engine assignment should be done through engine properties. See https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing for more info.
-{{- $queueWarning = true }}
-{{- end }}
-{{- end }}

@@ -42,16 +42,12 @@ spec:
               value: {{ template "fmeflow.deployment.protocol" $ }}
             - name: EXTERNALPORT
               value: "{{ $.Values.deployment.port }}"
-            - name: FMEFLOWHOSTNAME
+            - name: COREHOSTNAME
               value: engineregistration
             - name: NODENAME
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-            {{- if .queues }}
-            - name: FME_ENV_ENGINE_QUEUES
-              value: {{ .queues | quote }}
-            {{- end }}
             {{- if .type }}
             - name: ENGINETYPE
               value: {{ .type | quote }}

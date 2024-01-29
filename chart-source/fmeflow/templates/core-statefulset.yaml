@@ -48,11 +48,7 @@ spec:
           env:
             - name: PRIMARY_PROCESS
               value: core
-            - name: FMEFLOWHOSTNAME
-              value: localhost
-            - name: WEBSERVERHOSTNAME
-              value: localhost
-            - name: FMEFLOWHOSTNAMELOCAL
+            - name: COREHOSTNAME
               value: localhost
             - name: EXTERNALHOSTNAME
               value: {{ .Values.deployment.hostname }}
@@ -149,11 +145,7 @@ spec:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
           env:
-            - name: FMEFLOWHOSTNAME
-              value: localhost
-            - name: WEBSERVERHOSTNAME
-              value: localhost
-            - name: FMEFLOWHOSTNAMELOCAL
+            - name: COREHOSTNAME
               value: localhost
             - name: EXTERNALHOSTNAME
               value: {{ .Values.deployment.hostname }}
