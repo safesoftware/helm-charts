@@ -27,6 +27,8 @@ fmeflow:
     maxThreads: 200
     experimentalJavaFlags: false
     hikariDBMaxConnections: 30
+  utilityengine:
+    enabled: true
   forcePasswordChange: true
   debugLevel: "NONE"
   enableTransactionQueueTimeout: false
