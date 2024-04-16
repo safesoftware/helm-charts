@@ -2,7 +2,7 @@
 
 ## Helm Chart Rename
 
-Starting with FME Flow 2024.0, the helm chart has been renamed from having separate charts for each major release (e.g., `safesoftware/fmeserver-2023.1`, `safesoftware/fmeserver-2023.2`, etc) to having a single chart `safesoftware/fmeflow`.
+Starting with FME Flow 2024.0, the helm chart has been renamed from having separate charts for each major release (e.g., `safesoftware/fmeserver-2023-1`, `safesoftware/fmeserver-2023-2`, etc) to having a single chart `safesoftware/fmeflow`.
 
 This change is being made to make this repo less complex with so many versions of the chart. The new `fmeflow` chart will be made compatible with versions of FME Flow moving forward starting with 2024.0. If there are changes we need to make that will break backwards compatibility, we will increment the major version of this chart and will provide guidance to users on which versions of the chart to use with which versions of FME Flow. These types of changes should be very infrequent.
 
