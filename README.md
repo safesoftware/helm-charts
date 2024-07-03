@@ -23,10 +23,10 @@ To add the Safe Software charts repository:
 
 ## Installing the Chart
 
-To quickly get started, find the latest docker image tag for this version of FME Flow [here](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?page=1&name=2024.0&ordering=last_updated).
+To quickly get started, find the latest docker image tag for this version of FME Flow [here](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?page=1&name=2024.1&ordering=last_updated).
 
 Then run the command specifying the docker tag found above:
-`helm install --version 1 fmeflow safesoftware/fmeflow --set fmeflow.image.tag=<docker_tag>`
+`helm install fmeflow safesoftware/fmeflow --set fmeflow.image.tag=<docker_tag>`
 
 See all available parameters below.
 
@@ -38,21 +38,22 @@ The following table lists the configurable parameters of the FME Flow helm chart
 
 |      Parameter      |               Description             |                    Default                |
 |---------------------|---------------------------------------|-------------------------------------------|
-| `fmeflow.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?page=1&name=2024.0&ordering=last_updated). |
+| `fmeflow.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?page=1&name=2024.1&ordering=last_updated). |
 | `fmeflow.image.pullPolicy` | Image pull policy. IfNotPresent means that the image is pulled only if it is not already present on the node. If this is changed to "Always", then the node will always try to pull to make sure it has the latest version of that tag. | `IfNotPresent` |
 | `fmeflow.image.registry` | Docker registry | `docker.io` This parameter should not be changed. |
 | `fmeflow.image.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
 | `fmeflow.debugLevel` | Set the verbosity of the FME Flow Core logs. Can be set to NONE, LOW, MEDIUM, HIGH or SUPER_VERBOSE. | `NONE` |
 | `deployment.hostname` | FME Flow hostname | `localhost` |
 | `deployment.port` | FME Flow port | `443` |
-| `deployment.tlsSecretName` | Custom TLS certificate, see [documentation](http://docs.safe.com/fme/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `Nil` |
-| `deployment.certManager.issuerName` | Cert Manager issuer name, see [documentation](http://docs.safe.com/fme/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `Nil` |
-| `deployment.certManager.issuerType` | Can be `cluster` or `namespace`, ignored if no issuerName is provided. See [documentation](http://docs.safe.com/fme/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `cluster` |
+| `deployment.tlsSecretName` | Custom TLS certificate, see [documentation](http://docs.safe.com/fme/2021.0/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `Nil` |
+| `deployment.certManager.issuerName` | Cert Manager issuer name, see [documentation](http://docs.safe.com/fme/2021.0/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `Nil` |
+| `deployment.certManager.issuerType` | Can be `cluster` or `namespace`, ignored if no issuerName is provided. See [documentation](http://docs.safe.com/fme/2021.0/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `cluster` |
 | `deployment.numCores` | Number of cores to launch. Multi-core only works in a multi-host cluster with ReadWriteMany storage | `1` |
 | `deployment.startAsRoot` | Starts core container as root and grants the fmeflow user access to the file system. | `false` |
 | `deployment.useHostnameIngress` | Configures the ingress to route traffic to FME Flow only if the request matches the value of `deployment.hostname`. Setting this to false will route all traffic on the ingress to FME Flow. | `true` |
 | `deployment.deployPostgresql` | Deploy a Postgresql Database for FME Flow to use. Set this to `false` if you have an existing database you would like FME Flow to connect to. | `true` |
 | `deployment.disableTLS` | Set this to `true` if you would like to disable TLS on the ingress. This is not recommended. | `false` |
+| `deployment.automountServiceAccountToken` | Set this to `true` if you would like to automatically mount the service token for the namespace. See [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#opt-out-of-api-credential-automounting) for more details. | `false` |
 | `resources.core` | [Core CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `1.5Gi`, CPU: `200m` |
 | `resources.web` | [Web CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `1Gi`, CPU: `200m` |
 | `resources.queue` | [Queue CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `128Mi`, CPU: `100m` |
