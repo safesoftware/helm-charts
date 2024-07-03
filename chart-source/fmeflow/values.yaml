@@ -1,6 +1,6 @@
 fmeflow:
   image:
-    tag: 2024.1-beta
+    tag: 
     registry: docker.io
     namespace: safesoftware
     # Supported values: Always or IfNotPresent
@@ -84,6 +84,7 @@ deployment:
   useHostnameIngress: true
   deployPostgresql: true
   disableTLS: false
+  automountServiceAccountToken: false
   ingress:
     # general annotations are applied to all ingresses
     general:

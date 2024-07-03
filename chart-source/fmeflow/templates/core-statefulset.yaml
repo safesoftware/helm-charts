@@ -297,6 +297,7 @@ spec:
             - name: AZUREPOSTGRESQL
               value: 'true'
             {{- end }}
+      automountServiceAccountToken: {{ .Values.deployment.automountServiceAccountToken }}
       restartPolicy: Always
       volumes:
         - name: fmeflowdata
