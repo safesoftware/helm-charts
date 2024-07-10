@@ -11,10 +11,15 @@ Along with the rename of the chart itself, everything in the chart has been rena
 
 Deploying with versions prior to 2024.0 should still use the old `fmeserver-<version>` charts.
 
-Starting with 2024.1, we had to make some changes to the deployment that are not backwards compatible. This means that FME Flow 2024.0 should use version 1 of this chart, and 2024.1+ should use the latest version (version 2). This can be specified when calling `helm install` as follows:
+
+## Helm Chart Versioning
+
+Starting with 2024.1, we had to make some changes to the deployment that are not backwards compatible. This means that FME Flow 2024.0 should use version 1 of this chart, and 2024.1 and newer should use the latest version (version 2). This can be specified when calling `helm install` as follows:
 
 <b>2024.0</b>: `helm install --version 1 ...`<br>
-<b>2024.1+</b>: `helm install ...`
+<b>2024.1+</b>: `helm install ...` or `helm install --version 2 ...` <br>
+
+You can view all versions of the helm chart by running the command `helm search repo fmeflow --versions` after adding the repository. It is a good idea to make your deployments reproducible to pin an exact version of the helm chart when deploying and use the same version for any helm operations you need to perform on that deployment. You can pin a helm chart version with the `--version` flag. For example, `helm install --version 2.0.4 ...`
 
 ## Prerequisites
 
