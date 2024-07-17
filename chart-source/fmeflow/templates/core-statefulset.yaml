@@ -208,55 +208,6 @@ spec:
             timeoutSeconds: {{ .Values.fmeflow.healthcheck.startup.timeoutSeconds }}
             periodSeconds: {{ .Values.fmeflow.healthcheck.startup.periodSeconds }}
           {{- end }}
-        {{- if .Values.fmeflow.utilityengine.enabled }}
-        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-engine:{{ template "fmeflow.image.tag" . }}
-          name: utilityengine
-          imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
-          volumeMounts:
-            - mountPath: /data/fmeflowdata
-              name: fmeflowdata
-          env:
-            - name: EXTERNALHOSTNAME
-              value: {{ .Values.deployment.hostname }}
-            - name: WEBPROTOCOL
-              value: {{ template "fmeflow.deployment.protocol" $ }}
-            - name: EXTERNALPORT
-              value: "{{ $.Values.deployment.port }}"
-            - name: COREHOSTNAME
-              value: localhost
-            - name: NODENAME
-              value: localhost
-            - name: ENGINETYPE
-              value: UTILITY
-            - name: NODEMANAGED
-              value: "{{ .Values.fmeflow.engines.enginesNodeManaged }}"
-            - name: PGSQLHOSTNAME
-              value: "{{ template "fmeflow.database.host" $ }}"
-            - name: PGSQLPORT
-              value: "{{ $.Values.fmeflow.database.port }}"
-            - name: PGSQLDATABASENAME
-              value: "{{ $.Values.fmeflow.database.name }}"
-            {{- if $.Values.fmeflow.database.azure}}
-            - name: PGSQLUSERNAME
-              value: "{{ $.Values.fmeflow.database.user }}@{{ template "fmeflow.database.host" $ }}"
-            {{- else }}
-            - name: PGSQLUSERNAME
-              value: "{{ $.Values.fmeflow.database.user }}"
-            {{- end }}
-            - name: PGSQLPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "fmeflow.database.secretName" $ }}
-                  key: {{ $.Values.fmeflow.database.passwordSecretKey }}
-            {{- if $.Values.fmeflow.database.ssl }}
-            - name: POSTGRESQLSSL
-              value: 'true'
-            {{- end }}
-            {{- if not $.Values.fmeflow.waitForDatabase }}
-            - name: WAITFORDATABASE
-              value: 'false'
-            {{- end }}
-        {{- end }}
       initContainers:
         - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-core:{{ template "fmeflow.image.tag" . }}
           name: dbinit
@@ -297,7 +248,6 @@ spec:
             - name: AZUREPOSTGRESQL
               value: 'true'
             {{- end }}
-      automountServiceAccountToken: {{ .Values.deployment.automountServiceAccountToken }}
       restartPolicy: Always
       volumes:
         - name: fmeflowdata

@@ -54,7 +54,6 @@ spec:
             initialDelaySeconds: 10
             timeoutSeconds: 1
             periodSeconds: 5
-      automountServiceAccountToken: {{ .Values.deployment.automountServiceAccountToken }}
       restartPolicy: Always
       volumes:
         - name: fmeflowdata

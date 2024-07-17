@@ -166,7 +166,6 @@ spec:
       {{- if not (empty $.Values.fmeflow.engines.awsServiceAccount) }}
       serviceAccountName: "fme-engine-aws"
       {{- end }}
-      automountServiceAccountToken: {{ $.Values.deployment.automountServiceAccountToken }}
       restartPolicy: Always
       volumes:
         - name: fmeflowdata

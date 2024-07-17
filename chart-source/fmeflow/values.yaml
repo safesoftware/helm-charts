@@ -1,6 +1,6 @@
 fmeflow:
   image:
-    tag: 
+    tag: 2024.0-beta
     registry: docker.io
     namespace: safesoftware
     # Supported values: Always or IfNotPresent
@@ -27,8 +27,6 @@ fmeflow:
     maxThreads: 200
     experimentalJavaFlags: false
     hikariDBMaxConnections: 30
-  utilityengine:
-    enabled: true
   forcePasswordChange: true
   debugLevel: "NONE"
   enableTransactionQueueTimeout: false
@@ -84,7 +82,6 @@ deployment:
   useHostnameIngress: true
   deployPostgresql: true
   disableTLS: false
-  automountServiceAccountToken: false
   ingress:
     # general annotations are applied to all ingresses
     general:
