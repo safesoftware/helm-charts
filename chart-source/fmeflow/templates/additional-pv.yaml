@@ -1,0 +1,17 @@
+﻿{{ if .Values.additionalStorage.useHostDir }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.additionalStorage.name | default "geodata"}}
+spec:
+  {{- with .Values.additionalStorage }}
+  capacity:
+    storage: {{ .fmeflow.size }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: {{ .reclaimPolicy }}
+  hostPath:
+    path: {{ .fmeflow.path | default "/tmp/k8s/geodata" }}
+    type: DirectoryOrCreate
+  {{- end }}
+{{- end}}
