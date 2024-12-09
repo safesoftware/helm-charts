@@ -179,6 +179,7 @@ storage:
     size: 10Gi
     class:
     path:
+    existingPersistentVolume: ''
 
 # It is recommended not to modify those parameters
 # For more options regarding PostgreSQL deployement, check the helm chart documentation:

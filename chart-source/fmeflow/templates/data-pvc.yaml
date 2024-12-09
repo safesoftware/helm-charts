@@ -15,4 +15,7 @@ spec:
   resources:
     requests:
       storage: {{ .fmeflow.size }}
+  {{- if .fmeflow.existingPersistentVolume }}
+  volumeName: {{ .fmeflow.existingPersistentVolume }}
+  {{- end }}
   {{- end }}
