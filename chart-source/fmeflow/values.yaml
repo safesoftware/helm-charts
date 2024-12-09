@@ -70,7 +70,8 @@ fmeflow:
           requests:
             memory: 512Mi
             cpu: 200m
-
+  extraVolumes: []
+  extraVolumeMounts: []
 
 deployment:
   hostname: localhost

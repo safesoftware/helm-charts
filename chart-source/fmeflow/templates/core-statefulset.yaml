@@ -45,6 +45,9 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+{{- with .Values.fmeflow.extraVolumeMounts }}
+{{ toYaml . | indent 12 }}
+{{- end }}
           env:
             - name: PRIMARY_PROCESS
               value: core
@@ -144,6 +147,9 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+{{- with .Values.fmeflow.extraVolumeMounts }}
+{{ toYaml . | indent 12 }}
+{{- end }}
           env:
             - name: COREHOSTNAME
               value: localhost
@@ -215,6 +221,9 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+{{- with .Values.fmeflow.extraVolumeMounts }}
+{{ toYaml . | indent 12 }}
+{{- end }}
           env:
             - name: EXTERNALHOSTNAME
               value: {{ .Values.deployment.hostname }}
@@ -264,6 +273,9 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+{{- with .Values.fmeflow.extraVolumeMounts }}
+{{ toYaml . | indent 12 }}
+{{- end }}
           env:
             - name: PRIMARY_PROCESS
               value: initpgsql
@@ -303,6 +315,9 @@ spec:
         - name: fmeflowdata
           persistentVolumeClaim:
             claimName: {{ template "fmeflow.storage.data.claimName" . }}
+{{- with .Values.fmeflow.extraVolumes }}
+{{ toYaml . | indent 8 }}
+{{- end }}
       {{- if .Values.scheduling.core.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.scheduling.core.nodeSelector | indent 8 }}
