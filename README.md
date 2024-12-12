@@ -103,7 +103,7 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `fmeflow.database.adminPasswordSecretKey` | The key in the specified `fmeflow.database.adminPasswordSecret` that contains the password for the admin user specified in `fmeflow.database.adminUser` |  `postgres-password` |
 | `fmeflow.database.adminDatabase` | The admin database to use when connecting with the adminUser. |  `postgres` |
 | `fmeflow.database.ssl` | Adds `sslmode=require` to the JDBC connections to the database |  `false` |
-| `fmeflow.database.azure` | Set this to `true` if connecting to an Azure Managed Postgresql database to format the username properly when connecting. |  `false` |
+| `fmeflow.database.azure` | NOTE: This flag is needed for Azure Database for PostgreSQL Single Server, which is being retired from Azure at the end of March 2025, and is no longer needed for the newer Azure PosgreSQL Flexible Servers. (more info [here](https://azure.microsoft.com/en-us/updates?id=azure-database-for-postgresql-single-server-will-be-retired-migrate-to-flexible-server-by-28-march-2025)) Set this to `true` only if connecting to an Azure Managed Postgresql Single Server database to format the username properly when connecting. |  `false` |
 | `fmeflow.webserver.maxThreads` | Max threads the Tomcat webserver can use (more info [here](https://tomcat.apache.org/tomcat-8.0-doc/config/http.html)) | 200 |
 | `fmeflow.forcePasswordChange` | Force the admin user to change password on first login | `true` |
 | `fmeflow.enableTransactionQueueTimeout` | Enable timeout on queue connections. | `false` |
