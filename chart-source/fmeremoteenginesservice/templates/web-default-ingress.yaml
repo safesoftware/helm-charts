@@ -1,0 +1,22 @@
+apiVersion: {{ include "fmeflow.ingress.apiversion" . }}
+kind: Ingress
+metadata:
+  name: fmeflow-remoteengine-web-ingress
+  annotations:
+{{- if .Values.deployment.ingress.annotations }}    
+{{ toYaml .Values.deployment.ingress.annotations | indent 4 }}
+{{ end }}
+{{- include "fmeflow.ingress.annotations" . | indent 4 }}
+spec:
+  ingressClassName: {{ .Values.deployment.ingress.ingressClassName }}
+  {{- include "fmeflow.ingress.tls" . }}
+  rules:
+    - http:
+        paths:
+          - backend:
+{{ include "fmeflow.ingress.web.service" . | indent 14 }}
+            path: /
+            {{ include "fmeflow.ingress.pathType" . }}
+      {{- if .Values.deployment.useHostnameIngress }}
+      host: {{ .Values.deployment.hostname }}
+      {{ end }}

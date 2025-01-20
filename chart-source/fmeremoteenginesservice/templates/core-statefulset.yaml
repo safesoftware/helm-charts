@@ -1,0 +1,293 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    {{- include "fmeflow.common.labels" . | indent 4 }}
+    safe.k8s.fmeflow.component: remoteengine
+  name: fmeremoteengine
+  {{- with .Values.annotations.statefulset }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  serviceName: fmeremoteengine
+  selector:
+    matchLabels:
+      safe.k8s.fmeflow.component: remoteengine
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeflow.component: remoteengine
+        {{- include "fmeflow.common.labels" . | indent 8 }}
+        {{- with .Values.labels }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
+      {{- with .Values.annotations.template }}
+      annotations:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+    spec:
+      
+      securityContext:
+        {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
+        runAsUser: 0
+        {{- else }}
+        fsGroup: 1363
+        {{- end }}
+      containers:
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-core:{{ template "fmeflow.image.tag" . }}
+          name: core
+          imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
+          ports:
+            - containerPort: 7070
+          resources:
+{{ toYaml .Values.resources.core | indent 12 }}
+          volumeMounts:
+            - mountPath: /data/fmeflowdata
+              name: fmeflowdata
+          env:
+            - name: PRIMARY_PROCESS
+              value: core
+            - name: COREHOSTNAME
+              value: localhost
+            - name: NODENAME
+              value: localhost
+            - name: EXTERNALHOSTNAME
+              value: {{ .Values.deployment.hostname }}
+            - name: EXTERNALPORT
+              value: "{{ .Values.deployment.port }}"
+            - name: WEBPROTOCOL
+              value: {{ template "fmeflow.deployment.protocol" . }}
+            - name: REDISHOSTS
+              value: "localhost"
+            - name: PGSQLHOSTNAME
+              value: "localhost"
+            - name: PGSQLPORT
+              value: "5432"
+            - name: REMOTEENGINE
+              value: "true"
+            - name: FIRSTLOGINCHANGEPASSWORD
+              value: "{{ .Values.fmeflow.forcePasswordChange }}"
+            - name: ENABLETRANSACTIONQUEUETIMEOUT
+              value: "{{ .Values.fmeflow.enableTransactionQueueTimeout }}"
+            - name: PGSQLPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeflow.database.secretName" . }}
+                  key: {{ .Values.fmeflow.database.passwordSecretKey }}
+            {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
+            - name: FMEFLOW_UID
+              value: '1363'
+            - name: FMEFLOW_GID
+              value: '1363'
+            {{- end }}
+          {{- if .Values.fmeflow.healthcheck.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ template "fmeflow.liveness.url" . }}
+              port: 8080
+            initialDelaySeconds: {{ .Values.fmeflow.healthcheck.liveness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.fmeflow.healthcheck.liveness.failureThreshold }}
+            timeoutSeconds: {{ .Values.fmeflow.healthcheck.liveness.timeoutSeconds }}
+            periodSeconds: {{ .Values.fmeflow.healthcheck.readiness.periodSeconds }}
+          readinessProbe:
+            httpGet:
+              path: {{ template "fmeflow.healthcheck.url" . }}
+              port: 8080
+            initialDelaySeconds: {{ .Values.fmeflow.healthcheck.readiness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.fmeflow.healthcheck.readiness.failureThreshold }}
+            timeoutSeconds: {{ .Values.fmeflow.healthcheck.readiness.timeoutSeconds }}
+            periodSeconds: {{ .Values.fmeflow.healthcheck.readiness.periodSeconds }}
+          startupProbe:
+            httpGet:
+              path: {{ template "fmeflow.healthcheck.url" . }}
+              port: 8080
+            initialDelaySeconds: {{ .Values.fmeflow.healthcheck.startup.initialDelaySeconds }}
+            failureThreshold: {{ .Values.fmeflow.healthcheck.startup.failureThreshold }}
+            timeoutSeconds: {{ .Values.fmeflow.healthcheck.startup.timeoutSeconds }}
+            periodSeconds: {{ .Values.fmeflow.healthcheck.startup.periodSeconds }}
+          {{- end }}
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-web:{{ template "fmeflow.image.tag" . }}
+          name: web
+          imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
+          ports:
+            - containerPort: 8080
+          resources:
+{{ toYaml .Values.resources.web | indent 12 }}
+          volumeMounts:
+            - mountPath: /data/fmeflowdata
+              name: fmeflowdata
+          env:
+            - name: COREHOSTNAME
+              value: localhost
+            - name: NODENAME
+              value: localhost
+            - name: EXTERNALHOSTNAME
+              value: {{ .Values.deployment.hostname }}
+            - name: WEBPROTOCOL
+              value: {{ template "fmeflow.deployment.protocol" . }}
+            - name: EXTERNALPORT
+              value: "{{ .Values.deployment.port }}"
+            - name: REMOTEENGINE
+              value: "true"
+            - name: TITLECONTENT
+              value: "FMEREMOTEENGINE"
+            - name: PGSQLHOSTNAME
+              value: "localhost"
+            - name: PGSQLPORT
+              value: "5432"
+            - name: PGSQLPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeflow.database.secretName" . }}
+                  key: {{ .Values.fmeflow.database.passwordSecretKey }}
+          {{- if .Values.fmeflow.healthcheck.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: {{ .Values.fmeflow.healthcheck.liveness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.fmeflow.healthcheck.liveness.failureThreshold }}
+            timeoutSeconds: {{ .Values.fmeflow.healthcheck.liveness.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: {{ template "fmeflow.healthcheck.url" . }}
+              port: 8080
+            initialDelaySeconds: {{ .Values.fmeflow.healthcheck.readiness.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.fmeflow.healthcheck.readiness.failureThreshold }}
+            periodSeconds: {{ .Values.fmeflow.healthcheck.readiness.periodSeconds }}
+          startupProbe:
+            httpGet:
+              path: {{ template "fmeflow.healthcheck.url" . }}
+              port: 8080
+            initialDelaySeconds: {{ .Values.fmeflow.healthcheck.startup.initialDelaySeconds }}
+            failureThreshold: {{ .Values.fmeflow.healthcheck.startup.failureThreshold }}
+            timeoutSeconds: {{ .Values.fmeflow.healthcheck.startup.timeoutSeconds }}
+            periodSeconds: {{ .Values.fmeflow.healthcheck.startup.periodSeconds }}
+          {{- end }}
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-queue:{{ template "fmeflow.image.tag" . }}
+          name: queue
+          imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - mountPath: /data/fmeflowdata
+              name: fmeflowdata
+          env:
+          - name: POD_IP
+            valueFrom: { fieldRef: { fieldPath: status.podIP } }
+          resources:
+{{ toYaml .Values.resources.queue | indent 12 }}
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec redis-cli -a sozPpbLfgdI9WJoPejNMpSxGw -h $POD_IP ping
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 5
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec redis-cli -a sozPpbLfgdI9WJoPejNMpSxGw -h $POD_IP ping
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 5
+        - image: {{ if .image }}{{ if .image.registry }}{{ .image.registry }}{{ else }}{{ template "fmeflow.image.registry" $ }}{{ end }}/{{ if .image.namespace }}{{ .image.namespace }}{{ else }}{{ template "fmeflow.image.namespace" $ }}{{ end }}/fmeflow-engine:{{ if .image.tag }}{{ .image.tag }}{{ else }}{{ template "fmeflow.image.tag" $ }}{{ end }}{{else}}{{ template "fmeflow.image.registry" $ }}/{{ template "fmeflow.image.namespace" $ }}/fmeflow-engine:{{ template "fmeflow.image.tag" $ }}{{ end }}
+          name: engine
+          imagePullPolicy: {{ if .image }}{{ if .image.pullPolicy }}{{ .image.pullPolicy }}{{ else }}{{ template "fmeflow.image.pullPolicy" $ }}{{ end }}{{ else }}{{ template "fmeflow.image.pullPolicy" $ }}{{ end }}
+          volumeMounts:
+            - mountPath: /data/fmeflowdata
+              name: fmeflowdata
+          env:
+            - name: EXTERNALHOSTNAME
+              value: {{ .Values.deployment.hostname }}
+            - name: WEBPROTOCOL
+              value: {{ template "fmeflow.deployment.protocol" $ }}
+            - name: EXTERNALPORT
+              value: "{{ .Values.deployment.port }}"
+            - name: COREHOSTNAME
+              value: localhost
+            - name: NODENAME
+              value: "localhost"
+            - name: REMOTEENGINE
+              value: "true"
+            - name: NODEMANAGED
+              value: "true"
+            - name: PGSQLHOSTNAME
+              value: "localhost"
+            - name: PGSQLPORT
+              value: "5432"
+            - name: PGSQLPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeflow.database.secretName" $ }}
+                  key: {{ .Values.fmeflow.database.passwordSecretKey }}
+          resources:
+{{ toYaml .Values.resources.engine | indent 12 }}
+        - image: {{ .Values.postgresql.image.tag | quote}}
+          name: database
+          imagePullPolicy: {{ if .image }}{{ if .image.pullPolicy }}{{ .image.pullPolicy }}{{ else }}{{ template "fmeflow.image.pullPolicy" $ }}{{ end }}{{ else }}{{ template "fmeflow.image.pullPolicy" $ }}{{ end }}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql
+              name: fmeflowpostgresqldata
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "postgresql.secretname" . }}
+                  key: "postgresql-db-password"
+          resources:
+{{ toYaml .Values.resources.database | indent 12 }}
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-core:{{ template "fmeflow.image.tag" . }}
+          name: dbinit
+          imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
+          args: ["/bin/sh", "-c", "/fmeflow/startServer.sh && tail -f /dev/null"]
+          volumeMounts:
+            - mountPath: /data/fmeflowdata
+              name: fmeflowdata
+          env:
+            - name: PRIMARY_PROCESS
+              value: initpgsql
+            - name: RUNSETUP
+              value: 'true'
+            - name: PGSQLHOSTNAME
+              value: "localhost"
+            - name: PGSQLPORT
+              value: "5432"
+            - name: REMOTEENGINE
+              value: "true"
+            - name: FIRSTLOGINCHANGEPASSWORD
+              value: "{{ .Values.fmeflow.forcePasswordChange }}"
+            - name: PGSQLPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeflow.database.secretName" . }}
+                  key: {{ .Values.fmeflow.database.passwordSecretKey }}
+      restartPolicy: Always
+      {{- if not (empty .Values.fmeflow.awsServiceAccount) }}
+      serviceAccountName: "fme-engine-aws"
+      {{- end }}
+      volumes:
+        - name: fmeflowdata
+          persistentVolumeClaim:
+            claimName: {{ template "fmeflow.storage.data.claimName" . }}
+        - name: fmeflowpostgresqldata
+          persistentVolumeClaim:
+            claimName: "fmeflow-postgresql"
+      {{- if .Values.scheduling.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.scheduling.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.tolerations }}
+      tolerations:
+{{ toYaml .Values.scheduling.tolerations | indent 8 }}
+      {{- end }}
+      {{- if .Values.scheduling.affinity }}
+      affinity:
+{{ toYaml .Values.scheduling.affinity | indent 8 }}
+        {{- end }}

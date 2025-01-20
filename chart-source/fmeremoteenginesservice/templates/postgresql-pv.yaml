@@ -1,0 +1,17 @@
+{{ if .Values.storage.useHostDir }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: fmeflow-postgresql-pv
+spec:
+  {{- with .Values.storage }}
+  capacity:
+    storage: {{ .postgresql.size }}
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: {{ .reclaimPolicy }}
+  hostPath:
+    path: {{ .postgresql.path | default "/tmp/k8s/fmeflow_db" }}
+    type: DirectoryOrCreate
+  {{- end }}
+{{ end }}

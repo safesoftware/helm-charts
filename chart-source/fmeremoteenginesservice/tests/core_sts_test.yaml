@@ -1,0 +1,155 @@
+suite: core statefulset
+templates:
+  - core-statefulset.yaml
+tests:
+  - it: renders default values
+    set:
+      fmeflow.image.tag: '25000'
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "docker.io/safesoftware/fmeflow-core:25000"
+      - equal:
+          path: spec.template.spec.containers[1].image
+          value: "docker.io/safesoftware/fmeflow-web:25000"
+      - equal:
+          path: spec.template.spec.containers[2].image
+          value: "docker.io/safesoftware/fmeflow-queue:25000"
+      - equal:
+          path: spec.template.spec.containers[3].image
+          value: "docker.io/safesoftware/fmeflow-engine:25000"
+      - equal:
+          path: spec.template.spec.containers[4].image
+          value: "postgres:16.1-bullseye"
+      - equal:
+          path: spec.template.spec.containers[1].env[1].value
+          value: "localhost"
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: IfNotPresent
+      - equal:
+          path: spec.template.spec.volumes[0].persistentVolumeClaim.claimName
+          value: fmeflow-data
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMEFLOW_UID
+            value: '1363'
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMEFLOW_GID
+            value: '1363'
+      - isEmpty:
+          path: spec.template.spec.securityContext.runAsUser
+      - equal:
+          path: spec.template.spec.securityContext.fsGroup
+          value: 1363
+
+  - it: renders labels
+    set:
+      fmeflow.image.tag: '25000'
+    asserts:
+      - equal:
+          path: metadata.labels.safe\.k8s\.fmeflow\.component
+          value: remoteengine
+      - equal:
+          path: metadata.labels.safe\.k8s\.fmeflow\.build
+          value: '25000'
+
+  - it: allows to change the pull policy, registry and namespace
+    set:
+      fmeflow.image.tag: '25000'
+      fmeflow.image.pullPolicy: Always
+      fmeflow.image.registry: safe-harbour.safe.internal
+      fmeflow.image.namespace: fmeflow-k8s
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: Always
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: "safe-harbour.safe.internal/fmeflow-k8s/fmeflow-core:25000"
+      - equal:
+          path: spec.template.spec.containers[1].image
+          value: "safe-harbour.safe.internal/fmeflow-k8s/fmeflow-web:25000"
+      - equal:
+          path: spec.template.spec.containers[2].image
+          value: "safe-harbour.safe.internal/fmeflow-k8s/fmeflow-queue:25000"
+      - equal:
+          path: spec.template.spec.containers[3].image
+          value: "safe-harbour.safe.internal/fmeflow-k8s/fmeflow-engine:25000"
+
+  - it: allows to change the hostname
+    set:
+      fmeflow.image.tag: '25000'
+      deployment.hostname: 'fmeflow.safe.com'
+    asserts:
+       - equal:
+          path: spec.template.spec.containers[1].env[2].value
+          value: "fmeflow.safe.com"
+
+  - it: sets right permission for hostpath disk
+    set:
+      fmeflow.image.tag: '25000'
+      storage.useHostDir: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMEFLOW_UID
+            value: '1363'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMEFLOW_GID
+            value: '1363'
+      - equal:
+          path: spec.template.spec.securityContext.runAsUser
+          value: 0
+      - isEmpty:
+          path: spec.template.spec.securityContext.fsGroup
+
+  - it: sets right permission for start as root
+    set:
+      fmeflow.image.tag: '25000'
+      deployment.startAsRoot: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMEFLOW_UID
+            value: '1363'
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FMEFLOW_GID
+            value: '1363'
+      - equal:
+          path: spec.template.spec.securityContext.runAsUser
+          value: 0
+      - isEmpty:
+          path: spec.template.spec.securityContext.fsGroup
+
+  - it: allows changing of postgresql image
+    set:
+      fmeflow.image.tag: '25000'
+      postgresql.image.tag: 'postgres:16.3-bullseye'
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[4].image
+          value: "postgres:16.3-bullseye"
+  - it: allows setting of annotations
+    set:
+      fmeflow.image.tag: '25000'
+      annotations.statefulset: "statefulset"
+      annotations.template: "template"
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations
+          value: "template"
+      - equal:
+          path: metadata.annotations
+          value: "statefulset"
+          
+    

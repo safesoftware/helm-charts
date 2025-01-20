@@ -1,0 +1,8 @@
+Congratulations, your FME Flow Remote Engines Service Deployment should be ready shortly! You can check the progress of the deployment by typing:
+
+  $ kubectl -n {{ .Release.Namespace }} get pods
+
+Once all containers are running, you should be able to access your deployment under {{ template "fmeflow.deployment.protocol" . }}://{{ .Values.deployment.hostname }}
+
+To uninstall/delete FME Flow (this deletes all data):
+  $ helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}
