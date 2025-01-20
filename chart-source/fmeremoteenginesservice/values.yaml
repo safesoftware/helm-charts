@@ -1,0 +1,101 @@
+fmeflow:
+  image:
+    tag:
+    registry: docker.io
+    namespace: safesoftware
+    # Supported values: Always or IfNotPresent
+    pullPolicy: IfNotPresent
+  database:
+    password: 4fmmsgrz09
+    passwordSecret:
+    passwordSecretKey: fmeflow-db-password
+  enableTransactionQueueTimeout: false
+  forcePasswordChange: true
+  healthcheck:
+    enabled: true
+    liveness:
+      initialDelaySeconds: 60
+      failureThreshold: 6
+      timeoutSeconds: 5
+      periodSeconds: 10
+    readiness:
+      initialDelaySeconds: 60
+      failureThreshold: 3
+      timeoutSeconds: 5
+      periodSeconds: 5
+    startup:
+      initialDelaySeconds: 10
+      failureThreshold: 20
+      timeoutSeconds: 5
+      periodSeconds: 30
+
+deployment:
+  hostname: localhost
+  port: 443
+  tlsSecretName:
+  certManager:
+    issuerName:
+    issuerType: cluster
+  startAsRoot: false
+  useHostnameIngress: true
+  disableTLS: false
+  ingress:
+    ingressClassName: "nginx"
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      nginx.ingress.kubernetes.io/affinity: cookie
+      nginx.ingress.kubernetes.io/session-cookie-name: fmeflow-ingress
+      nginx.ingress.kubernetes.io/session-cookie-hash: md5
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+
+annotations:
+  statefulset: {}
+  template: {}
+
+labels: {}
+
+scheduling:
+  affinity: {}
+  nodeSelector: {}
+  tolerations: []
+
+resources:
+  core:
+    requests:
+      memory: 1.5Gi
+      cpu: 200m
+  web:
+    requests:
+      memory: 1.5Gi
+      cpu: 200m
+  queue:
+    requests:
+      memory: 64Mi
+      cpu: 100m
+  engine:
+    requests:
+      memory: 4Gi
+      cpu: 1000m
+  database:
+    requests:
+      memory: 512Mi
+      cpu: 200m
+
+storage:
+  useHostDir: false
+  reclaimPolicy: Delete
+  postgresql:
+    size: 1Gi
+    class:
+    path:
+  fmeflow:
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    class:
+    path:
+
+postgresql:
+  image: 
+    tag: postgres:16.1-bullseye
+  auth:
+    postgresqlPassword: a6av3abwzi

@@ -1,0 +1,84 @@
+suite: web default ingress
+templates:
+  - web-default-ingress.yaml
+tests:
+  - it: renders default configuration for self-signed certificate
+    set:
+      fmeflow.image.tag: '25000'
+    asserts:
+      - equal:
+          path: spec.ingressClassName
+          value: nginx
+      - equal:
+          path: metadata.annotations.nginx\.ingress\.kubernetes\.io/proxy-body-size
+          value: '0'
+      - equal:
+          path: metadata.annotations.nginx\.ingress\.kubernetes\.io/proxy-read-timeout
+          value: '300'
+      - equal:
+          path: spec.rules[0].host
+          value: localhost
+      - equal:
+          path: spec.tls[0].hosts[0]
+          value: localhost
+      - isEmpty:
+          path: metadata.annotations.certmanager\.k8s\.io/issuer
+      - isEmpty:
+          path: metadata.annotations.certmanager\.k8s\.io/cluster-issuer
+      - isEmpty:
+          path: spec.tls[0].secretName
+
+  - it: renders certmanager cluster issuer configuration with custom timeout
+    set:
+      fmeflow.image.tag: '25000'
+      deployment.hostname: fmeflow.safe.com
+      deployment.ingress.annotations.nginx\.ingress\.kubernetes\.io/proxy-read-timeout: "120"
+      deployment.tlsSecretName: fmeflow-tls-cert-le-test
+      deployment.certManager.issuerName: letsencrypt-test
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: fmeflow.safe.com
+      - equal:
+          path: spec.tls[0].hosts[0]
+          value: fmeflow.safe.com
+      - equal:
+          path: spec.tls[0].secretName
+          value: fmeflow-tls-cert-le-test
+      - equal:
+          path: metadata.annotations.certmanager\.k8s\.io/cluster-issuer
+          value: letsencrypt-test
+      - equal:
+          path: metadata.annotations.nginx\.ingress\.kubernetes\.io/proxy-read-timeout
+          value: '120'
+
+  - it: renders certmanager namespace issuer configuration
+    set:
+      fmeflow.image.tag: '25000'
+      deployment.hostname: fmeflow.safe.com
+      deployment.tlsSecretName: fmeflow-tls-cert-le-test
+      deployment.certManager.issuerName: letsencrypt-test
+      deployment.certManager.issuerType: namespace
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: fmeflow.safe.com
+      - equal:
+          path: spec.tls[0].hosts[0]
+          value: fmeflow.safe.com
+      - equal:
+          path: spec.tls[0].secretName
+          value: fmeflow-tls-cert-le-test
+      - equal:
+          path: metadata.annotations.certmanager\.k8s\.io/issuer
+          value: letsencrypt-test
+
+  - it: allows ingress class to be changed
+    set:
+      fmeflow.image.tag: '25000'
+      deployment.ingress.ingressClassName: "traefik"
+    asserts:
+      - equal:
+          path: spec.ingressClassName
+          value: traefik
+

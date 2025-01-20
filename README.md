@@ -1,5 +1,7 @@
 # Official Safe Software Helm Charts
 
+This repository houses the helm charts for deploying FME Flow and the FME Flow Remote Engine Service. The remainder of this readme is focussed on the FME Flow Helm chart. To see the readme for the Remote Engine Service, see its [Readme](./README-RemoteEngine.md)
+
 ## Helm Chart Rename
 
 Starting with FME Flow 2024.0, the helm chart has been renamed from having separate charts for each major release (e.g., `safesoftware/fmeserver-2023-1`, `safesoftware/fmeserver-2023-2`, etc) to having a single chart `safesoftware/fmeflow`.
@@ -27,7 +29,7 @@ To add the Safe Software charts repository:
 
 ## Installing the Chart
 
-To quickly get started, find the latest docker image tag for this version of FME Flow [here](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?page=1&name=2024.1&ordering=last_updated).
+To quickly get started, find the latest docker image tag for this version of FME Flow [here](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?page=1&name=2024.2&ordering=last_updated).
 
 Then run the command specifying the docker tag found above:
 `helm install fmeflow safesoftware/fmeflow --set fmeflow.image.tag=<docker_tag>`

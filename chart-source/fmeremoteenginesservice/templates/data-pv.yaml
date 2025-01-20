@@ -1,0 +1,17 @@
+{{ if .Values.storage.useHostDir }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: fmeflow-data
+spec:
+  {{- with .Values.storage }}
+  capacity:
+    storage: {{ .fmeflow.size }}
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: {{ .reclaimPolicy }}
+  hostPath:
+    path: {{ .fmeflow.path | default "/tmp/k8s/fmeflow_data" }}
+    type: DirectoryOrCreate
+  {{- end }}
+{{ end }}
