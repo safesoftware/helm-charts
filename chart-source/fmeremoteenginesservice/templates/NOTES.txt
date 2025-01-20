@@ -1,4 +1,4 @@
-Congratulations, your FME Flow Remote Engine Services Deployment should be ready shortly! You can check the progress of the deployment by typing:
+Congratulations, your FME Flow Remote Engines Service Deployment should be ready shortly! You can check the progress of the deployment by typing:
 
   $ kubectl -n {{ .Release.Namespace }} get pods
 
