@@ -29,7 +29,7 @@ To add the Safe Software charts repository:
 
 ## Installing the Chart
 
-To quickly get started, find the latest docker image tag for this version of FME Flow [here](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?page=1&name=2024.2&ordering=last_updated).
+To quickly get started, find the latest docker image tag for FME Flow [on Docker Hub](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?name=2024.2). It is recommended to use a date-stamped tag from this list. For example: `2024.2.2-20250115`.
 
 Then run the command specifying the docker tag found above:
 `helm install fmeflow safesoftware/fmeflow --set fmeflow.image.tag=<docker_tag>`
