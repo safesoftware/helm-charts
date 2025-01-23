@@ -45,6 +45,10 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeserverdata
               name: fmeserverdata
+{{- if .Values.additionalStorage }}
+            - mountPath: {{ .Values.additionalStorage.mountPath | default "/opt/geodata" }}
+              name: {{ .Values.additionalStorage.name | default "geodata" }}
+{{- end }}
           env:
             - name: PRIMARY_PROCESS
               value: core
@@ -124,6 +128,10 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeserverdata
               name: fmeserverdata
+            {{- if .Values.additionalStorage.enabled }}
+            - mountPath: {{ .Values.additionalStorage.mountPath }}
+              name: geodata
+            {{- end }}
           env:
             - name: FMESERVERHOSTNAME
               value: localhost
