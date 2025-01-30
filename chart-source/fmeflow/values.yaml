@@ -1,6 +1,6 @@
 fmeflow:
   image:
-    tag: 
+    tag:
     registry: docker.io
     namespace: safesoftware
     # Supported values: Always or IfNotPresent
@@ -165,6 +165,14 @@ resources:
     requests:
       memory: 256Mi
       cpu: 100m
+  utilityengine:
+    requests:
+      memory: 1.5Gi
+      cpu: 200m
+  dbinit:
+    requests:
+      memory: 128Mi
+      cpu: 100m
 
 storage:
   useHostDir: false
@@ -184,7 +192,7 @@ storage:
 # https://github.com/bitnami/charts/tree/master/bitnami/postgresql
 postgresql:
   image: 
-    tag: 16.1.0-debian-11-r19
+    tag: 17.2.0-debian-12-r5
   primary:
     persistence:
       existingClaim: fmeflow-postgresql

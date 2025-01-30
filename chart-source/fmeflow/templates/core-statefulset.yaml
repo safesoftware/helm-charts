@@ -74,6 +74,8 @@ spec:
               value: "{{ .Values.fmeflow.scheduler.idleWaitTime }}"
             - name: ENABLETRANSACTIONQUEUETIMEOUT
               value: "{{ .Values.fmeflow.enableTransactionQueueTimeout }}"
+            - name: ENABLEDFEATURES
+              value: "{{ .Values.fmeflow.enabledFeatures | default "" }}"
             {{- if .Values.fmeflow.portpool }}
             - name: PORTPOOL
               value: "{{ .Values.fmeflow.portpool }}"
@@ -163,6 +165,8 @@ spec:
               value: "{{ .Values.fmeflow.engines.hideHostContent }}"
             - name: COREDEBUGLEVEL
               value: "{{ .Values.fmeflow.debugLevel }}"
+            - name: ENABLEDFEATURES
+              value: "{{ .Values.fmeflow.enabledFeatures | default "" }}"
             - name: PGSQLHOSTNAME
               value: "{{ template "fmeflow.database.host" . }}"
             - name: PGSQLPORT
@@ -212,6 +216,8 @@ spec:
         - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-engine:{{ template "fmeflow.image.tag" . }}
           name: utilityengine
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
+          resources: 
+{{ toYaml .Values.resources.utilityengine | indent 12 }}
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
@@ -261,6 +267,8 @@ spec:
         - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-core:{{ template "fmeflow.image.tag" . }}
           name: dbinit
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
+          resources: 
+{{ toYaml .Values.resources.dbinit | indent 12 }}
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
