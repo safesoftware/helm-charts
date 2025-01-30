@@ -80,6 +80,10 @@ resources:
     requests:
       memory: 512Mi
       cpu: 200m
+  dbinit:
+    requests:
+      memory: 128Mi
+      cpu: 100m
 
 storage:
   useHostDir: false
