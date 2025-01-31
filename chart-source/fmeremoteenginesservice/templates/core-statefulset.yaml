@@ -247,6 +247,8 @@ spec:
           name: dbinit
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           args: ["/bin/sh", "-c", "/fmeflow/startServer.sh && tail -f /dev/null"]
+          resources:
+{{ toYaml .Values.resources.dbinit | indent 12 }}         
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
