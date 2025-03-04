@@ -212,12 +212,12 @@ spec:
             timeoutSeconds: {{ .Values.fmeflow.healthcheck.startup.timeoutSeconds }}
             periodSeconds: {{ .Values.fmeflow.healthcheck.startup.periodSeconds }}
           {{- end }}
-        {{- if .Values.fmeflow.utilityengine.enabled }}
+        {{- if .Values.fmeflow.fmeutility.enabled }}
         - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-engine:{{ template "fmeflow.image.tag" . }}
-          name: utilityengine
+          name: fmeutility
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           resources: 
-{{ toYaml .Values.resources.utilityengine | indent 12 }}
+{{ toYaml .Values.resources.fmeutility | indent 12 }}
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata

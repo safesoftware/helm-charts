@@ -27,7 +27,7 @@ fmeflow:
     maxThreads: 200
     experimentalJavaFlags: false
     hikariDBMaxConnections: 30
-  utilityengine:
+  fmeutility:
     enabled: true
   forcePasswordChange: true
   debugLevel: "NONE"
@@ -165,7 +165,7 @@ resources:
     requests:
       memory: 256Mi
       cpu: 100m
-  utilityengine:
+  fmeutility:
     requests:
       memory: 1.5Gi
       cpu: 200m
