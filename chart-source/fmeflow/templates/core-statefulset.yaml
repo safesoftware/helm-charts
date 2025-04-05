@@ -45,6 +45,10 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+          {{- if .Values.additionalStorage }}
+            - mountPath: {{ .Values.additionalStorage.mountPath | default "/opt/geodata" }}
+              name: {{ .Values.additionalStorage.name | default "geodata" }}
+          {{- end }}
           env:
             - name: PRIMARY_PROCESS
               value: core
@@ -146,6 +150,10 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+            {{- if .Values.additionalStorage }}
+            - mountPath: {{ .Values.additionalStorage.mountPath | default "/opt/geodata" }}
+              name: {{ .Values.additionalStorage.name | default "geodata" }}
+            {{- end }}
           env:
             - name: COREHOSTNAME
               value: localhost
@@ -311,6 +319,11 @@ spec:
         - name: fmeflowdata
           persistentVolumeClaim:
             claimName: {{ template "fmeflow.storage.data.claimName" . }}
+        {{- if $.Values.additionalStorage }}
+        - name: {{ $.Values.additionalStorage.name | default "geodata" }}
+          persistentVolumeClaim:
+            claimName: {{ $.Values.additionalStorage.name | default "geodata" }}
+        {{- end }}
       {{- if .Values.scheduling.core.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.scheduling.core.nodeSelector | indent 8 }}
