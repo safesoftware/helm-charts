@@ -4,5 +4,5 @@ Congratulations, your FME Flow Remote Engines Service Deployment should be ready
 
 Once all containers are running, you should be able to access your deployment under {{ template "fmeflow.deployment.protocol" . }}://{{ .Values.deployment.hostname }}
 
-To uninstall/delete FME Flow (this deletes all data):
+To uninstall/delete FME Flow Remote Engines Service (this deletes all data):
   $ helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}
