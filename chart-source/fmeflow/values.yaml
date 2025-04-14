@@ -66,10 +66,24 @@ fmeflow:
         affinity: {}
         nodeSelector: {}
         tolerations: []
+        engineProperties:
         resources:
           requests:
             memory: 512Mi
             cpu: 200m
+      - name: "dynamic-group"
+        engines: 0
+        type: "DYNAMIC"
+        labels: {}
+        affinity: {}
+        nodeSelector: {}
+        tolerations: []
+        engineProperties:
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: 200m
+
 
 
 deployment:
