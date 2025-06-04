@@ -20,7 +20,7 @@ Starting with 2024.1, we had to make some changes to the deployment that are not
 <b>2024.0</b>: `helm install --version 1 ...`<br>
 <b>2024.1+</b>: `helm install ...` or `helm install --version 2 ...` <br>
 
-You can view all versions of the helm chart by running the command `helm search repo fmeflow --versions` after adding the repository. It is a good idea to make your deployments reproducible to pin an exact version of the helm chart when deploying and use the same version for any helm operations you need to perform on that deployment. You can pin a helm chart version with the `--version` flag. For example, `helm install --version 2.1.0 ...`
+You can view all versions of the helm chart by running the command `helm search repo fmeflow --versions` after adding the repository. It is a good idea to make your deployments reproducible to pin an exact version of the helm chart when deploying and use the same version for any helm operations you need to perform on that deployment. You can pin a helm chart version with the `--version` flag. For example, `helm install --version 2.2.0 ...`
 
 ## Prerequisites
 
@@ -66,7 +66,7 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `resources.websocket` | [Websocket CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `256Mi`, CPU: `100m` |
 | `resources.fmeutility` | [FMEUtility CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `1.5Gi`, CPU: `200m`|
 | `resources.dbinit` | [dbinit CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `128Mi`, CPU: `100m` |
-| `storage.reclaimPolicy` | [Volume Reclaim Policy](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaim-policy) | `Delete` |
+| `storage.reclaimPolicy` | [Volume Reclaim Policy](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaim-policy). Only required if useHostDir is enabled. | `Delete` |
 | `storage.useHostDir` | Allows to map data and database volumes to a directory on a node. Requires path parameters. | `false` |
 | `storage.postgresql.class` | Storage class for PostgreSQL data. Ignored if host dir mapping is used. | `Nil` |
 | `storage.postgresql.size` | PostgreSQL volume size | `1Gi` |
@@ -144,6 +144,16 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `labels.core` | Labels to apply to the core pods | `{}` |
 | `labels.queue` | Labels to apply to the core pods | `{}` |
 | `labels.websocket` | Labels to apply to the core pods | `{}` |
+| `additionalStorage` | An array of additional volumes to mount into the Core, Web and Engine pods. This can be useful when needing to store data in a different volume from the system share, or if you wanted to share data with other things running in your cluster. Unless `existingClaim` is used, this will create a new persistentVolumeClaim which depending on your storage class will likely create an empty volume for you to use. | `[]`|
+| `additionalStorage[].name` | The name of the volume. This will be used as the claim name and volume name. | `Nil` |
+| `additionalStorage[].mountPath` | The path inside of the containers to mount the volume. This will be identical in the pods it is mounted in. | `Nil` |
+| `additionalStorage[].accessMode` | Access mode for the storage. This should be ReadWriteMany if your pods will be deployed across multiple nodes. | `Nil` |
+| `additionalStorage[].size` | Volume size. | `Nil` |
+| `additionalStorage[].class` | Storage class for the volume. | `Nil` |
+| `additionalStorage[].existingClaim` | Name of an existing PersistentVolumeClaim to use. This is useful if you want to mount an existing volume mounted inside another app in the cluster. Specifying this will set the `claimName` to this and will not create a new persistent volume claim. | `Nil` |
+| `additionalStorage[].useHostDir` | Create the volume in a directory on the node instead of using a storage class. | `Nil` |
+| `additionalStorage[].path` | Absolute path where data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
+| `additionalStorage[].reclaimPolicy` | [Volume Reclaim Policy](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaim-policy). Only required if useHostDir is enabled. | `Nil` |
 
 ## Development
 
