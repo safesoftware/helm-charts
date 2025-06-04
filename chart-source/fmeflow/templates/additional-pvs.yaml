@@ -1,0 +1,18 @@
+{{- range .Values.additionalStorage }}
+{{ if and (.useHostDir) (not .existingClaim)}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .name }}
+spec:
+  capacity:
+    storage: {{ .size }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: {{ .reclaimPolicy }}
+  hostPath:
+    path: {{ .path  }}
+    type: DirectoryOrCreate
+---
+{{- end}}
+{{- end }}

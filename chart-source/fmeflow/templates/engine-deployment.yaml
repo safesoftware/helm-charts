@@ -35,6 +35,12 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+            {{- if $.Values.additionalStorage }}
+            {{- range $.Values.additionalStorage }}
+            - mountPath: {{ .mountPath }}
+              name: {{ .name }}
+            {{- end }}
+            {{- end }}
           env:
             - name: EXTERNALHOSTNAME
               value: {{ $.Values.deployment.hostname }}
@@ -172,6 +178,13 @@ spec:
         - name: fmeflowdata
           persistentVolumeClaim:
             claimName: {{ template "fmeflow.storage.data.claimName" $ }}
+        {{- if $.Values.additionalStorage }}
+        {{- range $.Values.additionalStorage }}
+        - name: {{ .name }}
+          persistentVolumeClaim:
+            claimName: {{ if .existingClaim }}{{ .existingClaim }}{{ else }}{{ .name }}{{ end }}
+        {{- end }}
+        {{- end }}
       affinity:
         {{- include "fmeflow.deployment.dataVolumeAffinity" $ | indent 8 }}
       {{- if .affinity }}

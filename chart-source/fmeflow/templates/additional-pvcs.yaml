@@ -1,0 +1,23 @@
+{{ if .Values.additionalStorage }}
+{{- range .Values.additionalStorage }}
+{{- if not .existingClaim }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    safe.k8s.fmeflow.component: data
+    {{- include "fmeflow.common.labels" $ | indent 4 }}
+  name: {{ .name }}
+spec:
+  accessModes:
+    - {{ .accessMode }}
+  {{- if and (not .useHostDir) .class }}
+  storageClassName: {{ .class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .size }}
+---
+{{- end }}
+{{- end }}
+{{- end }}

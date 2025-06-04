@@ -45,6 +45,12 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+          {{- if .Values.additionalStorage }}
+          {{- range .Values.additionalStorage }}
+            - mountPath: {{ .mountPath  }}
+              name: {{ .name }}
+          {{- end }}
+          {{- end }}
           env:
             - name: PRIMARY_PROCESS
               value: core
@@ -146,6 +152,12 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+          {{- if .Values.additionalStorage }}
+          {{- range .Values.additionalStorage }}
+            - mountPath: {{ .mountPath  }}
+              name: {{ .name }}
+          {{- end }}
+          {{- end }}
           env:
             - name: COREHOSTNAME
               value: localhost
@@ -311,6 +323,13 @@ spec:
         - name: fmeflowdata
           persistentVolumeClaim:
             claimName: {{ template "fmeflow.storage.data.claimName" . }}
+        {{- if .Values.additionalStorage }}
+        {{- range .Values.additionalStorage }}
+        - name: {{ .name }}
+          persistentVolumeClaim:
+            claimName: {{ if .existingClaim }}{{ .existingClaim }}{{ else }}{{ .name }}{{ end }}
+        {{- end }}
+        {{- end }}
       {{- if .Values.scheduling.core.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.scheduling.core.nodeSelector | indent 8 }}
