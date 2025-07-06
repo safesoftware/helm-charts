@@ -167,7 +167,7 @@ PostgreSQL Helm Chart  - Apache 2.0 - Available from [Bitnami](https://github.co
 
 ## Semantic Versioning
 
-We follow the major.minor.patch versioning method. Here is what each component means: 
+We follow the major.minor.patch versioning method (more details can be found on semver.org). Here is what each component means: 
 
 ### Major Version 
 
