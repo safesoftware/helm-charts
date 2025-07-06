@@ -164,3 +164,19 @@ The following table lists the configurable parameters of the FME Flow helm chart
 
 ## Third Party Dependancies
 PostgreSQL Helm Chart  - Apache 2.0 - Available from [Bitnami](https://github.com/bitnami/charts/tree/master/bitnami/postgresql).
+
+## Semantic Versioning
+
+We follow the major.minor.patch versioning method. Here is what each component means: 
+
+### Major Version 
+
+Major version refers to major, backward-incompatible changes.
+
+### Minor Version
+
+Minor version refers to back-compatible changes that does not break the API.
+
+### Patch Version
+
+Patch version refers to back-compatible bug fixes.
