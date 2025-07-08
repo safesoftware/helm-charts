@@ -175,7 +175,7 @@ Major version refers to major, backward-incompatible changes.
 
 ### Minor Version
 
-Minor version refers to back-compatible changes that does not break the API.
+Minor version refers to back-compatible changes that does not break deploying earlier versions of FME Flow.
 
 ### Patch Version
 
