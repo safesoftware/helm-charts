@@ -2,6 +2,41 @@
 
 This repository houses the helm charts for deploying FME Flow and the FME Flow Remote Engine Service. The remainder of this readme is focussed on the FME Flow Helm chart. To see the readme for the Remote Engine Service, see its [Readme](./README-RemoteEngine.md)
 
+## Important Notice: Bitnami PostgreSQL Chart Changes (August 28, 2025)
+
+**Bitnami is making changes to their PostgreSQL Helm chart and container images, scheduled for August 28, 2025.** After this date, only the latest PostgreSQL image tag will be available on Docker Hub, and older tags will be removed. This will impact users who rely on specific image tags for PostgreSQL.
+
+**What you need to do:**
+
+1. **Switch to the legacy image repository:**
+   - Set the image repository to `bitnamilegacy/postgresql` to continue using older tags.
+2. **Allow image substitutions:**
+   - The Bitnami chart will block deployment with image substitutions unless you set `global.security.allowInsecureImages=true`.
+
+You can do both in one command:
+
+```
+helm install ... \
+  --set postgresql.image.repository=bitnamilegacy/postgresql \
+  --set global.security.allowInsecureImages=true \
+  ...
+```
+
+Or in your `values.yaml`:
+
+```yaml
+global:
+  security:
+    allowInsecureImages: true
+postgresql:
+  image:
+    repository: bitnamilegacy/postgresql
+```
+
+If you do not make these changes, your deployments may fail to pull or start the required PostgreSQL image after August 28, 2025.
+
+For more details, see the [Bitnami announcement](https://github.com/bitnami/containers/issues/83267), [bitnamilegacy Docker Hub](https://hub.docker.com/r/bitnamilegacy/postgresql), and [Bitnami chart image verification documentation](https://github.com/bitnami/charts/issues/30850).
+
 ## Helm Chart Rename
 
 Starting with FME Flow 2024.0, the helm chart has been renamed from having separate charts for each major release (e.g., `safesoftware/fmeserver-2023-1`, `safesoftware/fmeserver-2023-2`, etc) to having a single chart `safesoftware/fmeflow`.
