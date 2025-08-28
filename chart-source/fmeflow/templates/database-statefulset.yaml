@@ -1,0 +1,63 @@
+{{ if .Values.deployment.deployPostgresql }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    {{- include "fmeflow.common.labels" . | indent 4 }}
+    safe.k8s.fmeflow.component: database
+  name: database
+  {{- with .Values.annotations.database.statefulset }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      safe.k8s.fmeflow.component: database
+  template:
+    metadata:
+      labels:
+        safe.k8s.fmeflow.component: database
+        {{- include "fmeflow.common.labels" . | indent 8 }}
+        {{- with .Values.labels.database }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
+      {{- with .Values.annotations.database.template }}
+      annotations:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+    spec:
+      securityContext:
+        {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
+        runAsUser: 0
+        {{- else }}
+        fsGroup: 1363
+        {{- end }}
+      containers:
+        - image: {{ .Values.postgresql.image.tag | quote}}
+          name: database
+          imagePullPolicy: {{ if .image }}{{ if .image.pullPolicy }}{{ .image.pullPolicy }}{{ else }}{{ template "fmeflow.image.pullPolicy" $ }}{{ end }}{{ else }}{{ template "fmeflow.image.pullPolicy" $ }}{{ end }}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql
+              name: fmeflow-postgresql
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.fmeflow.database.adminUser }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fmeflow.database.adminPasswordSecret" . }}
+                  key: {{ .Values.fmeflow.database.adminPasswordSecretKey }}
+            - name: POSTGRES_DB
+              value: {{ .Values.fmeflow.database.adminDatabase }}
+          ports:
+            - name: tcp-postgresql
+              containerPort: 5432
+          resources:
+{{ toYaml .Values.resources.database | indent 12 }}
+      volumes:
+        - name: fmeflow-postgresql
+          persistentVolumeClaim:
+            claimName: "fmeflow-postgresql"
+{{ end }}

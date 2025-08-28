@@ -1,0 +1,18 @@
+{{ if .Values.deployment.deployPostgresql }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    safe.k8s.fmeflow.component: database
+    {{- include "fmeflow.common.labels" . | indent 4 }}
+  name: "{{ .Release.Name}}-postgresql"
+spec:
+  type: ClusterIP
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+      nodePort: null
+  selector:
+    safe.k8s.fmeflow.component: database
+{{ end }}

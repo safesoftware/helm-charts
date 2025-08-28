@@ -6,6 +6,7 @@ metadata:
     {{- include "fmeflow.common.labels" . | indent 4 }}
   annotations:
     "helm.sh/hook": test-success
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   containers:
     - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-deployment-tester:{{ template "fmeflow.image.tag" . }}

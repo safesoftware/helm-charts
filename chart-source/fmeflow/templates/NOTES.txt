@@ -21,5 +21,8 @@ If you still have issues, please review the Useful Commands for FME Flow and Kub
 
 If you aren't able to resolve the issue, or you think you've found a bug you can contact us here: https://www.safe.com/support/
 
+The fmeflow-deployment-test pod deletes the previous pod before a new test is launched. It does not delete itself upon uninstallation. To manually delete the pod:
+  $ kubectl delete pod fmeflow-deployment-test -n {{ .Release.Namespace }}
+
 To uninstall/delete FME Flow (this deletes all data):
   $ helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}

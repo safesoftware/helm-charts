@@ -1,4 +1,4 @@
 apiVersion: v1
 description: For use with FME Flow 2024.1 and newer
 name: fmeflow
-version: 2.3.1
+version: 2.5.0
