@@ -4,6 +4,8 @@ This repository houses the helm charts for deploying FME Flow and the FME Flow R
 
 ## Important Notice: Bitnami PostgreSQL Chart Changes (August 28, 2025)
 
+Note: Applies only to Helm chart versions < 2.5.0. From 2.5.0+, we use the official PostgreSQL image (no Bitnami dependency).
+
 **Bitnami is making changes to their PostgreSQL Helm chart and container images, scheduled for August 28, 2025.** After this date, only the latest PostgreSQL image tag will be available on Docker Hub, and older tags will be removed. This will impact users who rely on specific image tags for PostgreSQL.
 
 **What you need to do:**
