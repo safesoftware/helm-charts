@@ -208,6 +208,7 @@ storage:
     size: 1Gi
     class:
     path:
+    volumePath: ""
   fmeflow:
     accessMode: ReadWriteOnce
     size: 10Gi
