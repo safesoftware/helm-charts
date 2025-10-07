@@ -108,10 +108,12 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `storage.postgresql.class` | Storage class for PostgreSQL data. Ignored if host dir mapping is used. | `Nil` |
 | `storage.postgresql.size` | PostgreSQL volume size | `1Gi` |
 | `storage.postgresql.path` | Absolute path where database data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
+| `storage.postgresql.volumePath` | Optional subdirectory inside the persistent volume to mount for PostgreSQL data when using PVCs. Leave empty to mount the volume root, or specify a folder like "pgdata" to mount a subdirectory within the volume. See [documentation](https://kubernetes.io/docs/concepts/storage/volumes/#using-subpath) for more details. | `""` |
 | `storage.fmeflow.accessMode` | Access mode for FME Flow data storage class. | `ReadWriteOnce` |
 | `storage.fmeflow.class` | Storage class for FME Flow data. Ignored if host dir mapping is used. | `Nil` |
 | `storage.fmeflow.size` | FME Flow data volume size | `10Gi` |
 | `storage.fmeflow.path` | Absolute path where FME Flow data should be stored on host. Only required if useHostDir is enabled. | `Nil` |
+| `storage.fmeflow.volumePath` | Optional subdirectory inside the persistent volume to mount for FME Flow data when using PVCs. Leave empty to mount the volume root, or specify a folder like "fmeflow" to mount a subdirectory within the volume. See [documentation](https://kubernetes.io/docs/concepts/storage/volumes/#using-subpath) for more details. | `""` |
 | `fmeflow.engines.debugLevel` | Set the verbosity of the FME Flow Engine logs. Can be set to NONE, LOW, MEDIUM, HIGH or SUPER_VERBOSE. | `NONE` |
 | `fmeflow.engines.receiveTimeout` | Engines that have not received a job in this period of time (measured in milliseconds) will be restarted. Set to 0 to never restart. | `0` |
 | `fmeflow.engines.groups` | An array of engine deployments. Each deployment defines a name, queues to join, number of replicas, and scheduling information. |  |
