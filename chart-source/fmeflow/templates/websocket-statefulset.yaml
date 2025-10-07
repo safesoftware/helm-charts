@@ -40,6 +40,9 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+              {{- if .Values.storage.fmeflow.volumePath }}
+              subPath: {{ .Values.storage.fmeflow.volumePath }}
+              {{- end }}
           resources:
 {{ toYaml .Values.resources.websocket | indent 12 }}
           livenessProbe:

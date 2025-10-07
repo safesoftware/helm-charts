@@ -39,8 +39,11 @@ spec:
           name: database
           imagePullPolicy: {{ if .image }}{{ if .image.pullPolicy }}{{ .image.pullPolicy }}{{ else }}{{ template "fmeflow.image.pullPolicy" $ }}{{ end }}{{ else }}{{ template "fmeflow.image.pullPolicy" $ }}{{ end }}
           volumeMounts:
-            - mountPath: /var/lib/postgresql
+            - mountPath: /var/lib/postgresql/data
               name: fmeflow-postgresql
+              {{- if .Values.storage.postgresql.volumePath }}
+              subPath: {{ .Values.storage.postgresql.volumePath }}
+              {{- end }}
           env:
             - name: POSTGRES_USER
               value: {{ .Values.fmeflow.database.adminUser }}

@@ -45,6 +45,9 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+              {{- if .Values.storage.fmeflow.volumePath }}
+              subPath: {{ .Values.storage.fmeflow.volumePath }}
+              {{- end }}
           {{- if .Values.additionalStorage }}
           {{- range .Values.additionalStorage }}
             - mountPath: {{ .mountPath  }}
@@ -152,6 +155,9 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+              {{- if .Values.storage.fmeflow.volumePath }}
+              subPath: {{ .Values.storage.fmeflow.volumePath }}
+              {{- end }}
           {{- if .Values.additionalStorage }}
           {{- range .Values.additionalStorage }}
             - mountPath: {{ .mountPath  }}
@@ -233,6 +239,9 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+              {{- if .Values.storage.fmeflow.volumePath }}
+              subPath: {{ .Values.storage.fmeflow.volumePath }}
+              {{- end }}
           env:
             - name: EXTERNALHOSTNAME
               value: {{ .Values.deployment.hostname }}
@@ -284,6 +293,9 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+              {{- if .Values.storage.fmeflow.volumePath }}
+              subPath: {{ .Values.storage.fmeflow.volumePath }}
+              {{- end }}
           env:
             - name: PRIMARY_PROCESS
               value: initpgsql

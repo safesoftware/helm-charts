@@ -37,6 +37,9 @@ spec:
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
+              {{- if .Values.storage.fmeflow.volumePath }}
+              subPath: {{ .Values.storage.fmeflow.volumePath }}
+              {{- end }}
           env:
           - name: POD_IP
             valueFrom: { fieldRef: { fieldPath: status.podIP } }
