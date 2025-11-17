@@ -8,8 +8,14 @@ metadata:
     "helm.sh/hook": test-success
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
+  {{- if .Values.fmeflow.image.pullSecrets }}
+  imagePullSecrets:
+    {{- range .Values.fmeflow.image.pullSecrets }}
+    - name: {{ . }}
+    {{- end }}
+  {{- end }}
   containers:
-    - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-deployment-tester:{{ template "fmeflow.image.tag" . }}
+    - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/{{ .Values.fmeflow.image.deploymenttester.name }}:{{ template "fmeflow.image.tag" . }}
       name: deployment-tester
       imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
       env:
