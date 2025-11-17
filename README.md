@@ -83,8 +83,13 @@ The following table lists the configurable parameters of the FME Flow helm chart
 |---------------------|---------------------------------------|-------------------------------------------|
 | `fmeflow.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?page=1&name=2025.0&ordering=last_updated). |
 | `fmeflow.image.pullPolicy` | Image pull policy. IfNotPresent means that the image is pulled only if it is not already present on the node. If this is changed to "Always", then the node will always try to pull to make sure it has the latest version of that tag. | `IfNotPresent` |
+| `fmeflow.image.pullSecrets` | List of existing secrets to use for pulling images from private registries. Example: `["my-registry-secret"]` See [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) for more details | `[]` |
 | `fmeflow.image.registry` | Docker registry | `docker.io` This parameter should not be changed. |
 | `fmeflow.image.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
+| `fmeflow.image.core.name` | Name of the FME Flow Core image | `fmeflow-core` |
+| `fmeflow.image.web.name` | Name of the FME Flow Web Image | `fmeflow-web` |
+| `fmeflow.image.queue.name` | Name of the FME Flow Queue Image | `fmeflow-queue` |
+| `fmeflow.image.utilityengine.name` | Name of the FME Flow Engine image to use for the utility engine | `fmeflow-engine` |
 | `fmeflow.debugLevel` | Set the verbosity of the FME Flow Core logs. Can be set to NONE, LOW, MEDIUM, HIGH or SUPER_VERBOSE. | `NONE` |
 | `deployment.hostname` | FME Flow hostname | `localhost` |
 | `deployment.port` | FME Flow port | `443` |
@@ -134,6 +139,7 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `fmeflow.engines.groups[].image.pullPolicy` | Image pull policy. IfNotPresent means that the image is pulled only if it is not already present on the node. If this is changed to "Always", then the node will always try to pull to make sure it has the latest version of that tag. |  |
 | `fmeflow.engines.groups[].image.registry` | Docker registry |  |
 | `fmeflow.engines.groups[].image.namespace` | Docker registry namespace |  |
+| `fmeflow.engines.groups[].image.name` | Name of the FME Engine image | `fmeflow-engine` |
 | `fmeflow.database.host` | The hostname of the Postgres database to use. Only set this if you are not using the included Postgres database |  _The service DNS of the Postgresql database deployed with this chart_ |
 | `fmeflow.database.port` | The port of the Postgres database to use. |  `5432` |
 | `fmeflow.database.name` | The database name for FME Flow to use for its schema. |  `fmeflow` |
