@@ -28,6 +28,12 @@ spec:
 {{ toYaml . | indent 8 }}
       {{- end }}
     spec:
+      {{- if .Values.fmeflow.image.pullSecrets }}
+      imagePullSecrets:
+        {{- range .Values.fmeflow.image.pullSecrets }}
+        - name: {{ . }}
+        {{- end }}
+      {{- end }}
       securityContext:
         {{- if or .Values.storage.useHostDir .Values.deployment.startAsRoot }}
         runAsUser: 0
@@ -35,7 +41,7 @@ spec:
         fsGroup: 1363
         {{- end }}
       containers:
-        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-core:{{ template "fmeflow.image.tag" . }}
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/{{ .Values.fmeflow.image.core.name }}:{{ template "fmeflow.image.tag" . }}
           name: core
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           ports:
@@ -145,7 +151,7 @@ spec:
             timeoutSeconds: {{ .Values.fmeflow.healthcheck.startup.timeoutSeconds }}
             periodSeconds: {{ .Values.fmeflow.healthcheck.startup.periodSeconds }}
           {{- end }}
-        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-web:{{ template "fmeflow.image.tag" . }}
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/{{ .Values.fmeflow.image.web.name }}:{{ template "fmeflow.image.tag" . }}
           name: web
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           ports:
@@ -231,7 +237,7 @@ spec:
             periodSeconds: {{ .Values.fmeflow.healthcheck.startup.periodSeconds }}
           {{- end }}
         {{- if .Values.fmeflow.fmeutility.enabled }}
-        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-engine:{{ template "fmeflow.image.tag" . }}
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/{{ .Values.fmeflow.image.utilityengine.name }}:{{ template "fmeflow.image.tag" . }}
           name: fmeutility
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           resources: 
@@ -285,7 +291,7 @@ spec:
             {{- end }}
         {{- end }}
       initContainers:
-        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-core:{{ template "fmeflow.image.tag" . }}
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/{{ .Values.fmeflow.image.core.name }}:{{ template "fmeflow.image.tag" . }}
           name: dbinit
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           resources: 

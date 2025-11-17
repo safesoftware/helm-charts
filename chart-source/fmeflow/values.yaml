@@ -5,6 +5,16 @@ fmeflow:
     namespace: safesoftware
     # Supported values: Always or IfNotPresent
     pullPolicy: IfNotPresent
+    # Name of existing secret to use for pulling images from private registries
+    pullSecrets: []
+    core:
+      name: fmeflow-core
+    web:
+      name: fmeflow-web
+    queue:
+      name: fmeflow-queue
+    utilityengine:
+      name: fmeflow-engine
   database:
     host:
     port: '5432'
@@ -218,6 +228,6 @@ storage:
 
 postgresql:
   image:
-    tag: postgres:17.5-bullseye
+    tag: postgres:17.6-bookworm
   livenessProbe:
     initialDelaySeconds: 300

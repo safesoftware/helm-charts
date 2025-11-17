@@ -28,8 +28,14 @@ spec:
 {{ toYaml . | indent 8 }}
       {{- end }}
     spec:
+      {{- if $.Values.fmeflow.image.pullSecrets }}
+      imagePullSecrets:
+        {{- range $.Values.fmeflow.image.pullSecrets }}
+        - name: {{ . }}
+        {{- end }}
+      {{- end }}
       containers:
-        - image: {{ if .image }}{{ if .image.registry }}{{ .image.registry }}{{ else }}{{ template "fmeflow.image.registry" $ }}{{ end }}/{{ if .image.namespace }}{{ .image.namespace }}{{ else }}{{ template "fmeflow.image.namespace" $ }}{{ end }}/fmeflow-engine:{{ if .image.tag }}{{ .image.tag }}{{ else }}{{ template "fmeflow.image.tag" $ }}{{ end }}{{else}}{{ template "fmeflow.image.registry" $ }}/{{ template "fmeflow.image.namespace" $ }}/fmeflow-engine:{{ template "fmeflow.image.tag" $ }}{{ end }}
+        - image: {{ if .image }}{{ if .image.registry }}{{ .image.registry }}{{ else }}{{ template "fmeflow.image.registry" $ }}{{ end }}/{{ if .image.namespace }}{{ .image.namespace }}{{ else }}{{ template "fmeflow.image.namespace" $ }}{{ end }}/{{ if .image.name }}{{ .image.name }}{{ else }}fmeflow-engine{{ end }}:{{ if .image.tag }}{{ .image.tag }}{{ else }}{{ template "fmeflow.image.tag" $ }}{{ end }}{{else}}{{ template "fmeflow.image.registry" $ }}/{{ template "fmeflow.image.namespace" $ }}/fmeflow-engine:{{ template "fmeflow.image.tag" $ }}{{ end }}
           name: engine
           imagePullPolicy: {{ if .image }}{{ if .image.pullPolicy }}{{ .image.pullPolicy }}{{ else }}{{ template "fmeflow.image.pullPolicy" $ }}{{ end }}{{ else }}{{ template "fmeflow.image.pullPolicy" $ }}{{ end }}
           volumeMounts:

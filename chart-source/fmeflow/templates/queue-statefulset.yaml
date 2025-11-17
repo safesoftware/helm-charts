@@ -28,8 +28,14 @@ spec:
 {{ toYaml . | indent 8 }}
       {{- end }}
     spec:
+      {{- if .Values.fmeflow.image.pullSecrets }}
+      imagePullSecrets:
+        {{- range .Values.fmeflow.image.pullSecrets }}
+        - name: {{ . }}
+        {{- end }}
+      {{- end }}
       containers:
-        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-queue:{{ template "fmeflow.image.tag" . }}
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/{{ .Values.fmeflow.image.queue.name }}:{{ template "fmeflow.image.tag" . }}
           name: queue
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           ports:
@@ -93,4 +99,4 @@ spec:
       tolerations:
 {{ toYaml .Values.scheduling.queue.tolerations | indent 8 }}
       {{- end }}
-      
+

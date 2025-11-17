@@ -28,8 +28,14 @@ spec:
 {{ toYaml . | indent 8 }}
       {{- end }}
     spec:
+      {{- if .Values.fmeflow.image.pullSecrets }}
+      imagePullSecrets:
+        {{- range .Values.fmeflow.image.pullSecrets }}
+        - name: {{ . }}
+        {{- end }}
+      {{- end }}
       containers:
-        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/fmeflow-core:{{ template "fmeflow.image.tag" . }}
+        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/{{ .Values.fmeflow.image.core.name }}:{{ template "fmeflow.image.tag" . }}
           name: websocket
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           env:
