@@ -57,7 +57,7 @@ Starting with 2024.1, we had to make some changes to the deployment that are not
 <b>2024.0</b>: `helm install --version 1 ...`<br>
 <b>2024.1+</b>: `helm install ...` or `helm install --version 2 ...` <br>
 
-You can view all versions of the helm chart by running the command `helm search repo fmeflow --versions` after adding the repository. It is a good idea to make your deployments reproducible to pin an exact version of the helm chart when deploying and use the same version for any helm operations you need to perform on that deployment. You can pin a helm chart version with the `--version` flag. For example, `helm install --version 2.2.0 ...`
+You can view all versions of the helm chart by running the command `helm search repo fmeflow --versions` after adding the repository. It is a good idea to make your deployments reproducible to pin an exact version of the helm chart when deploying and use the same version for any helm operations you need to perform on that deployment. You can pin a helm chart version with the `--version` flag. For example, `helm install --version 2.0.4 ...`
 
 ## Prerequisites
 
@@ -75,6 +75,18 @@ See all available parameters below.
 
 For more information see the [documentation](https://docs.safe.com/fme/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-Intro.htm) and our [FME Community landing page for Kubernetes](https://community.safe.com/s/article/Getting-Started-with-FME-Server-and-Kubernetes).
 
+## Ingress Migration Notes
+
+This chart now targets the official [NGINX Ingress Controller](https://docs.nginx.com/nginx-ingress-controller/), see [Community Ingress NGINX retirement](https://kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/).
+
+If you are migrating from previous chart versions that used community `ingress-nginx`, update your values as follows:
+
+1. Keep `deployment.useHostnameIngress=true` when using the official NGINX Ingress Controller.
+2. Set `deployment.hostname` to a DNS hostname (for example `fmeflow.example.com` or `localhost`). Do not use an IP address with hostname-based ingress.
+3. Replace old `nginx.ingress.kubernetes.io/*` annotations with `nginx.org/*` annotations.
+4. Sticky session defaults were removed. If your deployment depended on sticky sessions, configure an alternative strategy outside these chart defaults.
+5. If `deployment.disableTLS=false`, set `deployment.tlsSecretName` to use your own certificate, or leave it empty to use the chart-managed self-signed secret.
+
 ## Configuration
 
 The following table lists the configurable parameters of the FME Flow helm chart and their default values.
@@ -84,21 +96,33 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `fmeflow.image.tag` | The docker image tag to use. |  `Nil` You must provide a tag. You can find available tags [here](https://hub.docker.com/r/safesoftware/fmeflow-core/tags?page=1&name=2025.0&ordering=last_updated). |
 | `fmeflow.image.pullPolicy` | Image pull policy. IfNotPresent means that the image is pulled only if it is not already present on the node. If this is changed to "Always", then the node will always try to pull to make sure it has the latest version of that tag. | `IfNotPresent` |
 | `fmeflow.image.pullSecrets` | List of existing secrets to use for pulling images from private registries. Example: `["my-registry-secret"]` See [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) for more details | `[]` |
-| `fmeflow.image.registry` | Docker registry | `docker.io` This parameter should not be changed. |
-| `fmeflow.image.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
+| `fmeflow.image.registry` | Default Docker registry for all FME Flow images. Can be overridden per image (see below). | `docker.io` |
+| `fmeflow.image.namespace` | Default Docker registry namespace for all FME Flow images. Can be overridden per image (see below). | `safesoftware` |
 | `fmeflow.image.core.name` | Name of the FME Flow Core image | `fmeflow-core` |
-| `fmeflow.image.web.name` | Name of the FME Flow Web Image | `fmeflow-web` |
-| `fmeflow.image.queue.name` | Name of the FME Flow Queue Image | `fmeflow-queue` |
+| `fmeflow.image.core.registry` | Override the Docker registry for the Core image only. Falls back to `fmeflow.image.registry` if not set. | `Nil` |
+| `fmeflow.image.core.namespace` | Override the Docker registry namespace for the Core image only. Falls back to `fmeflow.image.namespace` if not set. | `Nil` |
+| `fmeflow.image.web.name` | Name of the FME Flow Web image | `fmeflow-web` |
+| `fmeflow.image.web.registry` | Override the Docker registry for the Web image only. | `Nil` |
+| `fmeflow.image.web.namespace` | Override the Docker registry namespace for the Web image only. | `Nil` |
+| `fmeflow.image.queue.name` | Name of the FME Flow Queue image | `fmeflow-queue` |
+| `fmeflow.image.queue.registry` | Override the Docker registry for the Queue image only. | `Nil` |
+| `fmeflow.image.queue.namespace` | Override the Docker registry namespace for the Queue image only. | `Nil` |
 | `fmeflow.image.utilityengine.name` | Name of the FME Flow Engine image to use for the utility engine | `fmeflow-engine` |
+| `fmeflow.image.utilityengine.registry` | Override the Docker registry for the Utility Engine image only. | `Nil` |
+| `fmeflow.image.utilityengine.namespace` | Override the Docker registry namespace for the Utility Engine image only. | `Nil` |
+| `fmeflow.image.deploymenttester.name` | Name of the FME Flow Deployment Tester image | `fmeflow-deployment-tester` |
+| `fmeflow.image.deploymenttester.registry` | Override the Docker registry for the Deployment Tester image only. | `Nil` |
+| `fmeflow.image.deploymenttester.namespace` | Override the Docker registry namespace for the Deployment Tester image only. | `Nil` |
 | `fmeflow.debugLevel` | Set the verbosity of the FME Flow Core logs. Can be set to NONE, LOW, MEDIUM, HIGH or SUPER_VERBOSE. | `NONE` |
 | `deployment.hostname` | FME Flow hostname | `localhost` |
 | `deployment.port` | FME Flow port | `443` |
-| `deployment.tlsSecretName` | Custom TLS certificate, see [documentation](http://docs.safe.com/fme/2021.0/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `Nil` |
+| `deployment.tlsSecretName` | Custom TLS certificate, see [documentation](http://docs.safe.com/fme/2021.0/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details. If not set, the chart will use a self-signed secret named `<release>-fmeflow-tls-selfsigned`. | `Nil` |
 | `deployment.certManager.issuerName` | Cert Manager issuer name, see [documentation](http://docs.safe.com/fme/2021.0/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `Nil` |
 | `deployment.certManager.issuerType` | Can be `cluster` or `namespace`, ignored if no issuerName is provided. See [documentation](http://docs.safe.com/fme/2021.0/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `cluster` |
 | `deployment.numCores` | Number of cores to launch. Multi-core only works in a multi-host cluster with ReadWriteMany storage | `1` |
 | `deployment.startAsRoot` | Starts core container as root and grants the fmeflow user access to the file system. | `false` |
-| `deployment.useHostnameIngress` | Configures the ingress to route traffic to FME Flow only if the request matches the value of `deployment.hostname`. Setting this to false will route all traffic on the ingress to FME Flow. | `true` |
+| `deployment.useHostnameIngress` | Configures the ingress to route traffic to FME Flow only if the request host matches `deployment.hostname`. When using official NGINX Ingress Controller, setting this to `false` is unsupported. | `true` |
+| `deployment.ingress.useNginxMergeable` | Enables NGINX mergeable ingress resources (master/minion) when `deployment.useHostnameIngress=true`. Set this to `false` to disable mergeable mode or when using an ingress controller other than official NGINX. | `true` |
 | `deployment.deployPostgresql` | Deploy a Postgresql Database for FME Flow to use. Set this to `false` if you have an existing database you would like FME Flow to connect to. | `true` |
 | `deployment.disableTLS` | Set this to `true` if you would like to disable TLS on the ingress. This is not recommended. | `false` |
 | `deployment.automountServiceAccountToken` | Set this to `true` if you would like to automatically mount the service token for the namespace. See [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#opt-out-of-api-credential-automounting) for more details. | `false` |
@@ -126,7 +150,7 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `fmeflow.engines.groups[].engines` | The number of engines to deploy in this engine deployment. | `2` |
 | `fmeflow.engines.groups[].type` | The FME Engine licensing type to use. Must be STANDARD or DYNAMIC. | `STANDARD` |
 | `fmeflow.engines.groups[].engineProperties` | A comma delimited list of properties to set on this engine. The engine deployment `name` will be automatically added. [See this link for more info](https://community.safe.com/s/article/FME-Server-on-Kubernetes-Utilizing-Engine-Assignment-and-Job-Routing) | `""` |
-| `fmeflow.engines.groups[].resources` | [Engine CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `512Mi`, CPU: `200m` |
+| `fmeflow.engines.groups[].resources` | [Engine CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/). [Ephemeral storage](https://kubernetes.io/docs/concepts/storage/ephemeral-storage/#requests-limits) can also be set to manage temporary disk usage on the node. | Memory: `512Mi`, CPU: `200m` |
 | `fmeflow.engines.groups[].memorylimit.top` | Tell the FME Engine the percentage of available memory to use. Only set this if a memory limit is being set for this engine group. Must be a float between 0.0 and 1.0 and greater than `memorylimit.bottom`. Note this parameter is set automatically when a memory limit is set for an engine. Use these parameters to override. |  |
 | `fmeflow.engines.groups[].memorylimit.bottom` | Tell the FME Engine the percentage of available memory to use. Only set this if a memory limit is being set for this engine group. Must be a float between 0.0 and 1.0 and less than `memorylimit.top`. Note this parameter is set automatically when a memory limit is set for an engine. Use these parameters to override. |  |
 | `fmeflow.engines.groups[].affinity` | Affinity labels for pod assignment for this engine deployment | `{}` |
@@ -140,6 +164,7 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `fmeflow.engines.groups[].image.registry` | Docker registry |  |
 | `fmeflow.engines.groups[].image.namespace` | Docker registry namespace |  |
 | `fmeflow.engines.groups[].image.name` | Name of the FME Engine image | `fmeflow-engine` |
+| `fmeflow.engines.groups[].trustedCACerts.secretName` | Name of a Kubernetes Secret containing CA certificate files (`.crt` or `.pem`) to import into the FME-bundled JRE keystore of engines in this group at startup. Use when workspaces run on this engine group need to trust a private CA for outbound TLS connections. Leave unset to disable. **Requires FME Flow 2026.2 or newer** | `Nil` |
 | `fmeflow.database.host` | The hostname of the Postgres database to use. Only set this if you are not using the included Postgres database |  _The service DNS of the Postgresql database deployed with this chart_ |
 | `fmeflow.database.port` | The port of the Postgres database to use. |  `5432` |
 | `fmeflow.database.name` | The database name for FME Flow to use for its schema. |  `fmeflow` |
@@ -157,6 +182,7 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `fmeflow.forcePasswordChange` | Force the admin user to change password on first login | `true` |
 | `fmeflow.enableTransactionQueueTimeout` | Enable timeout on queue connections. | `false` |
 | `fmeflow.portpool` | Range of ports which can be assigned to FME Engines, Subscribers and Protocols when connecting to FME Flow. Port pools may be specified as a comma-seperated list of port numbers and port number ranges. E.g. 20000-21000,21200 | `Nil` |
+| `fmeflow.trustedCACerts.secretName` | Name of a Kubernetes Secret containing CA certificate files (`.crt` or `.pem`) to import into the Java keystore of the Core and Web containers at startup. Used for trusting private CAs when FME Flow makes outbound TLS connections — most commonly a domain controller's CA for LDAPS authentication (see the [bare-metal equivalent](https://docs.safe.com/fme/html/FME-Flow/AdminGuide/Import_CA_Certificate_for_LDAPS_Connections.htm)). For certificates that engines need (e.g. for workspaces hitting private TLS endpoints), use `fmeflow.engines.groups[].trustedCACerts.secretName` instead. Leave unset to disable. **Requires FME Flow 2026.2 or newer** | `Nil` |
 | `fmeflow.waitForDatabase` | Wait until the database is up and can be connected to before starting FME Flow Core and Engines. Only disable this if this check is causing issues.  | `true` |
 | `fmeflow.waitForQueue` | Wait until the redis queue is up and can be connected to before starting FME Flow Core. Only disable this if this check is causing issues.  | `true` |
 | `fmeflow.healthcheck.startup.initialDelaySeconds` | Set the initial delay before running the startup probes. | `10` |
@@ -174,18 +200,25 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `scheduling.websocket.tolerations` | Toleration labels for pod assignment for Websocket pod. [Official documentation](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) on taints ansd tolerations. | `[]` |
 | `annotations.core.statefulset` | `Annotations for the core statefulset` | `{}` |
 | `annotations.core.template` | `Annotations for the core pod template` | `{}` |
+| `annotations.core.service` | `Annotations for the core service` | `{}` |
 | `annotations.engine.deployment` | `Annotations for the engine deployment` | `{}` |
 | `annotations.engine.template` | `Annotations for the engine pod template` | `{}` |
 | `annotations.queue.statefulset` | `Annotations for the queue statefulset` | `{}` |
 | `annotations.queue.template` | `Annotations for the queue pod template` | `{}` |
+| `annotations.queue.service` | `Annotations for the queue service` | `{}` |
 | `annotations.websocket.statefulset` | `Annotations for the websocket statefulset` | `{}` |
 | `annotations.websocket.template` | `Annotations for the websocket pod template` | `{}` |
-| `ingress.general.ingressClassName` | `Ingress class name to use for ingress objects.` | `nginx` |
-| `ingress.general.annotations` | `Annotations to apply to all ingress objects.` | `nginx.ingress.kubernetes.io/proxy-body-size: "0"`<br/>`nginx.ingress.kubernetes.io/affinity: cookie`<br/>`nginx.ingress.kubernetes.io/session-cookie-name: fmeflow-ingress`<br/>`nginx.ingress.kubernetes.io/session-cookie-hash: md5` |
-| `ingress.web.annotations` | `Annotations to apply to the default web ingress` | `nginx.ingress.kubernetes.io/proxy-read-timeout: "300"`<br/>`nginx.ingress.kubernetes.io/proxy-body-size: "0"` |
-| `ingress.migration.annotations` | `Annotations to apply to the migration REST endpoint ingress. Typically a longer timeout is set for large backup and restore REST calls.` | `nginx.ingress.kubernetes.io/proxy-read-timeout: "1800"` |
-| `ingress.transact.annotations` | `Annotations to apply to the transact REST endpoint ingress. Typically a long timeout is set for synchronous calls to execute long running jobs.` | `nginx.ingress.kubernetes.io/proxy-read-timeout: "1209600"` |
-| `ingress.websocket.annotations` | `Annotations to apply to the websocket REST endpoint ingress. Typically a long timeout is set for long open websocket connections.` | `nginx.ingress.kubernetes.io/proxy-read-timeout: "2592000"` |
+| `annotations.websocket.service` | `Annotations for the websocket service` | `{}` |
+| `annotations.database.statefulset` | `Annotations for the database statefulset` | `{}` |
+| `annotations.database.template` | `Annotations for the database pod template` | `{}` |
+| `annotations.database.service` | `Annotations for the database service` | `{}` |
+| `ingress.enabled` | `Optionally create Ingress objects.` | `true` |
+| `deployment.ingress.general.ingressClassName` | `Ingress class name to use for ingress objects.` | `nginx` |
+| `deployment.ingress.general.annotations` | `Annotations to apply to all ingress objects.` | `nginx.org/client-max-body-size: "0"` |
+| `deployment.ingress.web.annotations` | `Annotations to apply to the default web ingress` | `nginx.org/proxy-read-timeout: "300s"` |
+| `deployment.ingress.migration.annotations` | `Annotations to apply to the migration REST endpoint ingress. Typically a longer timeout is set for large backup and restore REST calls.` | `nginx.org/proxy-read-timeout: "1800s"` |
+| `deployment.ingress.transact.annotations` | `Annotations to apply to the transact REST endpoint ingress. Typically a long timeout is set for synchronous calls to execute long running jobs.` | `nginx.org/proxy-read-timeout: "1209600s"` |
+| `deployment.ingress.websocket.annotations` | `Annotations to apply to the websocket REST endpoint ingress. Typically a long timeout is set for long open websocket connections.` | `nginx.org/proxy-read-timeout: "2592000s"` |
 | `labels.core` | Labels to apply to the core pods | `{}` |
 | `labels.queue` | Labels to apply to the core pods | `{}` |
 | `labels.websocket` | Labels to apply to the core pods | `{}` |
@@ -209,3 +242,19 @@ The following table lists the configurable parameters of the FME Flow helm chart
 
 ## Third Party Dependancies
 PostgreSQL Helm Chart  - Apache 2.0 - Available from [Bitnami](https://github.com/bitnami/charts/tree/master/bitnami/postgresql).
+
+## Semantic Versioning
+
+We follow the major.minor.patch versioning method (more details can be found on semver.org). Here is what each component means: 
+
+### Major Version 
+
+Major version refers to major, backward-incompatible changes.
+
+### Minor Version
+
+Minor version refers to back-compatible changes that does not break deploying earlier versions of FME Flow.
+
+### Patch Version
+
+Patch version refers to back-compatible bug fixes.

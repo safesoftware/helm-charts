@@ -16,6 +16,17 @@ See the FME Flow doc about working with [Remote Engines Service](https://docs.sa
 
 See all available parameters below.
 
+## Ingress Migration Notes
+
+This chart now targets the official [NGINX Ingress Controller](https://docs.nginx.com/nginx-ingress-controller/), see [Community Ingress NGINX retirement](https://kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/).
+If you are migrating from previous chart versions that used community `ingress-nginx`, update your values as follows:
+
+1. Keep `deployment.useHostnameIngress=true` when using the official NGINX Ingress Controller.
+2. Set `deployment.hostname` to a DNS hostname (for example `fmeflow.example.com` or `localhost`). Do not use an IP address with hostname-based ingress.
+3. Replace old `nginx.ingress.kubernetes.io/*` annotations with `nginx.org/*` annotations.
+4. Sticky session defaults were removed. If your deployment depended on sticky sessions, configure an alternative strategy outside these chart defaults.
+5. If `deployment.disableTLS=false`, set `deployment.tlsSecretName` to use your own certificate, or leave it empty to use the chart-managed self-signed secret.
+
 ## Configuration
 
 The following table lists the configurable parameters of the FME Flow helm chart and their default values.
@@ -28,11 +39,12 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `fmeflow.image.namespace` | Docker registry namespace | `safesoftware` This parameter should not be changed. |
 | `deployment.hostname` | FME Flow hostname | `localhost` |
 | `deployment.port` | FME Flow port | `443` |
-| `deployment.tlsSecretName` | Custom TLS certificate, see [documentation](https://docs.safe.com/fme/html/FME-Flow/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `Nil` |
+| `deployment.tlsSecretName` | Custom TLS certificate, see [documentation](https://docs.safe.com/fme/html/FME-Flow/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details. If not set, the chart will use a self-signed secret named `<release>-fmeremoteenginesservice-tls-selfsigned`. | `Nil` |
 | `deployment.certManager.issuerName` | Cert Manager issuer name, see [documentation](https://docs.safe.com/fme/html/FME-Flow/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `Nil` |
 | `deployment.certManager.issuerType` | Can be `cluster` or `namespace`, ignored if no issuerName is provided. See [documentation](https://docs.safe.com/fme/html/FME-Flow/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `cluster` |
 | `deployment.startAsRoot` | Starts core container as root and grants the fmeflow user access to the file system. | `false` |
-| `deployment.useHostnameIngress` | Configures the ingress to route traffic to FME Flow only if the request matches the value of `deployment.hostname`. Setting this to false will route all traffic on the ingress to FME Flow. | `true` |
+| `deployment.useHostnameIngress` | Configures the ingress to route traffic to FME Flow only if the request host matches `deployment.hostname`. When using official NGINX Ingress Controller, setting this to `false` is unsupported. | `true` |
+| `deployment.ingress.useNginxMergeable` | Enables NGINX mergeable ingress resources (master/minion) when `deployment.useHostnameIngress=true`. Set this to `false` to disable mergeable mode or when using an ingress controller other than official NGINX. | `true` |
 | `deployment.disableTLS` | Set this to `true` if you would like to disable TLS on the ingress. This is not recommended. | `false` |
 | `resources.core` | [Core CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `1.5Gi`, CPU: `200m` |
 | `resources.web` | [Web CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `1.5Gi`, CPU: `200m` |
@@ -63,8 +75,8 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `scheduling.tolerations` | Toleration labels for pod assignment. [Official documentation](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) on taints and tolerations. | `[]` |
 | `annotations.statefulset` | `Annotations for the statefulset` | `{}` |
 | `annotations.template` | `Annotations for the pod template` | `{}` |
-| `ingress.ingressClassName` | `Ingress class name to use for ingress objects.` | `nginx` |
-| `ingress.annotations` | `Annotations to apply to all ingress objects.` | `nginx.ingress.kubernetes.io/proxy-body-size: "0"`<br/>`nginx.ingress.kubernetes.io/affinity: cookie`<br/>`nginx.ingress.kubernetes.io/session-cookie-name: fmeflow-ingress`<br/>`nginx.ingress.kubernetes.io/session-cookie-hash: md5` |
+| `deployment.ingress.ingressClassName` | `Ingress class name to use for ingress objects.` | `nginx` |
+| `deployment.ingress.annotations` | `Annotations applied to ingress objects.` | `nginx.org/client-max-body-size: "0"`<br/>`nginx.org/proxy-read-timeout: "300s"` |
 | `labels` | Labels to apply to the pod | `{}` |
 
 ## Development
@@ -73,3 +85,19 @@ The following table lists the configurable parameters of the FME Flow helm chart
 
 1. `helm plugin install https://github.com/lrills/helm-unittest`
 2. `helm unittest <path/to/chart/source>`
+
+## Semantic Versioning
+
+We follow the major.minor.patch versioning method (more details can be found on semver.org). Here is what each component means: 
+
+### Major Version 
+
+Major version refers to major, backward-incompatible changes.
+
+### Minor Version
+
+Minor version refers to back-compatible changes that does not break deploying earlier versions of FME Flow.
+
+### Patch Version
+
+Patch version refers to back-compatible bug fixes.
