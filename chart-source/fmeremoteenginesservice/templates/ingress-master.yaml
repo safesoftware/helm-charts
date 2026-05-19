@@ -1,0 +1,17 @@
+{{- if and .Values.deployment.useHostnameIngress .Values.deployment.ingress.useNginxMergeable }}
+apiVersion: {{ include "fmeflow.ingress.apiversion" . }}
+kind: Ingress
+metadata:
+  name: fmeflow-remoteengine-master-ingress
+  annotations:
+    nginx.org/mergeable-ingress-type: "master"
+{{- if .Values.deployment.ingress.annotations }}
+{{ toYaml .Values.deployment.ingress.annotations | indent 4 }}
+{{ end }}
+{{- include "fmeflow.ingress.annotations" . | indent 4 }}
+spec:
+  ingressClassName: {{ .Values.deployment.ingress.ingressClassName }}
+  {{- include "fmeflow.ingress.tls" . }}
+  rules:
+    - host: {{ .Values.deployment.hostname }}
+{{- end }}

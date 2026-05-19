@@ -16,10 +16,17 @@ cert-manager.io/issuer: {{ .Values.deployment.certManager.issuerName | quote }}
   tls:
     - hosts:
         - {{ .Values.deployment.hostname }}
-      {{- if .Values.deployment.tlsSecretName }}
-      secretName: {{ .Values.deployment.tlsSecretName }}
-      {{- end }}
+      secretName: {{ include "fmeflow.ingress.tlsSecretName" . }}
 {{- end }}
+{{- end }}
+
+{{/* Resolves the tls secret used by ingress resources */}}
+{{- define "fmeflow.ingress.tlsSecretName" }}
+{{- if .Values.deployment.tlsSecretName -}}
+{{ .Values.deployment.tlsSecretName }}
+{{- else -}}
+{{- printf "%s-tls-selfsigned" (include "fmeflow.fullname" .) -}}
+{{- end -}}
 {{- end }}
 
 
@@ -175,6 +182,6 @@ servicePort: 8080
 
 {{- define "fmeflow.ingress.pathType" -}}
 {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.Version -}}
-pathType: Prefix
+pathType: {{ .Values.deployment.ingress.pathType | default "Prefix" }}
 {{- end -}}
 {{- end -}}

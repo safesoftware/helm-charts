@@ -4,6 +4,10 @@ metadata:
   labels:
     safe.k8s.fmeflow.component: remoteengine
     {{- include "fmeflow.common.labels" . | indent 4 }}
+  {{- with .Values.annotations.service }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   name: fmeflowremoteengineweb
 spec:
   ports:

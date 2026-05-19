@@ -1,15 +1,21 @@
+{{- if .Values.deployment.ingress.enabled }}
 apiVersion: {{ include "fmeflow.ingress.apiversion" . }}
 kind: Ingress
 metadata:
   name: fmeflow-remoteengine-web-ingress
   annotations:
-{{- if .Values.deployment.ingress.annotations }}    
+    {{- if and .Values.deployment.useHostnameIngress .Values.deployment.ingress.useNginxMergeable }}
+    nginx.org/mergeable-ingress-type: "minion"
+    {{- end }}
+{{- if .Values.deployment.ingress.annotations }}
 {{ toYaml .Values.deployment.ingress.annotations | indent 4 }}
 {{ end }}
 {{- include "fmeflow.ingress.annotations" . | indent 4 }}
 spec:
   ingressClassName: {{ .Values.deployment.ingress.ingressClassName }}
+  {{- if not (and .Values.deployment.useHostnameIngress .Values.deployment.ingress.useNginxMergeable) }}
   {{- include "fmeflow.ingress.tls" . }}
+  {{- end }}
   rules:
     - http:
         paths:
@@ -20,3 +26,4 @@ spec:
       {{- if .Values.deployment.useHostnameIngress }}
       host: {{ .Values.deployment.hostname }}
       {{ end }}
+{{- end }}

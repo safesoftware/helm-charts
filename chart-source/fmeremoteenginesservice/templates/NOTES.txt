@@ -6,3 +6,7 @@ Once all containers are running, you should be able to access your deployment un
 
 To uninstall/delete FME Flow Remote Engines Service (this deletes all data):
   $ helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+---
+NOTE: This chart now targets the official NGINX Ingress Controller as the community controller is being retired, view the README for more details.
+---

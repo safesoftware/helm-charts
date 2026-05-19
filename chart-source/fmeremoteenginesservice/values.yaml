@@ -9,6 +9,8 @@ fmeflow:
     password: 4fmmsgrz09
     passwordSecret:
     passwordSecretKey: fmeflow-db-password
+  engines:
+    terminationGracePeriodSeconds: 300
   enableTransactionQueueTimeout: false
   forcePasswordChange: true
   healthcheck:
@@ -39,18 +41,21 @@ deployment:
   startAsRoot: false
   useHostnameIngress: true
   disableTLS: false
+  automountServiceAccountToken: false
   ingress:
+    enabled: true
+    # enable nginx mergeable ingress resources (master/minion) when useHostnameIngress is true
+    useNginxMergeable: true
     ingressClassName: "nginx"
+    pathType: Prefix
     annotations:
-      nginx.ingress.kubernetes.io/proxy-body-size: "0"
-      nginx.ingress.kubernetes.io/affinity: cookie
-      nginx.ingress.kubernetes.io/session-cookie-name: fmeflow-ingress
-      nginx.ingress.kubernetes.io/session-cookie-hash: md5
-      nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+      nginx.org/client-max-body-size: "0"
+      nginx.org/proxy-read-timeout: "300s"
 
 annotations:
   statefulset: {}
   template: {}
+  service: {}
 
 labels: {}
 
@@ -100,6 +105,6 @@ storage:
 
 postgresql:
   image: 
-    tag: postgres:16.1-bullseye
+    tag: postgres:17.9-bookworm
   auth:
     postgresqlPassword: a6av3abwzi
