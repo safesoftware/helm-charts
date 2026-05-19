@@ -22,7 +22,7 @@ This chart now targets the official [NGINX Ingress Controller](https://docs.ngin
 If you are migrating from previous chart versions that used community `ingress-nginx`, update your values as follows:
 
 1. Keep `deployment.useHostnameIngress=true` when using the official NGINX Ingress Controller.
-2. Set `deployment.hostname` to a DNS hostname (for example `fmeflow.example.com` or `localhost`). Do not use an IP address with hostname-based ingress.
+2. Set `deployment.hostname` to a DNS hostname (for example `fmeflow.example.com`). Do not use an IP address with hostname-based ingress.
 3. Replace old `nginx.ingress.kubernetes.io/*` annotations with `nginx.org/*` annotations.
 4. Sticky session defaults were removed. If your deployment depended on sticky sessions, configure an alternative strategy outside these chart defaults.
 5. If `deployment.disableTLS=false`, set `deployment.tlsSecretName` to use your own certificate, or leave it empty to use the chart-managed self-signed secret.
