@@ -1,8 +1,12 @@
+{{- if .Values.deployment.ingress.enabled }}
 apiVersion: {{ include "fmeflow.ingress.apiversion" . }}
 kind: Ingress
 metadata:
   name: fmeflow-websocket-ingress
   annotations:
+    {{- if and .Values.deployment.useHostnameIngress .Values.deployment.ingress.useNginxMergeable }}
+    nginx.org/mergeable-ingress-type: "minion"
+    {{- end }}
 {{- if .Values.deployment.ingress.general.annotations }}
 {{ toYaml .Values.deployment.ingress.general.annotations | indent 4 }}
 {{ end }}
@@ -12,7 +16,9 @@ metadata:
 {{- include "fmeflow.ingress.annotations" . | indent 4 }}
 spec:
   ingressClassName: {{ .Values.deployment.ingress.general.ingressClassName }}
+  {{- if not (and .Values.deployment.useHostnameIngress .Values.deployment.ingress.useNginxMergeable) }}
   {{- include "fmeflow.ingress.tls" . }}
+  {{- end }}
   rules:
     - http:
         paths:
@@ -23,3 +29,4 @@ spec:
       {{- if .Values.deployment.useHostnameIngress }}
       host: {{ .Values.deployment.hostname }}
       {{ end }}
+{{- end }}

@@ -34,6 +34,7 @@ spec:
         {{- else }}
         fsGroup: 1363
         {{- end }}
+      automountServiceAccountToken: {{ .Values.deployment.automountServiceAccountToken }}
       containers:
         - image: {{ .Values.postgresql.image.tag | quote}}
           name: database

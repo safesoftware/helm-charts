@@ -5,6 +5,10 @@ metadata:
   labels:
     safe.k8s.fmeflow.component: database
     {{- include "fmeflow.common.labels" . | indent 4 }}
+  {{- with .Values.annotations.database.service }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   name: "{{ .Release.Name}}-postgresql"
 spec:
   type: ClusterIP

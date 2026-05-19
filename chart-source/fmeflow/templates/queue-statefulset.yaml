@@ -35,7 +35,7 @@ spec:
         {{- end }}
       {{- end }}
       containers:
-        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/{{ .Values.fmeflow.image.queue.name }}:{{ template "fmeflow.image.tag" . }}
+        - image: {{ include "fmeflow.image" (dict "ctx" . "component" "queue") }}
           name: queue
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           ports:

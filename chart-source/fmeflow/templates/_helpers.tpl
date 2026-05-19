@@ -16,12 +16,18 @@ cert-manager.io/issuer: {{ .Values.deployment.certManager.issuerName | quote }}
   tls:
     - hosts:
         - {{ .Values.deployment.hostname }}
-      {{- if .Values.deployment.tlsSecretName }}
-      secretName: {{ .Values.deployment.tlsSecretName }}
-      {{- end }}
+      secretName: {{ include "fmeflow.ingress.tlsSecretName" . }}
 {{- end }}
 {{- end }}
 
+{{/* Resolves the tls secret used by ingress resources */}}
+{{- define "fmeflow.ingress.tlsSecretName" }}
+{{- if .Values.deployment.tlsSecretName -}}
+{{ .Values.deployment.tlsSecretName }}
+{{- else -}}
+{{- printf "%s-tls-selfsigned" (include "fmeflow.fullname" .) -}}
+{{- end -}}
+{{- end }}
 
 {{- define "fmeflow.deployment.protocol" }}
 {{- if .Values.deployment.disableTLS }}http{{- else }}https{{- end }}
@@ -164,6 +170,21 @@ See https://github.com/helm/helm/issues/3708
 {{- end -}}
 {{- end -}}
 
+{{/*
+Build image from alternative registry
+Usage: {{ include "fmeflow.image" (dict "ctx" . "component" "core") }}
+Per-image overrides (.Values.fmeflow.image.<component>.registry/.namespace)
+fall back to the global image helpers when not set.
+*/}}
+{{- define "fmeflow.image" -}}
+{{- $ctx := .ctx -}}
+{{- $c := index $ctx.Values.fmeflow.image .component -}}
+{{- $registry  := $c.registry  | default (include "fmeflow.image.registry"  $ctx | trim) -}}
+{{- $namespace := $c.namespace | default (include "fmeflow.image.namespace" $ctx | trim) -}}
+{{- $tag       := include "fmeflow.image.tag" $ctx | trim -}}
+{{- printf "%s/%s/%s:%s" $registry $namespace $c.name $tag -}}
+{{- end -}}
+
 {{- define "fmeflow.resources.web" }}
 {{- if .Values.resources.web }}
 {{- if .Values.resources.web.requests }}
@@ -224,7 +245,7 @@ servicePort: 7078
 
 {{- define "fmeflow.ingress.pathType" -}}
 {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.Version -}}
-pathType: Prefix
+pathType: {{ .Values.deployment.ingress.general.pathType | default "Prefix" }}
 {{- end -}}
 {{- end -}}
 

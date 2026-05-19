@@ -9,14 +9,25 @@ fmeflow:
     pullSecrets: []
     core:
       name: fmeflow-core
+      # Uncomment to override the global registry/namespace for this image
+      # registry:
+      # namespace:
     web:
       name: fmeflow-web
+      # registry:
+      # namespace:
     queue:
       name: fmeflow-queue
+      # registry:
+      # namespace:
     utilityengine:
       name: fmeflow-engine
+      # registry:
+      # namespace:
     deploymenttester:
       name: fmeflow-deployment-tester
+      # registry:
+      # namespace:
   database:
     host:
     port: '5432'
@@ -66,11 +77,19 @@ fmeflow:
       failureThreshold: 20
       timeoutSeconds: 5
       periodSeconds: 30
+  # Mount a Kubernetes Secret containing CA certificates (.crt or .pem files) into the
+  # Core and Web containers. The Core container's startup script imports every file it
+  # finds under /etc/fmeflow/trusted-ca-certs/ into the Java keystore before launching
+  # the Java process. Typical use case: trusting the domain controller's CA for LDAPS
+  # authentication. Leave secretName unset to disable.
+  trustedCACerts:
+    secretName:
   engines:
     debugLevel: "NONE"
     hideHostContent: true
     enginesNodeManaged: false
     receiveTimeout: 0
+    terminationGracePeriodSeconds: 300
     groups:
       - name: "standard-group"
         engines: 2
@@ -80,6 +99,12 @@ fmeflow:
         nodeSelector: {}
         tolerations: []
         engineProperties:
+        # Name of a Kubernetes Secret containing CA certificates (.crt or .pem files)
+        # to import into the Java keystore of engines in this group at startup. Use
+        # when workspaces run on this engine group need to trust a private CA for
+        # outbound TLS connections. Leave secretName unset to disable.
+        trustedCACerts:
+          secretName:
         resources:
           requests:
             memory: 512Mi
@@ -92,6 +117,8 @@ fmeflow:
         nodeSelector: {}
         tolerations: []
         engineProperties:
+        trustedCACerts:
+          secretName:
         resources:
           requests:
             memory: 512Mi
@@ -113,48 +140,54 @@ deployment:
   disableTLS: false
   automountServiceAccountToken: false
   ingress:
+    enabled: true
+    # enable nginx mergeable ingress resources (master/minion) when useHostnameIngress is true
+    useNginxMergeable: true
     # general annotations are applied to all ingresses
     general:
       ingressClassName: "nginx"
+      pathType: Prefix
       annotations:
-        nginx.ingress.kubernetes.io/proxy-body-size: "0"
-        nginx.ingress.kubernetes.io/affinity: cookie
-        nginx.ingress.kubernetes.io/session-cookie-name: fmeflow-ingress
-        nginx.ingress.kubernetes.io/session-cookie-hash: md5
+        nginx.org/client-max-body-size: "0"
     # annotations on the default web traffic ingress
     web:
       annotations:
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+        nginx.org/proxy-read-timeout: "300s"
     # annotations on the migration endpoint
     migration:
       annotations:
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "1800"
+        nginx.org/proxy-read-timeout: "1800s"
     # annotations on the transact api endpoint
     transact:
       annotations:
         # 14 days read timeout for transact jobs
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "1209600"
+        nginx.org/proxy-read-timeout: "1209600s"
     websocket:
       annotations:
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "2592000"
+        nginx.org/proxy-read-timeout: "2592000s"
+        nginx.org/websocket-services: "fmeflowwebsocket"
 
 
 annotations:
   core:
     statefulset: {}
     template: {}
+    service: {}
   engine:
     deployment: {}
     template: {}
   queue:
     statefulset: {}
     template: {}
+    service: {}
   websocket:
     statefulset: {}
     template: {}
+    service: {}
   database:
     statefulset: {}
     template: {}
+    service: {}
 
 labels:
   core: {}
@@ -230,6 +263,6 @@ storage:
 
 postgresql:
   image:
-    tag: postgres:17.6-bookworm
+    tag: postgres:17.9-bookworm
   livenessProbe:
     initialDelaySeconds: 300

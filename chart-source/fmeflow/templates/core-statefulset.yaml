@@ -41,7 +41,7 @@ spec:
         fsGroup: 1363
         {{- end }}
       containers:
-        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/{{ .Values.fmeflow.image.core.name }}:{{ template "fmeflow.image.tag" . }}
+        - image: {{ include "fmeflow.image" (dict "ctx" . "component" "core") }}
           name: core
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           ports:
@@ -59,6 +59,11 @@ spec:
             - mountPath: {{ .mountPath  }}
               name: {{ .name }}
           {{- end }}
+          {{- end }}
+          {{- if .Values.fmeflow.trustedCACerts.secretName }}
+            - mountPath: /etc/fmeflow/trusted-ca-certs
+              name: trusted-ca-certs
+              readOnly: true
           {{- end }}
           env:
             - name: PRIMARY_PROCESS
@@ -151,7 +156,7 @@ spec:
             timeoutSeconds: {{ .Values.fmeflow.healthcheck.startup.timeoutSeconds }}
             periodSeconds: {{ .Values.fmeflow.healthcheck.startup.periodSeconds }}
           {{- end }}
-        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/{{ .Values.fmeflow.image.web.name }}:{{ template "fmeflow.image.tag" . }}
+        - image: {{ include "fmeflow.image" (dict "ctx" . "component" "web") }}
           name: web
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           ports:
@@ -169,6 +174,11 @@ spec:
             - mountPath: {{ .mountPath  }}
               name: {{ .name }}
           {{- end }}
+          {{- end }}
+          {{- if .Values.fmeflow.trustedCACerts.secretName }}
+            - mountPath: /etc/fmeflow/trusted-ca-certs
+              name: trusted-ca-certs
+              readOnly: true
           {{- end }}
           env:
             - name: COREHOSTNAME
@@ -237,7 +247,7 @@ spec:
             periodSeconds: {{ .Values.fmeflow.healthcheck.startup.periodSeconds }}
           {{- end }}
         {{- if .Values.fmeflow.fmeutility.enabled }}
-        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/{{ .Values.fmeflow.image.utilityengine.name }}:{{ template "fmeflow.image.tag" . }}
+        - image: {{ include "fmeflow.image" (dict "ctx" . "component" "utilityengine") }}
           name: fmeutility
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           resources: 
@@ -291,7 +301,7 @@ spec:
             {{- end }}
         {{- end }}
       initContainers:
-        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/{{ .Values.fmeflow.image.core.name }}:{{ template "fmeflow.image.tag" . }}
+        - image: {{ include "fmeflow.image" (dict "ctx" . "component" "core") }}
           name: dbinit
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           resources: 
@@ -347,6 +357,11 @@ spec:
           persistentVolumeClaim:
             claimName: {{ if .existingClaim }}{{ .existingClaim }}{{ else }}{{ .name }}{{ end }}
         {{- end }}
+        {{- end }}
+        {{- if .Values.fmeflow.trustedCACerts.secretName }}
+        - name: trusted-ca-certs
+          secret:
+            secretName: {{ .Values.fmeflow.trustedCACerts.secretName }}
         {{- end }}
       {{- if .Values.scheduling.core.nodeSelector }}
       nodeSelector:

@@ -35,7 +35,7 @@ spec:
         {{- end }}
       {{- end }}
       containers:
-        - image: {{ template "fmeflow.image.registry" . }}/{{ template "fmeflow.image.namespace" . }}/{{ .Values.fmeflow.image.core.name }}:{{ template "fmeflow.image.tag" . }}
+        - image: {{ include "fmeflow.image" (dict "ctx" . "component" "core") }}
           name: websocket
           imagePullPolicy: {{ template "fmeflow.image.pullPolicy" . }}
           env:

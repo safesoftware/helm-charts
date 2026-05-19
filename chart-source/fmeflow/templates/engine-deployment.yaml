@@ -38,6 +38,24 @@ spec:
         - image: {{ if .image }}{{ if .image.registry }}{{ .image.registry }}{{ else }}{{ template "fmeflow.image.registry" $ }}{{ end }}/{{ if .image.namespace }}{{ .image.namespace }}{{ else }}{{ template "fmeflow.image.namespace" $ }}{{ end }}/{{ if .image.name }}{{ .image.name }}{{ else }}fmeflow-engine{{ end }}:{{ if .image.tag }}{{ .image.tag }}{{ else }}{{ template "fmeflow.image.tag" $ }}{{ end }}{{else}}{{ template "fmeflow.image.registry" $ }}/{{ template "fmeflow.image.namespace" $ }}/fmeflow-engine:{{ template "fmeflow.image.tag" $ }}{{ end }}
           name: engine
           imagePullPolicy: {{ if .image }}{{ if .image.pullPolicy }}{{ .image.pullPolicy }}{{ else }}{{ template "fmeflow.image.pullPolicy" $ }}{{ end }}{{ else }}{{ template "fmeflow.image.pullPolicy" $ }}{{ end }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    fmePid=$(pidof fme);
+                    jobId=$(ls -lR /proc/ 2>&1 | grep -oP "job_\d+" | sed -n '1p');
+                    currentJobId=$(ls -lR /proc/ 2>&1 | grep -oP "job_\d+" | sed -n '1p');
+                    while ls -lR /proc/$fmePid 2>&1 | grep -q job_; do
+                      while [ "$jobId" = "$currentJobId" ]
+                      do
+                        currentJobId=$(ls -lR /proc/ 2>&1 | grep -oP "job_\d+" | sed -n '1p');
+                        sleep 1;
+                      done
+                      exit
+                    done
           volumeMounts:
             - mountPath: /data/fmeflowdata
               name: fmeflowdata
@@ -48,6 +66,13 @@ spec:
             {{- range $.Values.additionalStorage }}
             - mountPath: {{ .mountPath }}
               name: {{ .name }}
+            {{- end }}
+            {{- end }}
+            {{- if .trustedCACerts }}
+            {{- if .trustedCACerts.secretName }}
+            - mountPath: /etc/fmeflow/trusted-ca-certs
+              name: trusted-ca-certs
+              readOnly: true
             {{- end }}
             {{- end }}
           env:
@@ -182,6 +207,7 @@ spec:
       serviceAccountName: "fme-engine-aws"
       {{- end }}
       automountServiceAccountToken: {{ $.Values.deployment.automountServiceAccountToken }}
+      terminationGracePeriodSeconds: {{ $.Values.fmeflow.engines.terminationGracePeriodSeconds }}
       restartPolicy: Always
       volumes:
         - name: fmeflowdata
@@ -192,6 +218,13 @@ spec:
         - name: {{ .name }}
           persistentVolumeClaim:
             claimName: {{ if .existingClaim }}{{ .existingClaim }}{{ else }}{{ .name }}{{ end }}
+        {{- end }}
+        {{- end }}
+        {{- if .trustedCACerts }}
+        {{- if .trustedCACerts.secretName }}
+        - name: trusted-ca-certs
+          secret:
+            secretName: {{ .trustedCACerts.secretName }}
         {{- end }}
         {{- end }}
       affinity:

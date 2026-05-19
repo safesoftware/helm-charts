@@ -4,6 +4,10 @@ metadata:
   labels:
     safe.k8s.fmeflow.component: queue
     {{- include "fmeflow.common.labels" . | indent 4 }}
+  {{- with .Values.annotations.queue.service }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   name: fmeflowqueue
 spec:
   ports:

@@ -4,6 +4,10 @@ metadata:
   labels:
     safe.k8s.fmeflow.component: core
     {{- include "fmeflow.common.labels" . | indent 4 }}
+  {{- with .Values.annotations.core.service }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   name: engineregistration
 spec:
   ports:
