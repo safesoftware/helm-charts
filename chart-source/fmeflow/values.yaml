@@ -60,6 +60,8 @@ fmeflow:
   waitForQueue: true
   scheduler:
     idleWaitTime: 5000
+  maintenance:
+    idleWait: 90
   healthcheck:
     enabled: true
     liveness:
@@ -90,6 +92,28 @@ fmeflow:
     enginesNodeManaged: false
     receiveTimeout: 0
     terminationGracePeriodSeconds: 300
+    # When enabled, a sidecar runs in each engine pod and patches the
+    # controller.kubernetes.io/pod-deletion-cost annotation based on whether
+    # the engine is currently running a job. The Kubernetes scheduler then
+    # prefers to evict idle engines over busy ones when scaling down.
+    # Requires FME Flow 2026.3 or newer.
+    podDeletionCost:
+      enabled: false
+      busyValue: 10000
+      idleValue: 0
+      pollIntervalSeconds: 5
+      markerFilePath: /var/run/fmeflow/job-state
+      bootstrapTimeoutSeconds: 60
+      runAsUser: 65532
+      image:
+        registry: docker.io
+        repository: curlimages/curl
+        tag: 8.20.0
+        pullPolicy: IfNotPresent
+      resources:
+        requests:
+          memory: 32Mi
+          cpu: 10m
     groups:
       - name: "standard-group"
         engines: 2
@@ -129,6 +153,7 @@ fmeflow:
 deployment:
   hostname: localhost
   port: 443
+  serviceUrlMode: ingress
   tlsSecretName:
   certManager:
     issuerName:
@@ -263,6 +288,6 @@ storage:
 
 postgresql:
   image:
-    tag: postgres:17.9-bookworm
+    tag: postgres:17.10-bookworm
   livenessProbe:
     initialDelaySeconds: 300

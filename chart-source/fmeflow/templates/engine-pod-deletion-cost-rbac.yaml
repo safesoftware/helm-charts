@@ -1,0 +1,47 @@
+{{- if .Values.fmeflow.engines.podDeletionCost.enabled }}
+{{- /*
+  When awsServiceAccount is also set, the engine pod uses the `fme-engine-aws`
+  ServiceAccount instead (a pod can only assume one SA), so we skip creating
+  our own SA and bind the Role to `fme-engine-aws` directly. That single SA
+  carries both the EKS IRSA annotation and the K8s patch-pods permission.
+*/}}
+{{- $useAwsSA := not (empty .Values.fmeflow.engines.awsServiceAccount) }}
+{{- $subjectName := ternary "fme-engine-aws" "fme-engine-pod-deletion-cost" $useAwsSA }}
+{{- if not $useAwsSA }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: "fme-engine-pod-deletion-cost"
+  labels:
+    safe.k8s.fmeflow.component: engine
+    {{- include "fmeflow.common.labels" . | indent 4 }}
+---
+{{- end }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: "fme-engine-pod-deletion-cost"
+  labels:
+    safe.k8s.fmeflow.component: engine
+    {{- include "fmeflow.common.labels" . | indent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: "fme-engine-pod-deletion-cost"
+  labels:
+    safe.k8s.fmeflow.component: engine
+    {{- include "fmeflow.common.labels" . | indent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ $subjectName | quote }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: "fme-engine-pod-deletion-cost"
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

@@ -28,6 +28,14 @@ spec:
 {{ toYaml . | indent 8 }}
       {{- end }}
     spec:
+      {{- if $.Values.fmeflow.engines.podDeletionCost.enabled }}
+      # fsGroup so the engine UID (1363) can write the marker file to the
+      # emptyDir mounted at /var/run/fmeflow/. With fsGroupChangePolicy:
+      # OnRootMismatch (K8s 1.23+ default) this is a no-op on already-correct
+      # PVCs.
+      securityContext:
+        fsGroup: 1363
+      {{- end }}
       {{- if $.Values.fmeflow.image.pullSecrets }}
       imagePullSecrets:
         {{- range $.Values.fmeflow.image.pullSecrets }}
@@ -75,7 +83,19 @@ spec:
               readOnly: true
             {{- end }}
             {{- end }}
+            {{- if $.Values.fmeflow.engines.podDeletionCost.enabled }}
+            - mountPath: {{ dir $.Values.fmeflow.engines.podDeletionCost.markerFilePath }}
+              name: pod-deletion-cost-state
+            {{- end }}
           env:
+            {{- if $.Values.fmeflow.engines.podDeletionCost.enabled }}
+            - name: POD_DELETION_COST_WATCHER_ENABLED
+              value: "true"
+            - name: POD_DELETION_COST_WATCHER_MARKER_FILE
+              value: "{{ $.Values.fmeflow.engines.podDeletionCost.markerFilePath }}"
+            - name: POD_DELETION_COST_WATCHER_POLL_INTERVAL_SECONDS
+              value: "{{ $.Values.fmeflow.engines.podDeletionCost.pollIntervalSeconds }}"
+            {{- end }}
             - name: EXTERNALHOSTNAME
               value: {{ $.Values.deployment.hostname }}
             - name: WEBPROTOCOL
@@ -203,10 +223,106 @@ spec:
           resources:
 {{ toYaml .resources | indent 12 }}
           {{- end }}
+        {{- if $.Values.fmeflow.engines.podDeletionCost.enabled }}
+        - name: pod-deletion-cost-watcher
+          image: "{{ $.Values.fmeflow.engines.podDeletionCost.image.registry }}/{{ $.Values.fmeflow.engines.podDeletionCost.image.repository }}:{{ $.Values.fmeflow.engines.podDeletionCost.image.tag }}"
+          imagePullPolicy: {{ $.Values.fmeflow.engines.podDeletionCost.image.pullPolicy }}
+          securityContext:
+            runAsUser: {{ $.Values.fmeflow.engines.podDeletionCost.runAsUser }}
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: {{ dir $.Values.fmeflow.engines.podDeletionCost.markerFilePath }}
+              name: pod-deletion-cost-state
+              readOnly: true
+            # Writable scratch space for curl's temp files. The rest of the
+            # sidecar's root filesystem stays read-only via the
+            # securityContext above.
+            - mountPath: /tmp
+              name: pod-deletion-cost-sidecar-tmp
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -u
+              TOKEN_FILE=/var/run/secrets/kubernetes.io/serviceaccount/token
+              CA_FILE=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              URL="https://kubernetes.default.svc/api/v1/namespaces/$POD_NAMESPACE/pods/$POD_NAME"
+              MARKER_FILE="{{ $.Values.fmeflow.engines.podDeletionCost.markerFilePath }}"
+              BOOTSTRAP_TIMEOUT={{ $.Values.fmeflow.engines.podDeletionCost.bootstrapTimeoutSeconds }}
+              echo "[pod-deletion-cost] starting: pod=$POD_NAME ns=$POD_NAMESPACE marker=$MARKER_FILE"
+              # Wait for the engine's watcher to create the marker file. If it
+              # never appears, the engine image is older than FME Flow 2026.3
+              # and does not ship pod-deletion-cost-watcher.sh.
+              DEADLINE=$(( $(date +%s) + BOOTSTRAP_TIMEOUT ))
+              while [ ! -f "$MARKER_FILE" ]; do
+                if [ $(date +%s) -ge $DEADLINE ]; then
+                  echo "[pod-deletion-cost] marker file $MARKER_FILE did not appear within ${BOOTSTRAP_TIMEOUT}s." >&2
+                  echo "[pod-deletion-cost] the engine image does not ship pod-deletion-cost-watcher.sh; upgrade to FME Flow 2026.3 or newer." >&2
+                  exit 1
+                fi
+                sleep 1
+              done
+              echo "[pod-deletion-cost] marker file found; entering watch loop"
+              LAST=""
+              while true; do
+                STATE=$(cat "$MARKER_FILE" 2>/dev/null || echo unknown)
+                case "$STATE" in
+                  busy) COST={{ $.Values.fmeflow.engines.podDeletionCost.busyValue }} ;;
+                  idle) COST={{ $.Values.fmeflow.engines.podDeletionCost.idleValue }} ;;
+                  *)
+                    echo "[pod-deletion-cost] unexpected marker content '$STATE'; skipping" >&2
+                    sleep {{ $.Values.fmeflow.engines.podDeletionCost.pollIntervalSeconds }}
+                    continue
+                    ;;
+                esac
+                if [ "$STATE" != "$LAST" ]; then
+                  echo "[pod-deletion-cost] transition ${LAST:-<init>} -> $STATE, patching pod-deletion-cost=$COST"
+                  BODY_FILE=$(mktemp)
+                  ERR_FILE=$(mktemp)
+                  HTTP=$(curl -sS -o "$BODY_FILE" -w "%{http_code}" \
+                    --cacert "$CA_FILE" \
+                    -H "Authorization: Bearer $(cat $TOKEN_FILE)" \
+                    -H "Content-Type: application/strategic-merge-patch+json" \
+                    -X PATCH \
+                    --data "{\"metadata\":{\"annotations\":{\"controller.kubernetes.io/pod-deletion-cost\":\"$COST\"}}}" \
+                    "$URL" 2>"$ERR_FILE")
+                  ERR=$(cat "$ERR_FILE")
+                  echo "[pod-deletion-cost] PATCH HTTP $HTTP"
+                  if [ -n "$ERR" ]; then
+                    echo "[pod-deletion-cost] curl stderr: $ERR"
+                  fi
+                  if [ "$HTTP" = "200" ]; then
+                    echo "[pod-deletion-cost] PATCH ok"
+                    LAST=$STATE
+                  else
+                    echo "[pod-deletion-cost] PATCH failed body: $(cat $BODY_FILE)"
+                  fi
+                  rm -f "$BODY_FILE" "$ERR_FILE"
+                fi
+                sleep {{ $.Values.fmeflow.engines.podDeletionCost.pollIntervalSeconds }}
+              done
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          resources:
+{{ toYaml $.Values.fmeflow.engines.podDeletionCost.resources | indent 12 }}
+        {{- end }}
       {{- if not (empty $.Values.fmeflow.engines.awsServiceAccount) }}
       serviceAccountName: "fme-engine-aws"
+      {{- else if $.Values.fmeflow.engines.podDeletionCost.enabled }}
+      serviceAccountName: "fme-engine-pod-deletion-cost"
       {{- end }}
-      automountServiceAccountToken: {{ $.Values.deployment.automountServiceAccountToken }}
+      automountServiceAccountToken: {{ if $.Values.fmeflow.engines.podDeletionCost.enabled }}true{{ else }}{{ $.Values.deployment.automountServiceAccountToken }}{{ end }}
       terminationGracePeriodSeconds: {{ $.Values.fmeflow.engines.terminationGracePeriodSeconds }}
       restartPolicy: Always
       volumes:
@@ -226,6 +342,12 @@ spec:
           secret:
             secretName: {{ .trustedCACerts.secretName }}
         {{- end }}
+        {{- end }}
+        {{- if $.Values.fmeflow.engines.podDeletionCost.enabled }}
+        - name: pod-deletion-cost-state
+          emptyDir: {}
+        - name: pod-deletion-cost-sidecar-tmp
+          emptyDir: {}
         {{- end }}
       affinity:
         {{- include "fmeflow.deployment.dataVolumeAffinity" $ | indent 8 }}

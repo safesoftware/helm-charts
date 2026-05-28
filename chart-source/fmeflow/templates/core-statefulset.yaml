@@ -74,6 +74,14 @@ spec:
               value: {{ .Values.deployment.hostname }}
             - name: EXTERNALPORT
               value: "{{ .Values.deployment.port }}"
+            {{- $serviceUrlMode := .Values.deployment.serviceUrlMode | default "ingress" }}
+            {{- if eq $serviceUrlMode "internal" }}
+            - name: SERVICEURLMODE
+              value: "internal"
+            {{- else if eq $serviceUrlMode "unmanaged" }}
+            - name: ENABLEDYNAMICCONFIG
+              value: "false"
+            {{- end }}
             - name: WEBPROTOCOL
               value: {{ template "fmeflow.deployment.protocol" . }}
             - name: NODENAMENS
@@ -92,6 +100,8 @@ spec:
               value: "{{ .Values.fmeflow.forcePasswordChange }}"
             - name: SCHEDULERIDLEWAITTIME
               value: "{{ .Values.fmeflow.scheduler.idleWaitTime }}"
+            - name: MAINTENANCEIDLEWAIT
+              value: "{{ .Values.fmeflow.maintenance.idleWait }}"
             - name: ENABLETRANSACTIONQUEUETIMEOUT
               value: "{{ .Values.fmeflow.enableTransactionQueueTimeout }}"
             - name: ENABLEDFEATURES
