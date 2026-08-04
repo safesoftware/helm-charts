@@ -98,6 +98,8 @@ spec:
               value: "{{ .Values.fmeflow.database.name }}"
             - name: FIRSTLOGINCHANGEPASSWORD
               value: "{{ .Values.fmeflow.forcePasswordChange }}"
+            - name: SYSTEMAUTHENTICATIONENABLED
+              value: "{{ .Values.fmeflow.systemAuthenticationEnabled }}"
             - name: SCHEDULERIDLEWAITTIME
               value: "{{ .Values.fmeflow.scheduler.idleWaitTime }}"
             - name: MAINTENANCEIDLEWAIT
@@ -209,6 +211,8 @@ spec:
               value: "{{ .Values.fmeflow.engines.hideHostContent }}"
             - name: SHOWPASSWORDLOGINUI
               value: "{{ .Values.fmeflow.webserver.showPasswordLoginUI }}"
+            - name: SYSTEMAUTHENTICATIONENABLED
+              value: "{{ .Values.fmeflow.systemAuthenticationEnabled }}"
             - name: COREDEBUGLEVEL
               value: "{{ .Values.fmeflow.debugLevel }}"
             - name: ENABLEDFEATURES

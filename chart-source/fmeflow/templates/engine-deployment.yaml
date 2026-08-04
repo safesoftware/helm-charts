@@ -4,6 +4,7 @@ kind: Deployment
 metadata:
   labels:
     safe.k8s.fmeflow.component: engine
+    safe.k8s.fmeflow.engine-group: "{{ .name }}"
     {{- include "fmeflow.common.labels" $ | indent 4 }}
   name: "engine-{{ .name }}"
   {{- with $.Values.annotations.engine.deployment }}
@@ -15,10 +16,12 @@ spec:
   selector:
     matchLabels:
       safe.k8s.fmeflow.component: engine
+      safe.k8s.fmeflow.engine-group: "{{ .name }}"
   template:
     metadata:
       labels:
         safe.k8s.fmeflow.component: engine
+        safe.k8s.fmeflow.engine-group: "{{ .name }}"
         {{- include "fmeflow.common.labels" $ | indent 8 }}
         {{- with .labels }}
 {{ toYaml . | indent 8 }}

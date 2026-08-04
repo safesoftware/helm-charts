@@ -55,6 +55,7 @@ fmeflow:
   fmeutility:
     enabled: true
   forcePasswordChange: true
+  systemAuthenticationEnabled: true
   debugLevel: "NONE"
   enableTransactionQueueTimeout: false
   waitForDatabase: true
