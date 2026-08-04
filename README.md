@@ -52,10 +52,18 @@ Deploying with versions prior to 2024.0 should still use the old `fmeserver-<ver
 
 ## Helm Chart Versioning
 
-Starting with 2024.1, we had to make some changes to the deployment that are not backwards compatible. This means that FME Flow 2024.0 should use version 1 of this chart, and 2024.1 and newer should use the latest version (version 2). This can be specified when calling `helm install` as follows:
+The chart's major version is **not** tied to a specific FME Flow release. It follows [semantic versioning](#semantic-versioning): the major version increments on any backward-incompatible change, either a new minimum FME Flow requirement or a change that breaks an in-place `helm upgrade` of an existing deployment.
+
+| Chart major | Compatible FME Flow versions | Why it's a major version |
+|-------------|------------------------------|--------------------------|
+| 1 | 2024.0 | Original chart. |
+| 2 | 2024.1+ | Deployment changes required by FME Flow 2024.1 that are not backwards compatible with 2024.0. |
+| 3 | 2024.1+ | Each engine Deployment gained a unique selector label. A Deployment's `spec.selector` is immutable, so upgrading an existing install requires deleting and recreating the engine deployments (see [Upgrade Notes](#upgrade-notes)). Not tied to an FME Flow version. |
+
+Because compatibility is not always keyed to the latest chart, pick the chart major that matches your FME Flow version (and your tolerance for the upgrade steps noted above), for example:
 
 <b>2024.0</b>: `helm install --version 1 ...`<br>
-<b>2024.1+</b>: `helm install ...` or `helm install --version 2 ...` <br>
+<b>2024.1+</b>: `helm install ...` or `helm install --version 3 ...` <br>
 
 You can view all versions of the helm chart by running the command `helm search repo fmeflow --versions` after adding the repository. It is a good idea to make your deployments reproducible to pin an exact version of the helm chart when deploying and use the same version for any helm operations you need to perform on that deployment. You can pin a helm chart version with the `--version` flag. For example, `helm install --version 2.0.4 ...`
 
@@ -86,6 +94,27 @@ If you are migrating from previous chart versions that used community `ingress-n
 3. Replace old `nginx.ingress.kubernetes.io/*` annotations with `nginx.org/*` annotations.
 4. Sticky session defaults were removed. If your deployment depended on sticky sessions, configure an alternative strategy outside these chart defaults.
 5. If `deployment.disableTLS=false`, set `deployment.tlsSecretName` to use your own certificate, or leave it empty to use the chart-managed self-signed secret.
+
+## Upgrade Notes
+
+### 3.0.0 — Engine deployment selector change
+
+Each engine deployment now carries a unique `safe.k8s.fmeflow.engine-group: <group-name>` label on its metadata, `spec.selector.matchLabels`, and pod template. This lets per-group KEDA `ScaledObject`s / HPAs target a single engine deployment instead of matching all engines through the shared `safe.k8s.fmeflow.component: engine` selector (fixing the `AmbiguousSelector` warning).
+
+Because a Deployment's `spec.selector` is immutable, `helm upgrade` from an earlier chart version will fail for existing engine deployments with an error like:
+
+```
+The Deployment "engine-<name>" is invalid: spec.selector: field is immutable
+```
+
+To upgrade, delete the existing engine deployments first (this causes engine downtime), then run the upgrade so they are recreated with the new selector:
+
+```
+kubectl delete deployment -l safe.k8s.fmeflow.component=engine
+helm upgrade <release> safesoftware/fmeflow ...
+```
+
+Fresh installs are unaffected.
 
 ## Configuration
 
@@ -194,6 +223,7 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `fmeflow.webserver.maxThreads` | Max threads the Tomcat webserver can use (more info [here](https://tomcat.apache.org/tomcat-8.0-doc/config/http.html)) | 200 |
 | `fmeflow.webserver.showPasswordLoginUI` | Show the user/password fields on the FME Flow login page. Set to `false` to disable standard user/password login and only allow the configured external identity provider. **Requires FME Flow 2026.1.2.1 or newer** | `true` |
 | `fmeflow.forcePasswordChange` | Force the admin user to change password on first login | `true` |
+| `fmeflow.systemAuthenticationEnabled` | Allow username/password authentication against the backend API services. Set to `false` in SAML/SSO-only deployments to disable system username/password login on the backend so that only token-based authentication is accepted. Note that `FMEFlowJobSubmitter` and `FMEFlowNotifier` transformers won't work in a SAML-only deployment, as they don't support SAML or direct token auth. | `true` |
 | `fmeflow.enableTransactionQueueTimeout` | Enable timeout on queue connections. | `false` |
 | `fmeflow.maintenance.idleWait` | Amount of time in seconds an Engine must be idle after processing at least one job before it undergoes maintenance. A value of 0 or less disables maintenance. This feature is available for FME Flow 2026.3+. | `90` |
 | `fmeflow.portpool` | Range of ports which can be assigned to FME Engines, Subscribers and Protocols when connecting to FME Flow. Port pools may be specified as a comma-seperated list of port numbers and port number ranges. E.g. 20000-21000,21200 | `Nil` |
