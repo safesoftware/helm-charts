@@ -95,6 +95,53 @@ If you are migrating from previous chart versions that used community `ingress-n
 4. Sticky session defaults were removed. If your deployment depended on sticky sessions, configure an alternative strategy outside these chart defaults.
 5. If `deployment.disableTLS=false`, set `deployment.tlsSecretName` to use your own certificate, or leave it empty to use the chart-managed self-signed secret.
 
+## Gateway API
+
+Starting with chart version 3.1.0, FME Flow can be exposed through the [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) instead of Ingress resources. The mode is selected with `deployment.exposureType`:
+
+| `deployment.exposureType` | Resources created | Configured under |
+|---------------------------|-------------------|------------------|
+| `ingress` (default) | `Ingress` objects | `deployment.ingress.*` |
+| `gateway` | `Gateway` (optional) and `HTTPRoute` objects | `deployment.gateway.*` |
+
+Only one of the two modes is deployed at a time. With `gateway`, no `Ingress` objects are created and the `deployment.ingress.*` values are ignored.
+
+**Prerequisites:** the Gateway API CRDs (`gateway.networking.k8s.io/v1`) and a Gateway API controller must be installed in the cluster. The chart installs neither.
+
+**Let the chart create the Gateway** (default). Set `deployment.gateway.gatewayClassName` to the `GatewayClass` of your controller:
+
+```
+helm install fmeflow safesoftware/fmeflow \
+  --set fmeflow.image.tag=<docker_tag> \
+  --set deployment.hostname=fmeflow.example.com \
+  --set deployment.exposureType=gateway \
+  --set deployment.gateway.gatewayClassName=<gateway_class>
+```
+
+This creates a Gateway named `<release>-fmeflow-gateway` with an HTTPS listener that terminates TLS using `deployment.tlsSecretName` (or the chart-managed self-signed secret), plus an HTTP listener that redirects to HTTPS. `deployment.disableTLS`, `deployment.certManager.*` and `deployment.useHostnameIngress` apply to the Gateway the same way they apply to the Ingress objects.
+
+**Attach to an existing Gateway**, for example one shared by several applications:
+
+```
+helm install fmeflow safesoftware/fmeflow \
+  --set fmeflow.image.tag=<docker_tag> \
+  --set deployment.hostname=fmeflow.example.com \
+  --set deployment.exposureType=gateway \
+  --set deployment.gateway.create=false \
+  --set deployment.gateway.name=<gateway_name> \
+  --set deployment.gateway.namespace=<gateway_namespace>
+```
+
+In this case only the `HTTPRoute` is created. Listeners, TLS certificates and the HTTP to HTTPS redirect are managed on the existing Gateway, and its listener must allow routes from the FME Flow namespace (`allowedRoutes`).
+
+Things to be aware of in `gateway` mode:
+
+1. **Upload size.** The Ingress defaults remove the request body size limit (`nginx.org/client-max-body-size: "0"`). The Gateway API has no standard setting for this, so if your controller limits the body size, raise the limit with the controller's own policy resource (for example `ClientSettingsPolicy` for NGINX Gateway Fabric), otherwise large uploads may fail.
+2. **Timeouts.** The long timeouts for the migration, transact and websocket endpoints are set with the `HTTPRoute` `timeouts` field, which is an optional (extended) feature of the Gateway API. If your controller does not support it, set the `deployment.gateway.routes.*.timeout` values to `""` and configure the timeouts with the controller's own policy resource.
+3. **Timeout format.** Gateway API durations allow at most 5 digits per unit, so use `336h` rather than `1209600s`.
+4. **cert-manager.** `deployment.certManager.issuerName` annotates the chart-created Gateway. cert-manager only issues certificates for listeners that have a hostname, so keep `deployment.useHostnameIngress=true`, and Gateway API support must be enabled in cert-manager.
+5. **Websocket backend.** The `/websocket` route points to the headless `fmeflowwebsocket` service; your controller must support headless services as route backends.
+
 ## Upgrade Notes
 
 ### 3.0.0 — Engine deployment selector change
@@ -151,10 +198,10 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `deployment.certManager.issuerType` | Can be `cluster` or `namespace`, ignored if no issuerName is provided. See [documentation](http://docs.safe.com/fme/2021.0/html/FME_Server_Documentation/AdminGuide/Kubernetes/Kubernetes-Deploying-with-Custom-Certificate.htm) for more details | `cluster` |
 | `deployment.numCores` | Number of cores to launch. Multi-core only works in a multi-host cluster with ReadWriteMany storage | `1` |
 | `deployment.startAsRoot` | Starts core container as root and grants the fmeflow user access to the file system. | `false` |
-| `deployment.useHostnameIngress` | Configures the ingress to route traffic to FME Flow only if the request host matches `deployment.hostname`. When using official NGINX Ingress Controller, setting this to `false` is unsupported. | `true` |
+| `deployment.useHostnameIngress` | Configures the ingress (or the Gateway listeners and HTTPRoute when `deployment.exposureType=gateway`) to route traffic to FME Flow only if the request host matches `deployment.hostname`. When using official NGINX Ingress Controller, setting this to `false` is unsupported. | `true` |
 | `deployment.ingress.useNginxMergeable` | Enables NGINX mergeable ingress resources (master/minion) when `deployment.useHostnameIngress=true`. Set this to `false` to disable mergeable mode or when using an ingress controller other than official NGINX. | `true` |
 | `deployment.deployPostgresql` | Deploy a Postgresql Database for FME Flow to use. Set this to `false` if you have an existing database you would like FME Flow to connect to. | `true` |
-| `deployment.disableTLS` | Set this to `true` if you would like to disable TLS on the ingress. This is not recommended. | `false` |
+| `deployment.disableTLS` | Set this to `true` if you would like to disable TLS on the ingress or on the chart-created Gateway. This is not recommended. | `false` |
 | `deployment.automountServiceAccountToken` | Set this to `true` if you would like to automatically mount the service token for the namespace. See [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#opt-out-of-api-credential-automounting) for more details. | `false` |
 | `resources.core` | [Core CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `1.5Gi`, CPU: `200m` |
 | `resources.web` | [Web CPU/Memory resource requests/limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) | Memory: `1Gi`, CPU: `200m` |
@@ -257,13 +304,28 @@ The following table lists the configurable parameters of the FME Flow helm chart
 | `annotations.database.statefulset` | `Annotations for the database statefulset` | `{}` |
 | `annotations.database.template` | `Annotations for the database pod template` | `{}` |
 | `annotations.database.service` | `Annotations for the database service` | `{}` |
-| `ingress.enabled` | `Optionally create Ingress objects.` | `true` |
+| `deployment.exposureType` | How FME Flow is exposed outside the cluster. `ingress` creates Ingress objects configured by the `deployment.ingress.*` parameters. `gateway` creates Kubernetes Gateway API objects (Gateway and HTTPRoute) configured by the `deployment.gateway.*` parameters and creates no Ingress objects. See [Gateway API](#gateway-api). | `ingress` |
+| `deployment.ingress.enabled` | Optionally create Ingress objects. Only used when `deployment.exposureType=ingress`, as are all other `deployment.ingress.*` parameters. | `true` |
 | `deployment.ingress.general.ingressClassName` | `Ingress class name to use for ingress objects.` | `nginx` |
 | `deployment.ingress.general.annotations` | `Annotations to apply to all ingress objects.` | `nginx.org/client-max-body-size: "0"` |
 | `deployment.ingress.web.annotations` | `Annotations to apply to the default web ingress` | `nginx.org/proxy-read-timeout: "300s"` |
 | `deployment.ingress.migration.annotations` | `Annotations to apply to the migration REST endpoint ingress. Typically a longer timeout is set for large backup and restore REST calls.` | `nginx.org/proxy-read-timeout: "1800s"` |
 | `deployment.ingress.transact.annotations` | `Annotations to apply to the transact REST endpoint ingress. Typically a long timeout is set for synchronous calls to execute long running jobs.` | `nginx.org/proxy-read-timeout: "1209600s"` |
 | `deployment.ingress.websocket.annotations` | `Annotations to apply to the websocket REST endpoint ingress. Typically a long timeout is set for long open websocket connections.` | `nginx.org/proxy-read-timeout: "2592000s"` |
+| `deployment.gateway.create` | Create a Gateway object. Set this to `false` to attach the HTTPRoute to an existing Gateway instead. Only used when `deployment.exposureType=gateway`, as are all other `deployment.gateway.*` parameters. | `true` |
+| `deployment.gateway.name` | Name of the Gateway. Required when `deployment.gateway.create=false`. | `<release>-fmeflow-gateway` |
+| `deployment.gateway.namespace` | Namespace of the existing Gateway. Only used when `deployment.gateway.create=false`. | _The release namespace_ |
+| `deployment.gateway.sectionName` | Name of the listener of the existing Gateway to attach to. If empty, the HTTPRoute attaches to all listeners of the Gateway. Only used when `deployment.gateway.create=false`. | `""` |
+| `deployment.gateway.gatewayClassName` | GatewayClass of the created Gateway. Only used when `deployment.gateway.create=true`. | `nginx` |
+| `deployment.gateway.annotations` | Annotations to apply to the created Gateway. | `{}` |
+| `deployment.gateway.httpPort` | Port of the HTTP listener of the created Gateway. | `80` |
+| `deployment.gateway.httpsPort` | Port of the HTTPS listener of the created Gateway. | `443` |
+| `deployment.gateway.httpsRedirect` | When TLS is enabled, add an HTTP listener to the created Gateway that redirects all requests to HTTPS on `deployment.port`. | `true` |
+| `deployment.gateway.routes.annotations` | Annotations to apply to the HTTPRoute. | `{}` |
+| `deployment.gateway.routes.web.timeout` | Request timeout for default web traffic, as a [Gateway API duration](https://gateway-api.sigs.k8s.io/reference/spec/#duration). Set to `""` to omit the timeout. | `300s` |
+| `deployment.gateway.routes.migration.timeout` | Request timeout for the migration REST endpoints. Typically a longer timeout is set for large backup and restore REST calls. | `1800s` |
+| `deployment.gateway.routes.transact.timeout` | Request timeout for the transact REST endpoints. Typically a long timeout is set for synchronous calls to execute long running jobs. | `336h` |
+| `deployment.gateway.routes.websocket.timeout` | Request timeout for the websocket endpoint. Typically a long timeout is set for long open websocket connections. | `720h` |
 | `labels.core` | Labels to apply to the core pods | `{}` |
 | `labels.queue` | Labels to apply to the core pods | `{}` |
 | `labels.websocket` | Labels to apply to the core pods | `{}` |

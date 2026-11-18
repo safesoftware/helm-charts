@@ -1,4 +1,4 @@
-{{- if .Values.deployment.ingress.enabled }}
+{{- if and (eq (include "fmeflow.exposureType" .) "ingress") .Values.deployment.ingress.enabled }}
 apiVersion: {{ include "fmeflow.ingress.apiversion" . }}
 kind: Ingress
 metadata:

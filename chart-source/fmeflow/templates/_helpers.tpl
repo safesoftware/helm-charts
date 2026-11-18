@@ -33,6 +33,26 @@ cert-manager.io/issuer: {{ .Values.deployment.certManager.issuerName | quote }}
 {{- if .Values.deployment.disableTLS }}http{{- else }}https{{- end }}
 {{- end }}
 
+{{/* Resolves how FME Flow is exposed: "ingress" or "gateway" */}}
+{{- define "fmeflow.exposureType" -}}
+{{- $type := .Values.deployment.exposureType | default "ingress" -}}
+{{- if not (has $type (list "ingress" "gateway")) -}}
+{{- fail (printf "deployment.exposureType must be \"ingress\" or \"gateway\", got \"%s\"" $type) -}}
+{{- end -}}
+{{- $type -}}
+{{- end -}}
+
+{{/* Resolves the name of the Gateway the HTTPRoutes attach to */}}
+{{- define "fmeflow.gateway.name" -}}
+{{- if .Values.deployment.gateway.name -}}
+{{- .Values.deployment.gateway.name -}}
+{{- else if .Values.deployment.gateway.create -}}
+{{- printf "%s-gateway" (include "fmeflow.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- fail "deployment.gateway.name is required when deployment.gateway.create is false" -}}
+{{- end -}}
+{{- end -}}
+
 {{/* Common labels */}}
 {{- define "fmeflow.common.labels" }}
 app: {{ template "fmeflow.name" . }}

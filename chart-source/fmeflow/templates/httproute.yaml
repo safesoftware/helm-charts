@@ -1,0 +1,113 @@
+{{- if eq (include "fmeflow.exposureType" .) "gateway" }}
+{{- $gateway := .Values.deployment.gateway }}
+{{- $tls := not .Values.deployment.disableTLS }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: fmeflow-route
+  labels:
+    {{- include "fmeflow.common.labels" . | trim | nindent 4 }}
+  {{- with $gateway.routes.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+    - name: {{ include "fmeflow.gateway.name" . }}
+      {{- if $gateway.create }}
+      sectionName: {{ ternary "https" "http" $tls }}
+      {{- else }}
+      {{- with $gateway.namespace }}
+      namespace: {{ . }}
+      {{- end }}
+      {{- with $gateway.sectionName }}
+      sectionName: {{ . }}
+      {{- end }}
+      {{- end }}
+  {{- if .Values.deployment.useHostnameIngress }}
+  hostnames:
+    - {{ .Values.deployment.hostname | quote }}
+  {{- end }}
+  rules:
+    # websocket connections
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /websocket
+      {{- with $gateway.routes.websocket.timeout }}
+      timeouts:
+        request: {{ . | quote }}
+      {{- end }}
+      backendRefs:
+        - name: fmeflowwebsocket
+          port: 7078
+    # transact REST endpoints (synchronous, long running jobs)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /fmerest/v3/transformations/transact
+        - path:
+            type: PathPrefix
+            value: /fmerest/v3/transformations/transactjobs
+        - path:
+            type: PathPrefix
+            value: /fmerest/v3/transformations/transactdata
+      {{- with $gateway.routes.transact.timeout }}
+      timeouts:
+        request: {{ . | quote }}
+      {{- end }}
+      backendRefs:
+        - name: fmeflowweb
+          port: 8080
+    # migration REST endpoints (large backup and restore calls)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /fmerest/v3/migration/backup/download
+        - path:
+            type: PathPrefix
+            value: /fmerest/v3/migration/restore/upload
+      {{- with $gateway.routes.migration.timeout }}
+      timeouts:
+        request: {{ . | quote }}
+      {{- end }}
+      backendRefs:
+        - name: fmeflowweb
+          port: 8080
+    # default web traffic
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      {{- with $gateway.routes.web.timeout }}
+      timeouts:
+        request: {{ . | quote }}
+      {{- end }}
+      backendRefs:
+        - name: fmeflowweb
+          port: 8080
+{{- if and $gateway.create $tls $gateway.httpsRedirect }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: fmeflow-https-redirect
+  labels:
+    {{- include "fmeflow.common.labels" . | trim | nindent 4 }}
+spec:
+  parentRefs:
+    - name: {{ include "fmeflow.gateway.name" . }}
+      sectionName: http
+  {{- if .Values.deployment.useHostnameIngress }}
+  hostnames:
+    - {{ .Values.deployment.hostname | quote }}
+  {{- end }}
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            port: {{ .Values.deployment.port }}
+            statusCode: 301
+{{- end }}
+{{- end }}

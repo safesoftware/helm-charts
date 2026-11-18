@@ -1,0 +1,49 @@
+{{- if and (eq (include "fmeflow.exposureType" .) "gateway") .Values.deployment.gateway.create }}
+{{- $gateway := .Values.deployment.gateway }}
+{{- $certManagerAnnotations := include "fmeflow.ingress.annotations" . | trim }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ include "fmeflow.gateway.name" . }}
+  labels:
+    {{- include "fmeflow.common.labels" . | trim | nindent 4 }}
+  {{- if or $gateway.annotations $certManagerAnnotations }}
+  annotations:
+    {{- with $gateway.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with $certManagerAnnotations }}
+    {{- . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  gatewayClassName: {{ $gateway.gatewayClassName }}
+  listeners:
+    {{- if or .Values.deployment.disableTLS $gateway.httpsRedirect }}
+    - name: http
+      protocol: HTTP
+      port: {{ $gateway.httpPort }}
+      {{- if .Values.deployment.useHostnameIngress }}
+      hostname: {{ .Values.deployment.hostname | quote }}
+      {{- end }}
+      allowedRoutes:
+        namespaces:
+          from: Same
+    {{- end }}
+    {{- if not .Values.deployment.disableTLS }}
+    - name: https
+      protocol: HTTPS
+      port: {{ $gateway.httpsPort }}
+      {{- if .Values.deployment.useHostnameIngress }}
+      hostname: {{ .Values.deployment.hostname | quote }}
+      {{- end }}
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: {{ include "fmeflow.ingress.tlsSecretName" . }}
+      allowedRoutes:
+        namespaces:
+          from: Same
+    {{- end }}
+{{- end }}

@@ -1,4 +1,4 @@
-{{- if and .Values.deployment.useHostnameIngress .Values.deployment.ingress.useNginxMergeable }}
+{{- if and (eq (include "fmeflow.exposureType" .) "ingress") .Values.deployment.useHostnameIngress .Values.deployment.ingress.useNginxMergeable }}
 apiVersion: {{ include "fmeflow.ingress.apiversion" . }}
 kind: Ingress
 metadata:

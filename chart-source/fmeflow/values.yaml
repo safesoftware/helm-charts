@@ -193,6 +193,43 @@ deployment:
       annotations:
         nginx.org/proxy-read-timeout: "2592000s"
         nginx.org/websocket-services: "fmeflowwebsocket"
+  # how FME Flow is exposed outside the cluster:
+  #   ingress - Ingress resources, configured under deployment.ingress (default)
+  #   gateway - Kubernetes Gateway API resources (Gateway/HTTPRoute), configured under deployment.gateway
+  exposureType: ingress
+  # only used when exposureType is "gateway"
+  gateway:
+    # create a Gateway resource. Set to false to attach the HTTPRoute to an existing Gateway instead
+    create: true
+    # name of the Gateway. Defaults to <release>-fmeflow-gateway when create is true, required when create is false
+    name: ""
+    # namespace of the existing Gateway (create: false). Defaults to the release namespace
+    namespace: ""
+    # listener name of the existing Gateway to attach to (create: false). Empty attaches to all listeners
+    sectionName: ""
+    # the following settings only apply when the chart creates the Gateway (create: true)
+    gatewayClassName: "nginx"
+    annotations: {}
+    # ports the Gateway listens on
+    httpPort: 80
+    httpsPort: 443
+    # when TLS is enabled, also listen on HTTP and redirect all requests to HTTPS
+    httpsRedirect: true
+    routes:
+      # annotations on the HTTPRoute
+      annotations: {}
+      # request timeouts per route, as Gateway API durations (e.g. "300s", "30m", "336h").
+      # Set to "" to omit the timeout and use the default of the Gateway implementation
+      web:
+        timeout: "300s"
+      migration:
+        timeout: "1800s"
+      transact:
+        # 14 days for long running transact jobs
+        timeout: "336h"
+      websocket:
+        # 30 days for long open websocket connections
+        timeout: "720h"
 
 
 annotations:
