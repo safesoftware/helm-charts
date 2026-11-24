@@ -6,7 +6,7 @@ metadata:
     safe.k8s.fmeflow.component: engine
     safe.k8s.fmeflow.engine-group: "{{ .name }}"
     {{- include "fmeflow.common.labels" $ | indent 4 }}
-  name: "engine-{{ .name }}"
+  name: {{ include "fmeflow.workloadName" (dict "ctx" $ "name" (printf "engine-%s" .name)) | quote }}
   {{- with $.Values.annotations.engine.deployment }}
   annotations:
 {{ toYaml . | indent 4 }}

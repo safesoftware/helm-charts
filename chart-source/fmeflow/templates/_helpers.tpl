@@ -256,3 +256,16 @@ policy/v1
 policy/v1beta1
 {{- end -}}
 {{- end -}}
+
+{{/*
+Name of a workload (StatefulSet/Deployment/PDB), optionally prefixed with deployment.namePrefix.
+Usage: {{ include "fmeflow.workloadName" (dict "ctx" $ "name" "core") }}
+*/}}
+{{- define "fmeflow.workloadName" -}}
+{{- $prefix := .ctx.Values.deployment.namePrefix | default "" | trimSuffix "-" -}}
+{{- if $prefix -}}
+{{- printf "%s-%s" $prefix .name | trunc 52 | trimSuffix "-" -}}
+{{- else -}}
+{{- .name | trunc 52 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}

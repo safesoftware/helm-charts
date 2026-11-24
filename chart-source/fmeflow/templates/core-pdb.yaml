@@ -2,7 +2,7 @@
 apiVersion: {{ include "fmeflow.pdb.apiversion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: core-pdb
+  name: {{ include "fmeflow.workloadName" (dict "ctx" . "name" "core-pdb") }}
 spec:
   minAvailable: 1
   selector:

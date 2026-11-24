@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "fmeflow.common.labels" . | indent 4 }}
     safe.k8s.fmeflow.component: database
-  name: database
+  name: {{ include "fmeflow.workloadName" (dict "ctx" . "name" "database") }}
   {{- with .Values.annotations.database.statefulset }}
   annotations:
 {{ toYaml . | indent 4 }}

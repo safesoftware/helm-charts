@@ -153,6 +153,11 @@ fmeflow:
 
 
 deployment:
+  # Optional prefix for StatefulSet/Deployment (and therefore pod) names,
+  # e.g. "fmeflow" gives pods like fmeflow-core-0, fmeflow-queue-0, fmeflow-engine-standard-xxxx.
+  # Leave empty to keep the default names (core-0, queue-0, ...).
+  # Note: changing this on an existing release recreates the workloads (brief downtime).
+  namePrefix: ""
   hostname: localhost
   port: 443
   serviceUrlMode: ingress
