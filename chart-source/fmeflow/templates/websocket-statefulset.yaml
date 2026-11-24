@@ -4,7 +4,7 @@ metadata:
   labels:
     safe.k8s.fmeflow.component: websocket
     {{- include "fmeflow.common.labels" . | indent 4 }}
-  name: websocket
+  name: {{ include "fmeflow.workloadName" (dict "ctx" . "name" "websocket") }}
   {{- with .Values.annotations.websocket.statefulset }}
   annotations:
 {{ toYaml . | indent 4 }}

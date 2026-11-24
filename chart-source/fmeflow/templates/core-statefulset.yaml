@@ -4,7 +4,7 @@ metadata:
   labels:
     {{- include "fmeflow.common.labels" . | indent 4 }}
     safe.k8s.fmeflow.component: core
-  name: core
+  name: {{ include "fmeflow.workloadName" (dict "ctx" . "name" "core") }}
   {{- with .Values.annotations.core.statefulset }}
   annotations:
 {{ toYaml . | indent 4 }}
@@ -86,8 +86,19 @@ spec:
               value: {{ template "fmeflow.deployment.protocol" . }}
             - name: NODENAMENS
               value: fmeflow
+            {{- if .Values.deployment.namePrefix }}
+            # The core image builds the queue host as "queue-<index>.$QUEUENAMENS", which ignores
+            # the name prefix. Pair core-N with queue-N ourselves via REDISHOSTS instead.
+            - name: POD_INDEX
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['apps.kubernetes.io/pod-index']
+            - name: REDISHOSTS
+              value: "{{ include "fmeflow.workloadName" (dict "ctx" . "name" "queue") }}-$(POD_INDEX).fmeflowqueue"
+            {{- else }}
             - name: QUEUENAMENS
               value: fmeflowqueue
+            {{- end }}
             - name: COREDEBUGLEVEL
               value: "{{ .Values.fmeflow.debugLevel }}"
             - name: PGSQLHOSTNAME

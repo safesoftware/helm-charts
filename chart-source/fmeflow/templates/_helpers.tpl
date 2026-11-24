@@ -256,3 +256,27 @@ policy/v1
 policy/v1beta1
 {{- end -}}
 {{- end -}}
+
+{{/*
+Name of a workload (StatefulSet/Deployment/PDB), optionally prefixed with deployment.namePrefix.
+Usage: {{ include "fmeflow.workloadName" (dict "ctx" $ "name" "core") }}
+*/}}
+{{- define "fmeflow.workloadName" -}}
+{{- $prefix := .ctx.Values.deployment.namePrefix | default "" | trimSuffix "-" -}}
+{{- if $prefix -}}
+{{- if not (regexMatch "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$" $prefix) -}}
+{{- fail (printf "deployment.namePrefix %q is invalid: use only lowercase letters, digits and '-', starting and ending with a letter or digit." $prefix) -}}
+{{- end -}}
+{{- if not (semverCompare ">=1.28-0" .ctx.Capabilities.KubeVersion.Version) -}}
+{{- fail "deployment.namePrefix requires Kubernetes 1.28 or newer (the core uses the apps.kubernetes.io/pod-index label to find its queue)." -}}
+{{- end -}}
+{{- $name := printf "%s-%s" $prefix .name -}}
+{{- /* StatefulSet/Deployment names above 52 chars break pod labels; fail instead of truncating to avoid name collisions. */ -}}
+{{- if gt (len $name) 52 -}}
+{{- fail (printf "deployment.namePrefix is too long: %q is %d characters, the maximum is 52." $name (len $name)) -}}
+{{- end -}}
+{{- $name -}}
+{{- else -}}
+{{- .name -}}
+{{- end -}}
+{{- end -}}
